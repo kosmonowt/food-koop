@@ -1,0 +1,120 @@
+<!doctype HTML>
+<html>
+	<head>
+		<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="js/can.custom.js"></script>
+		<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	    <meta charset="utf-8">
+    	<title>Biokiste Backend App</title>
+	
+	    <!-- Sets initial viewport load and disables zooming  -->
+	    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+	
+	    <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	
+	    <!--<link href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+	    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="css/app.css" rel="stylesheet">
+	    <link href="css/webfont.css" rel="stylesheet">
+	</head>
+	<body>
+		<script id='appMustache' type='text/mustache'>
+		<div class="container">
+			<orders-app>
+				<div class="row">
+					<div class="col-ms-12">
+				  		<h2>Bestellungen</h2>
+					</div>
+				</div>
+				<ul class="nav nav-tabs" id="tabNav">
+				  <li role="presentation" class="active"><a href="#index" aria-controls="index">Übersicht</a></li>
+				  <li role="presentation"><a href="#create" aria-controls="create">Neue Bestellung</a></li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="index">
+						<div class="row">
+							<div class="col-xs-12">
+								<table class="table table-striped table-hover">
+									<tbody>
+										<tr>
+											<th></th>
+											<th>Datum</th>
+											<th>Nummer</th>
+											<th>Bezeichnung</th>
+											<th>Anbieter</th>
+											<th>Anzahl</th>
+											<th>Nettopreis</th>
+											<th>Mitglied</th>
+											<th colspan="2">Aktion</th>
+										</tr>
+										{{#each orders}}
+										<tr class="status-{{order_state_id}}">
+											<td><input type="checkbox" can-value="complete"></td>
+											<td>{{created_at}}</td>
+											<td>{{product.sku}}</td>
+											<td>{{product.name}}</td>
+											<td>{{merchant.name}}</td>
+											<td>{{amount}} <small>({{product.units}})</small></td>
+											<td>{{product.price}}</td>
+									        <td>{{member.name}}</td>
+											<td>
+												<div class="statusIcon status-{{order_state_id}}" onclick="$(this).children('.statusSetter').toggle();">
+													<div class='statusSetter' style="display:none;">
+														<div class='setStatus status-1' data-order_state_id='1' can-click="toggle">Wartend</div>
+														<div class='setStatus status-2' data-order_state_id='2' can-click="toggle">Zurückgestellt</div>
+														<div class='setStatus status-3' data-order_state_id='3' can-click="toggle">Bestellt</div>
+														<div class='setStatus status-4' data-order_state_id='4' can-click="toggle">Angekommen</div>
+														</div>
+												</div>
+											</td>
+										    <td><button can-click="destroy">Löschen</button></td>
+									    </tr>
+									    {{/each}}
+								    </tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="create">
+						<form class="form-horizontal">
+							<div class="row">
+								<div class="col-ms-6">
+									<h3>Neue Bestellung</h3>
+								</div>
+								<div class="col-ms-6">
+
+								</div>							
+							</div>
+							<div class="form-group">
+							    <label for="nummer" class="col-sm-2 control-label">Anbieter</label>
+							    <div class="col-sm-4">
+									<select class="form-control" id="newOrderFormMerchantId">
+										{{#each merchant}}
+										<option value="{{id}}">{{name}}</option>
+								  		{{/each}}
+									</select>
+							    </div>							
+							    <label for="nummer" class="col-sm-2 control-label">Artikelnummer / -name</label>
+							    <div class="col-sm-4">
+							      <input type="text" class="form-control" id="newOrderFormProductNumber" name="nummer" placeholder="z.B. 112233" can-keyup="findProduct">
+							    </div>
+							  </div>							
+						</form>
+					</div>
+				</div>
+			</orders-app>
+		</div>
+		</script>	
+		
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/orders.js"></script>
+		<script type="text/javascript">
+		$('#tabNav a').click(function (e) {
+  			e.preventDefault();
+  			$(this).tab('show');
+  		});
+  		</script>
+	</body>
+</html>

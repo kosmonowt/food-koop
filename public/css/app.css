@@ -1,0 +1,20 @@
+div.statusIcon		{ position: relative;}
+div.status-0:before { color: orange;}
+div.status-1:before { color: blue;}
+div.status-2:before { color: red;}
+div.status-3:before { color: green;}
+div.status-4:before { color: #00A094;}
+
+.statusSetter {
+    position: absolute;
+    background: white;
+    padding: 10px;
+    z-index: 10;
+    margin-left: -10px;
+    box-shadow: 0px 0px 4px;
+}
+
+.statusSetter .setStatus { line-height: 22px;}
+.statusSetter .setStatus:hover { background: #dadada;}
+
+span.userName:not(:last-child):after { content: "/";}
