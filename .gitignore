@@ -1,3 +1,11 @@
 /bootstrap/compiled.php
 .env.*.php
 .env.php
+/vendor
+composer.phar
+composer.lock
+.DS_Store
+Thumbs.db
+biokiste3.sublime-project
+biokiste3.sublime-workspace
+config.codekit
