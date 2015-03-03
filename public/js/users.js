@@ -9,7 +9,7 @@ can.Component.extend({
       this.attr('selectedMember', members);
     },
     delete: function(member) {
-      if (confirm("Willst Du "+member.name+" wirklich löschen?")) member.destroy();
+      if (confirm("Willst Du "+member.name+" wirklich löschen?")) member.destroy().then(function(){handleRestDestroy("Gelöscht:","Das Mitglied wurde gelöscht."),handleRestError});;
     },
     save: function(member) {
       member.save();

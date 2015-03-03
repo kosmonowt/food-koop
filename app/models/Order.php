@@ -1,7 +1,7 @@
 <?php
 
 class Order extends \Eloquent {
-	protected $fillable = ["amount","member_id","merchant_id","state"];
+	protected $fillable = ["amount","member_id","merchant_id","state","product_id","comment"];
 
 	public function member() {
         return $this->belongsTo('Member','member_id');

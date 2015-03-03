@@ -31,7 +31,35 @@ class OrdersController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
+		$data = Input::all();
+
+		$product = Product::findOrFail($data['product_id']);
+		$merchant = Merchant::findOrFail($data['merchant_id']);
+
+		$order = new Order();
+		$order->fill($data);
+		
+		if ($order->amount < 1) return App::abort(403, 'Bitte gebe die Menge an, die Du bestellen willst.');
+
+		// TODO: please dynamify!!!
+		$member_id = 13;
+		$user_id = 27;
+
+		$order->member_id = $member_id;
+		$member = Member::find($member_id);
+
+		$order->user_id = $user_id;
+		
+		// TODO: Check if can do better.
+		$order->order_state_id = 0;
+
+		$order->save();
+
+		$order->product = $product;
+		$order->merchant = $merchant;
+		$order->member = $member;
+
+		return $order->toJson();
 	}
 
 

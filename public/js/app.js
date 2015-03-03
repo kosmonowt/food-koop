@@ -9,6 +9,7 @@ var appConfig = {
     }
   }
 };
+var globals = {};
 
 /** PUT TO LIB SOON **/
 function ucfirst(str) {
@@ -33,7 +34,8 @@ var Order = can.Model.extend({
   findAll: 'GET '+sUrl+'orders',
   findOne: 'GET '+sUrl+'orders/{id}',
   update: 'PUT '+sUrl+'orders/{id}',
-  destroy: 'DELETE '+sUrl+'orders/{id}'
+  destroy: 'DELETE '+sUrl+'orders/{id}',
+  create : 'POST '+sUrl+'orders'  
 }, {});
 
 /** ORDER STATE **/
@@ -51,12 +53,9 @@ var Merchant = can.Model.extend({
   destroy: 'DELETE '+sUrl+'merchants/{id}'
 }, {});
 
-var ProductSearch = can.Model.extend({
-  findAll: function(params) {
-    return $.get(sUrl+"products/search/"+params.merchantId+"/"+params.term);
-  },
-  findOne: 'GET '+sUrl+'products/{id}',
-}, {});
+var ProductSearch = new can.Model();
+ProductSearch.findAll = function(params) {return $.get(sUrl+"products/search/"+params.merchantId+"/"+params.term);};
+ProductSearch.findOne = 'GET '+sUrl+'products/{id}';
 
 var User = can.Model.extend({
   findAll: 'GET '+sUrl+'users',
@@ -88,11 +87,42 @@ var MemberStatus = can.Model.extend({
   destroy: 'DELETE '+sUrl+'memberStatus/{id}'
 }, {});
 
+var Product = can.Model.extend({
+  findAll: 'GET '+sUrl+'products',
+  findOne: 'GET '+sUrl+'products/{id}',
+  update: 'PUT '+sUrl+'products/{id}',
+  destroy: 'DELETE '+sUrl+'products/{id}'
+}, {});
+
 can.mustache.registerHelper('quickEdit',
   function(subject, verb, number, options){
 });
 
+function addFlashMessage(title, message, type) {
+  $('#flashContainer').html("<div class='row bg-"+type+" flashMessage' onclick='$(this).remove();'><div class='col-xs-12'><strong>"+title+"</strong>&nbsp;"+message+"</div></div>");
+  setTimeout(function(){ $("#flashContainer").html(""); }, 10000);
+}
+
 var handleRestError = function(error) {
-  console.log(error.statusText);
-  console.log(error.responseText);
+  //console.log(error.statusText);
+  var responseText = JSON.parse(error.responseText);
+  var errorMessage = responseText.error.message;
+  // TODO MAKE FIELD TO PROVIDE ERROR MESSAGE TO USER.
+  addFlashMessage("Fehler:",errorMessage,"danger");
 };
+
+var handleRestCreate = function(title,message) {
+  addFlashMessage(title,message,"success");
+}
+
+var handleRestDestroy = function(title,message) {
+  addFlashMessage(title,message,"warning");
+}
+
+var handleRestUpdate = function(title,message) {
+  addFlashMessage(title,message,"info");
+}
+
+function gotoIndex() {
+  $("#tabIndexControl").trigger("click");
+}

@@ -18,3 +18,31 @@ div.status-4:before { color: #00A094;}
 .statusSetter .setStatus:hover { background: #dadada;}
 
 span.userName:not(:last-child):after { content: "/";}
+
+div.autocompleteListWrapper {
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    z-index: 10;
+    padding: 0px;
+	height: 360px;
+	overflow: auto;    
+}
+
+ul.autocompleteListWrapper {
+    background-color: #fff;
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+li.autocompleteListElement {padding: 10px}
+li.autocompleteListElement:hover {background-color: #ccc;}
+
+.flashMessage {
+height: 60px;
+font-size: 20px;
+line-height: 20px;
+padding: 10px;
+}

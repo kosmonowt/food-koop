@@ -13,11 +13,11 @@ class ProductsController extends \BaseController {
 	}
 
 	public function search($merchantId, $term) {
-		$P = Product::where("sku","LIKE","$term%");
+		$Product = Product::where("sku","LIKE","$term%");
 
-		if($merchantId > 0) $P->where("merchant_id",$merchantId);
+		if($merchantId > 0) $Product->where("merchant_id",$merchantId);
 
-		return $P->get()->toJson();
+		return $Product->get()->toJson();
 	}
 
 
