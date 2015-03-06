@@ -12,7 +12,6 @@ class OrdersController extends \BaseController {
 		return Order::with("member")->with("product")->with("merchant")->orderBy('updated_at', 'DESC')->take(50)->get()->toJson();
 	}
 
-
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -41,9 +40,8 @@ class OrdersController extends \BaseController {
 		
 		if ($order->amount < 1) return App::abort(403, 'Bitte gebe die Menge an, die Du bestellen willst.');
 
-		// TODO: please dynamify!!!
-		$member_id = 13;
-		$user_id = 27;
+		$member_id = Auth::user()->member_id;
+		$user_id = Auth::user()->id;
 
 		$order->member_id = $member_id;
 		$member = Member::find($member_id);

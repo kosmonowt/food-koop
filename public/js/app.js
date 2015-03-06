@@ -53,6 +53,13 @@ var Merchant = can.Model.extend({
   destroy: 'DELETE '+sUrl+'merchants/{id}'
 }, {});
 
+var ProductType = can.Model.extend({
+  findAll: 'GET '+sUrl+'productTypes',
+  findOne: 'GET '+sUrl+'productTypes/{id}',
+  update: 'PUT '+sUrl+'productTypes/{id}',
+  destroy: 'DELETE '+sUrl+'productTypes/{id}'
+}, {});
+
 var ProductSearch = new can.Model();
 ProductSearch.findAll = function(params) {return $.get(sUrl+"products/search/"+params.merchantId+"/"+params.term);};
 ProductSearch.findOne = 'GET '+sUrl+'products/{id}';
@@ -91,7 +98,8 @@ var Product = can.Model.extend({
   findAll: 'GET '+sUrl+'products',
   findOne: 'GET '+sUrl+'products/{id}',
   update: 'PUT '+sUrl+'products/{id}',
-  destroy: 'DELETE '+sUrl+'products/{id}'
+  destroy: 'DELETE '+sUrl+'products/{id}',
+  create : 'POST '+sUrl+'products'  
 }, {});
 
 can.mustache.registerHelper('quickEdit',

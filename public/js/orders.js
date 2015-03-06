@@ -1,9 +1,50 @@
 var productInformationTemplate = can.mustache('{{#product}}'+
-  '<div class="row"><label class="col-sm-2">Name:</label><div class="col-sm-4"><span class="productName" id="newOrderFormProductId" data-productid="{{id}}">{{name}}</span></div>'+
-  '<label class="col-xs-2">Nettopreis:</label><div class="col-xs-1"><span class="productPrice" id="newOrderFormProductPrice" data-price="{{price}}">{{price}}€</span></div>'+
-  '<label class="col-xs-2">MwSt:</label><div class="col-xs-1"><span class="productTaxrate" id="newOrderFormProductTaxrate" data-taxrate="{{taxrate}}">{{taxrate}}%</span></div></div>'+  
-  '<div class="row"><label class="col-xs-2">Gebinde:</label><div class="col-xs-4">{{units}} {{unit_unit}}</div>'+
-  '<label class="col-xs-2">Gewicht:</label><div class="col-xs-4">{{weight_per_unit}} {{tare_unit}} / VE</div></div>'+
+  '<input type="hidden" class="productName" name="product_id" value="{{id}}" data-productid="{{id}}">'+
+'<div class="form-group form-group-sm">'+
+' <label class="col-sm-2">Name:</label>'+
+' <div class="col-sm-4">'+
+'   <div class="input-group">'+
+'     <input type="text" class="form-control" name="product.name" value="{{name}}" disabled>'+
+'     <span class="input-group-addon">√</span>'+
+'   </div>'+
+' </div>'+
+' <label class="col-sm-2">Nettopreis:</label>'+
+' <div class="col-sm-4">'+
+'   <div class="input-group">'+
+'     <input type="number" class="form-control" name="product.price" value="{{price}}" min="0.01" range="0.01" disabled>'+
+'     <span class="input-group-addon productTaxrate" data-taxrate="{{taxrate}}">€ + {{taxrate}}% </span>'+
+'     <span class="input-group-addon">√</span>'+
+'   </div>    '+
+' </div>'+
+'</div>'+
+'<div class="form-group form-group-sm">'+
+' <label class="col-sm-2">Gebinde:</label>'+
+' <div class="col-sm-2"><div class="input-group">'+
+'  <input type="number" class="form-control" name="product.units" value="{{units}}" disabled>'+
+'     <span class="input-group-addon">√</span>'+
+' </div></div>'+
+'<div class="col-sm-2">'+
+'  <select class="form-control" name="product.unit_unit" disabled><option value="{{unit_unit}}">{{unit_unit}}</select>'+
+' </div>'+
+' <label class="col-sm-2">Gewicht:</label>'+
+' <div class="col-sm-2"><div class="input-group"><input type="number" class="form-control" name="product.weight_per_unit" value="{{weight_per_unit}}">'+
+'     <span class="input-group-addon">√</span>'+
+'</div></div>'+
+'<div class="col-sm-2">'+
+'  <select class="form-control" name="product.tare_unit" disabled><option value="{{tare_unit}}">{{tare_unit}}</select>'+
+'</div>'+
+'</div>'+
+'<div class="form-group form-group-sm">'+
+' <label class="col-sm-2">Produktart:</label>'+
+'<div class="col-sm-4">'+
+'  <select class="form-control" name="product.product_type_id" disabled><option value="{{product_type_id}}">{{product_type.name}}</select>'+
+'</div>'+
+' <label class="col-sm-2">Anmerkungen:</label>'+
+' <div class="col-sm-4"><div class="input-group">'+
+'  <input type="text" class="form-control" name="product.comment" value="{{comment}}" disabled>'+
+'     <span class="input-group-addon">√</span>'+
+' </div></div>'+
+'</div>'+
   '{{/product}}');
 
 
@@ -16,6 +57,7 @@ can.Component.extend({
     orders: new Order.List({}),
     orderStates: new OrderState.List({}),
     merchants: new Merchant.List({}),
+    productTypes: new ProductType.List({}),
     newOrderFormProductList: new can.List(),
     productSearchTerm: "",
     product: null,
@@ -98,6 +140,18 @@ can.Component.extend({
     resetOrder: function(scope, el, ev) {
       /** RESET ORDER FORM **/
       $(".2nd-step").addClass('hidden');
+    },
+    createProduct: function(scope, el, ev) {
+      ev.preventDefault();
+      var data = {};
+      el.find("input, select, button").each(function(i,x){
+        eval("data."+$(this).attr("name")+" = '"+$(this).val()+"';"); // Save Data
+      });
+      var product = new Product(data);
+      product.save(
+        function(product){ scope.newOrderFormProductList.push(product);},  // Success
+        handleRestError // Error
+        );
     },
     calculateOrderPrice: function(scope, el, ev) {
       /** CALC THE PRICE **/
