@@ -7,45 +7,138 @@
 <div role="tabpanel" class="tab-pane active" id="index">
 	<div class="row">
 		<div class="col-xs-12">
-			<table class="table table-striped table-hover">
-				<tbody>
-					<tr>
-						<th></th>
-						<th>Datum</th>
-						<th>Nummer</th>
-						<th>Bezeichnung</th>
-						<th>Anbieter</th>
-						<th>Anzahl</th>
-						<th>Nettopreis</th>
-						<th>Mitglied</th>
-						<th colspan="2">Aktion</th>
-					</tr>
-					@{{#each orders}}
-					<tr class="status-@{{order_state_id}}">
-						<td><input type="checkbox" can-value="complete"></td>
-						<td>@{{created_at}}</td>
-						<td>@{{product.sku}}</td>
-						<td>@{{product.name}}</td>
-						<td>@{{merchant.name}}</td>
-						<td>@{{amount}} <small>(@{{product.units}})</small></td>
-						<td>@{{product.price}}</td>
-				        <td>@{{member.name}}</td>
-						<td>
-							<div class="statusIcon status-@{{order_state_id}}" onclick="$(this).children('.statusSetter').toggle();">
-								<div class='statusSetter' style="display:none;">
-									<div class='setStatus status-1' data-order_state_id='1' can-click="toggle">Wartend</div>
-									<div class='setStatus status-2' data-order_state_id='2' can-click="toggle">Zurückgestellt</div>
-									<div class='setStatus status-3' data-order_state_id='3' can-click="toggle">Bestellt</div>
-									<div class='setStatus status-4' data-order_state_id='4' can-click="toggle">Angekommen</div>
-									</div>
-							</div>
-						</td>
-					    <td><button can-click="delete">Löschen</button></td>
-				    </tr>
-				    @{{/each}}
-			    </tbody>
-			</table>
+			<br>
+			<ul class="nav nav-pills" id="orderFilterButtons">
+				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrders" data-shows="ordersTable" data-affects="orderToggleTables">Übersicht</a></li>
+				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrdersByProduct" data-value="waiting" data-shows="ordersByProductTable" data-affects="orderToggleTables">Wartend</a></li>
+				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrdersByProduct" data-value="listed" data-shows="ordersByProductTable" data-affects="orderToggleTables">Bestelliste</a></li>				
+				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrdersByProduct" data-value="pending" data-shows="ordersByProductTable" data-affects="orderToggleTables">Bestellt</a></li>
+			</ul>
+			<br>
+	</div>
+	</div>
+	<div class="orderToggleTables" id="ordersTable">
+		<div class="row">
+			<div class="col-xs-12">
+				<table class="table table-striped table-hover">
+					<tbody>
+						<tr>
+							<th></th>
+							<th>Datum</th>
+							<th>Nummer</th>
+							<th>Bezeichnung</th>
+							<th>Anbieter</th>
+							<th>Anzahl</th>
+							<th>Nettopreis</th>
+							<th>Mitglied</th>
+							<th colspan="2">Aktion</th>
+						</tr>
+						@{{#each orders}}
+						<tr class="status-@{{order_state_id}}">
+							<td><input type="checkbox" can-value="complete"></td>
+							<td>@{{dmY data=created_at field="created_at"}}</td>
+							<td>@{{product.sku}}</td>
+							<td>@{{product.name}}</td>
+							<td>@{{merchant.name}}</td>
+							<td>@{{amount}} <small>(@{{product.units}})</small></td>
+							<td>@{{product.price}}</td>
+					        <td>@{{member.name}}</td>
+							<td>
+								<div class="statusIcon status-@{{order_state_id}}" onclick="$(this).children('.statusSetter').toggle();">
+									<div class='statusSetter' style="display:none;">
+										<div class='setStatus status-1' data-order_state_id='1' can-click="toggle">Wartend</div>
+										<div class='setStatus status-2' data-order_state_id='2' can-click="toggle">Zurückgestellt</div>
+										<div class='setStatus status-3' data-order_state_id='3' can-click="toggle">Auf Bestelliste</div>
+										<div class='setStatus status-4' data-order_state_id='4' can-click="toggle">Bestellt</div>
+										</div>
+								</div>
+							</td>
+						    <td><button class="btn btn-danger" can-click="delete"><span class="glyphicon glyphicon-remove"></span></button></td>
+					    </tr>
+					    @{{/each}}
+				    </tbody>
+				</table>
+			</div>
 		</div>
+	</div>
+	<div class="hidden orderToggleTables" id="ordersByProductTable">
+		<div class="row">
+			<div class="col-xs-12">				
+				<div class="btn-toolbar">
+					<div class="btn-group btn-group-sm">
+						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Anbieter Auswählen
+					    <span class="caret"></span>
+					    <span class="sr-only">Toggle Dropdown</span>
+						</button>
+					  <ul class="dropdown-menu" role="menu">
+					  	<li><a href="#" data-value="all" data-property="merchant_id" data-list="ordersByProduct" can-click="filterOrders"><span class="merchant-all"></span>Alle Händler</a></li>
+					  	@{{#each merchants}}
+					    <li><a href="#" data-value="@{{id}}" data-property="merchant_id" data-list="ordersByProduct" can-click="filterOrders"><span class="merchant-@{{id}}"></span>@{{name}}</a></li>
+					    @{{/each}}
+					  </ul>
+					</div>					
+					<div class="btn-group btn-group-sm">
+						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Markierte
+					    <span class="caret"></span>
+					    <span class="sr-only">Toggle Dropdown</span>
+						</button>
+					  <ul class="dropdown-menu" role="menu">
+					  	@{{#each orderStateSettersActive}}
+					    <li>
+					    	<a href="#" data-order_state_id="@{{id}}" data-findin="byProductTable" can-click="massToggle">
+					    		<span class="orderState-@{{id}}"></span>
+					    		@{{name}}
+					    	</a>
+					    </li>
+					    @{{/each}}
+					  </ul>
+					</div>
+					@{{#if ordersByProductShowResume.show}}
+					<div class="">
+						<button type="button" class="btn btn-success btn-sm" can-click="orderNow">Bestellung jetzt Auslösen&nbsp;<span class="glyphicon glyphicon-share-alt"></span></button>
+					</div>
+				    @{{/if}}
+				</div>
+			</div>
+		</div>		
+		<div class="row">
+			<div class="col-xs-12">
+				<table class="table table-striped table-hover" id="byProductTable">
+					<tbody>
+						<tr>
+							<th></th>
+							<th>Produkt</th>
+							<th>Menge</th>
+							<th>Bestellt zwischen / am</th>
+							<th>Einheiten Bestellen</th>
+							<th>Aktion</th>
+						</tr>
+						@{{#each ordersByProduct}}
+						<tr class="@{{colormark totalAmount}} orderState-@{{order_state_id}}">
+							<td onclick="$(this).children('input').click();"><input type="checkbox" value="@{{id}}"></td>
+							<td>
+								<strong>@{{sku}}</strong> - @{{name}}<br>
+								<strong>@{{totalForBulk}}€</strong> inkl. @{{taxrate}}% MwSt. (Einzelpreis: @{{price}}€)<br>
+								<strong>@{{merchant.name}}</strong><br>
+							</td>
+							<td>
+								<strong>@{{totalAmount}}</strong> von (@{{units}} @{{unit_unit}})
+								<br>in @{{countOrders}} Bestellungen
+							</td>
+							<td>@{{oneOrTwoDates data=earliestOrder field1="earliestOrder" field2="latestOrder"}}</td>
+							<td>
+								<strong>@{{bulkToOrder}}</strong><br>
+							<td>
+								<button class="btn btn-success btn-sm setOrderState-3"   can-click="toggle" data-order_state_id="3"><span class="glyphicon glyphicon-send" title="Auf die Bestelliste"></span></button>
+								<button class="btn btn-warning btn-sm setOrderState-2"   can-click="toggle" data-order_state_id="2"><span class="glyphicon glyphicon-remove-sign" title="Zurück in Wartezustand"></span></button>
+								<button class="btn btn-success btn-sm setOrderState-100" can-click="toggle" data-order_state_id="100"><span class="glyphicon glyphicon-ok-sign" title="Vollständig angekommen"></span></button>
+							</td>
+					    </tr>
+					    @{{/each}}
+				    </tbody>
+				</table>
+			</div>
+		</div>		
 	</div>
 </div>
 @stop
@@ -247,7 +340,7 @@
 			<orders-app>
 				@yield("appHeader")
 				<ul class="nav nav-tabs" id="tabNav">
-				  <li role="presentation" class="active"><a href="#index" aria-controls="index" id="tabIndexControl">Übersicht</a></li>
+				  <li role="presentation" class="active"><a href="#index" aria-controls="index" id="tabIndexControl">Bestellungen</a></li>
 				  <li role="presentation"><a href="#create" aria-controls="create">Neue Bestellung</a></li>
 				  <li role="presentation"><a href="#productCreate" aria-controls="productCreate">Produkt hinzufügen</a></li>
 				</ul>

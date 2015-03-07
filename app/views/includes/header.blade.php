@@ -16,6 +16,9 @@
 				<li class="@if ($controller == 'shifts') active @endif"><a href="shifts.html">Dienstplan</a></li>
 				<li class="@if ($controller == 'users') active @endif"><a href="users.html">Mitglieder</a></li>
 			</ul>
+			<ul class="nav navbar-nav pull-right">
+				<li><a href="logout">Logout</a></li>
+			</ul>
 		</div>
 	</nav>
 @stop

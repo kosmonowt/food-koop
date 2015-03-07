@@ -1,22 +1,47 @@
 <?php
+use Filter\HasFilters;
 
-class Product extends \Eloquent {
+class Product extends Model {
 
-	use SoftDeletingTrait;
+	use SoftDeletingTrait, HasFilters;
 
 	protected $fillable = ["merchant_id","product_type_id","sku","name","comment","price","units","weight_per_unit","unit_unit","tare_unit"];
 
 	protected $appends = array('taxrate');
 
+    protected static $rules = [
+		'merchant_id'  => 'required|exists:merchants,id',
+        'product_type_id' => 'required|exists:product_types,id',
+	    'sku' => "required|unique:products,sku,:id",
+        'name' => "required",
+        "price" => "required|numeric",
+        "units" => "required|integer"
+    ];
 
-	protected $rules = array(
-                'merchant_id'  => 'required|exists:merchants,id',
-                'product_type_id' => 'required|exists:product_types,id',
-                'sku' => "required|unique:products",
-                'name' => "required",
-                "price" => "required|numeric",
-                "units" => "required|integer"
-            	);
+    protected static $messages = [
+        'merchant_id.required' => 'Bitte Händler angeben.',
+        'merchant_id.exists' => 'Der Händler existiert nicht.',
+        'product_type_id.required' => 'Bitte Produktart auswählen.',
+        "product_type_id.exists" => "Diese Produktart ist unbekannt",
+        'sku.required' => "Bitte die Artikelnummer aus dem Katalog angeben.",
+        "sku.unique" => "Die SKU existiert bereits!",
+        "name" => "Bitte eine Bezeichnung zu diesem Produkt angeben.",
+        "price.required" => "Bitte Preis eingeben.",
+        "price.numeric" => "Der Preis muss numerisch sein",
+        "units.required" => "Bitte angeben wieviele Einheiten in der Verpackung enthalten sind.",
+        "units.integer" => "Die anzahl der Einheiten muss ganzzahlig sein. Bei gebrochenen Mengen bitte die nächstkleinere Einheit wählen."
+    ];
+
+    public $input = [
+        'sku' => 'trim',
+        'name' => 'trim',
+        'comment' => 'trim',
+        'price' => 'trim',
+        'units' => 'trim',
+        'weight_per_unit' => "trim",
+        "unit_unit" => "trim",
+        "tare_unit" => "trim"
+    ];
 
 	public function product_type() {
         return $this->belongsTo("ProductType","product_type_id");
@@ -38,11 +63,3 @@ class Product extends \Eloquent {
 	}
 
 }
-
-Order::creating(function($order) {
-	$product_id = $order->product_id;
-	if (!Order::where("product_id","=",$product_id)->count()) {
-		$order->comment = (strlen($order->comment)) ? $order->comment . " Erstbestellung." : "Erstbestellung.";
-	}
-	return $order;
-});

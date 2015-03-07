@@ -1,6 +1,6 @@
 <?php
 
-class UsersController extends \BaseController {
+class UserGroupsController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -9,7 +9,7 @@ class UsersController extends \BaseController {
 	 */
 	public function index()
 	{
-		return User::get()->toJson();
+		return UserGroup::get()->toJson();
 	}
 
 
@@ -31,17 +31,7 @@ class UsersController extends \BaseController {
 	 */
 	public function store()
 	{
-		$data = Input::all();
-
-		$user = new User();
-		$user->fill($data);
-		$user->password = Hash::make($user->password);
-
-		if(!$user->save()) {
-			App::abort(403,$user->getErrors());
-		}
-
-		return $user->toJson();
+		//
 	}
 
 
@@ -77,15 +67,10 @@ class UsersController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		$user = User::find($id);
-		$user->fill(Input::all());
-		$user->password = Hash::make($user->password);
+		$UserGroup = UserGroup::find($id);
+		$UserGroup->fill(Input::all());
 
-		if(!$user->save()) {
-			App::abort(403,$user->getErrors());
-		}
-
-		return $user->toJson();
+		return ($UserGroup->save()) ? "true" : "false";
 	}
 
 
@@ -97,13 +82,8 @@ class UsersController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$Uuer = User::find($id);
-
-		if(!$user->delete()) {
-			App::abort(403,$user->getErrors());
-		}
-
-		return "true";
+		$UserGroup = UserGroup::find($id);
+		return ($UserGroup->delete()) ? "true" : "false";
 	}
 
 

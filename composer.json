@@ -8,7 +8,8 @@
 		"laravel/framework": "4.2.*",
 		"machuga/authority-l4" : "dev-master",
 		"efficiently/authority-controller" : "1.2.*",
-        	"way/database": "dev-master"
+        	"way/database": "dev-master",
+		"rmasters/filter": "dev-master"
 	},
 	"require-dev": {
 		"way/generators": "~2.0"

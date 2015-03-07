@@ -29,3 +29,26 @@ It is thought to use
 * Members can do *Orders* to suit their needs of consumption.
 * Orders are made off a *Product*-catalogue, that holds products of different *Merchants* (Anbieter).
 * Orders can have OrderStates
+
+## Release History
+
+## Todo
+
+### Orders
+
+* Add Badges with (number of orders) to Übersicht
+
+### Products
+
+* Edit Product Attributes after Create
+* Make Product Overview Page
+* Make "Most famous Products" Page
+* Generate Product XLS File
+
+### Users
+
+* User import with password in migration
+
+### Known Issues
+
+* Product Search with more than 3 letters to define better

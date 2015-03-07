@@ -59,7 +59,9 @@ class ProductsController extends \BaseController {
 		$Product->fill($data);
 		$Product->product_state_id = $product_state_id;
 
-		$Product->save();
+		if(!$Product->save()) {
+			App::abort(403,$Product->getErrors());
+		}
 
 		if (isset($data['order_amount']) && isset($data['createAndOrder'])) {
 			$Order = new Order();

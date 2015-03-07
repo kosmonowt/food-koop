@@ -46,3 +46,50 @@ font-size: 20px;
 line-height: 20px;
 padding: 10px;
 }
+
+
+/** Statusfarben **/
+tr.demand-max {
+    background-color: #9DE59D;
+}
+
+tr.demand-max:nth-of-type(odd) {
+    background-color: #C0FFC0;
+}
+
+tr.demand-50 {
+    background-color: #EDC33E;
+}
+
+tr.demand-50:nth-of-type(odd) {
+    background-color: #EDC33E;
+}
+
+tr.demand-30 {
+    background-color: #F4B988;
+}
+
+tr.demand-30:nth-of-type(odd) {
+    background-color: #f48988;
+}
+
+tr.demand-low {
+    background-color: red;
+}
+
+/** ORDER STATE LOGICAL SWITCHES (MOVE TO JS SOON) **/
+
+.orderState-0 .setOrderState-100,
+.orderState-0 .setOrderState-2,
+.orderState-1 .setOrderState-100,
+.orderState-1 .setOrderState-2,
+.orderState-2 .setOrderState-100,
+.orderState-2 .setOrderState-2,
+.orderState-3 .setOrderState-100,
+.orderState-3 .setOrderState-3,
+.orderState-4 .setOrderState-3 {
+    display: none;
+}
+
+
+{ display: none;}

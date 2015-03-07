@@ -5,6 +5,8 @@ can.Component.extend({
     memberGroups: new MemberGroup.List({}),
     memberStatus: new MemberStatus.List({}),
     memberUsers: new can.List({}),
+    userGroups: new UserGroup.List({}),
+    currentMember: new can.Map({"id":"test"}),
     select: function(members){
       this.attr('selectedMember', members);
     },
@@ -27,11 +29,25 @@ can.Component.extend({
         function(member){ scope.members.push(member);},  // Success
         handleRestError // Error
         );
-
     },
 
-    filterUsersByMember: function(m,el,ev) { this.memberUsers.replace(m.user); },
-
+    filterUsersByMember: function(m,el,ev) { this.memberUsers.replace(m.user); this.currentMember.attr("id", m.id);  },
+    /** Create User **/
+    userCreate: function(scope,el,ev) {
+      ev.preventDefault();
+      var data = {};
+      $("#userCreateForm").find("input, select").each(function(i,x){
+        eval("data."+$(this).attr("name")+" = '"+$(this).val()+"';"); // Save Data
+      });
+      var user = new User(data);
+      user.save(
+        function(user){ 
+          // Assign User to member
+          member = scope.members.filter(function(member,ix,list) {return member.id == user.member_id;});
+          member[0].user.push(user);
+        }, handleRestError // Error
+      );
+    },
     /** 
      * Edit functions.
      * Has to move to a global prototype soon.
@@ -62,12 +78,12 @@ can.Component.extend({
         // for <Input>, quite easy
         m.attr(attrName,val);
         if (typeof(m.save)!= "undefined" ) {
-          m.save();
+          m.save(function(){},handleRestError);
         } else {
           //retrieve model
           var modelName = el.parents(".modelSection").data("model");
           eval("var u = new "+modelName+"(m)");
-          u.save();
+          u.save(function(){},handleRestError);
           // SAVE
         }
       }

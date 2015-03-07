@@ -2,14 +2,86 @@
 
 class OrdersController extends \BaseController {
 
+
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index()
-	{
+	public function index()	{
 		return Order::with("member")->with("product")->with("merchant")->orderBy('updated_at', 'DESC')->take(50)->get()->toJson();
+	}
+
+	/**
+	 * 
+	 * This will be the pill that 
+	 * 
+	 **/
+	public function countByOrderState($order_state_id,$by_product = false) {
+	}
+
+	public function byProduct($product_id = null,$order_state = null) {
+		
+		// If product id is a string we have an order state passed here...
+		if (!intval($product_id) && !is_null($product_id)) {
+			$order_state = $product_id;
+			$product_id = null;
+		}
+
+		$orders = Order::byProductVerbose();
+		if (!is_null($product_id)) $orders->where("product_id","=",$product_id);
+		if (!is_null($order_state)) {
+			switch ($order_state) {
+				case 'waiting':
+					$orders->waiting();
+					break;
+				case 'listed':
+					$orders->listed();
+					break;
+				case "pending":
+					$orders->pending();
+					break;
+				case "complete":
+					$orders->completed();
+					break;
+			}
+		}
+		$orders->orderBy("demand","DESC");
+		$orders->orderBy("earliestOrder","ASC");
+		return $orders->get()->toJson();
+	}
+
+	public function updateBulk($product_id,$order_state_id = null) {
+		
+		if (is_null($order_state_id)) {
+			$productIds = Input::get("product_ids");
+			$order = Order::whereIn("product_id",$productIds);
+			$order_state_id = $product_id;
+		} else {
+			$order = Order::where("product_id","=",$product_id);
+		}
+		
+		if ($order_state_id == 3) {
+			// Apply only for orders waiting.
+			$order->where("order_state_id","<",3);
+		} elseif ($order_state_id == 4) {
+			// Apply only for orders pending
+			$order->where("order_state_id","=",3);
+		} elseif ($order_state_id == 2) {
+			// Apply only for orders pending or ordered (not for completed ones)
+			$order->where("order_state_id","<=",4);
+		}
+
+		if (!is_null(Input::get("latestOrder"))) $order->where("created_at","<=",Input::get("latestOrder"));
+		if (!is_null(Input::get("earliestOrder"))) $order->where("created_at",">=",Input::get("earliestOrder"));
+
+		$order->update(array("order_state_id" => $order_state_id));
+		return $order->get()->toJson();
+	}
+
+	public function orderBulk() {
+		$order = Order::where("order_state_id","=",3)->update(array("order_state_id" => 4));
+		return "{\"result\":\"$order\"}";
 	}
 
 	/**

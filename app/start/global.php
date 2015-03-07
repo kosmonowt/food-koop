@@ -79,3 +79,6 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+// By Kosmo
+require app_path()."/eventListeners.php";

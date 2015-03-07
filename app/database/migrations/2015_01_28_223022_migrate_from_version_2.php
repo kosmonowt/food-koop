@@ -75,7 +75,7 @@ class MigrateFromVersion2 extends Migration {
 			$table->string('username',64);
 			$table->string('firstname', 64);
 			$table->string('lastname',64);
-			$table->string('password',128);
+			$table->string('password',192);
 			$table->string('email',255)->nullable();
 			$table->string('telephone',24)->nullable();
 			$table->rememberToken();

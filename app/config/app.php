@@ -124,6 +124,7 @@ return array(
 		'Authority\AuthorityL4\AuthorityL4ServiceProvider',
 		'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
+		'Filter\FilterServiceProvider',
 	),
 
 	/*
@@ -191,7 +192,8 @@ return array(
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
 
-		'Authority' => 'Authority\AuthorityL4\Facades\Authority',
+		'Model' => 'Way\Database\Model',
+		'Filter' => 'Filter\Facades\Filter',
 
 	),
 

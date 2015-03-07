@@ -1,4 +1,6 @@
-/** CONFIG **/
+/*======================================================================*/
+/*============================ CONFIGURATION ===========================*/
+/*======================================================================*/
 var sUrl = "/app/";
 var appConfig = {
   product: {
@@ -11,7 +13,9 @@ var appConfig = {
 };
 var globals = {};
 
-/** PUT TO LIB SOON **/
+/*======================================================================*/
+/*===================== LIBRARY OF COMMON SNIPS ========================*/
+/*======================================================================*/
 function ucfirst(str) {
   //  discuss at: http://phpjs.org/functions/ucfirst/
   // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
@@ -26,8 +30,19 @@ function ucfirst(str) {
   return f + str.substr(1);
 }
 
-/** END LIB **/
+/**
+ * Converts a datetime (mysql) - string to a date
+ */
+function datefromdatetime(datetime) {
+  var parts = datetime.substr(0,10).split('-');
+  var d = new Date(parts[0], parts[1]-1, parts[2]);
+  tototo = d;
+  return ('0'+d.getDate()).slice(-2)+"."+('0'+(d.getMonth()+1)).slice(-2)+"."+d.getFullYear();
+}
 
+/*======================================================================*/
+/*============================ REST API SECTION ========================*/
+/*======================================================================*/
 
 /** ORDERS **/
 var Order = can.Model.extend({
@@ -35,8 +50,21 @@ var Order = can.Model.extend({
   findOne: 'GET '+sUrl+'orders/{id}',
   update: 'PUT '+sUrl+'orders/{id}',
   destroy: 'DELETE '+sUrl+'orders/{id}',
-  create : 'POST '+sUrl+'orders'  
+  create : 'POST '+sUrl+'orders'
 }, {});
+
+/**
+ * For Order By Product. Can handle Params
+ * first should be the product_id.
+ * if not provided is is interpreted as order_state.
+ * more information see at routes.php
+ */
+var OrderSearch = new can.Model();
+OrderSearch.findByProduct = function(params) {
+  var param = "";
+  for (var i=0;i < params.length;i++) param += "/"+params[i];
+  return $.get(sUrl+'orders/byProduct'+param);
+};
 
 /** ORDER STATE **/
 var OrderState = can.Model.extend({
@@ -72,6 +100,13 @@ var User = can.Model.extend({
   create : 'POST '+sUrl+'users'
 }, {});
 
+var UserGroup = can.Model.extend({
+  findAll: 'GET '+sUrl+'userGroups',
+  findOne: 'GET '+sUrl+'userGroups/{id}',
+  update: 'PUT '+sUrl+'userGroups/{id}',
+  destroy: 'DELETE '+sUrl+'userGroups/{id}'
+}, {});
+
 var Member = can.Model.extend({
   findAll: 'GET '+sUrl+'members',
   findOne: 'GET '+sUrl+'members/{id}',
@@ -102,35 +137,106 @@ var Product = can.Model.extend({
   create : 'POST '+sUrl+'products'  
 }, {});
 
-can.mustache.registerHelper('quickEdit',
-  function(subject, verb, number, options){
+
+/*======================================================================*/
+/*============================ MUSTACHE SECTION ========================*/
+/*======================================================================*/
+
+can.mustache.registerHelper("dmY",function(data){
+  var date = eval("data.context."+data.hash.field);
+  return datefromdatetime(date);
 });
 
+/** Used in Orders to point out if one or more dates to be parsed for the cumulated order */
+can.mustache.registerHelper("oneOrTwoDates",function(data){
+  var date1 = eval("data.context."+data.hash.field1+".substr(0,10)");
+  var date2 = eval("data.context."+data.hash.field2+".substr(0,10)");
+  var ret = "";
+  if (date1 != date2) {
+    ret = datefromdatetime(date1); 
+    ret += " und ";
+  }
+  ret += datefromdatetime(date2);
+  return ret;
+});
+
+can.mustache.registerHelper("colormark",function(data){
+  var quote = (parseInt(this.totalAmount) / parseInt(this.units) * 100);
+  var classname = "demand-";
+  if (quote >= 100) { classname += "max";
+  } else if (quote >= 80) { classname += "80";
+  } else if (quote >= 60) { classname += "60";
+  } else if (quote >= 50) { classname += "50";
+  } else if (quote >= 30) { classname += "30";
+  } else if (quote >= 25) { classname += "25";
+  } else { classname += "low"; }
+  return classname;
+});
+
+can.mustache.registerHelper("orderIsPending",function(data){
+  return (data.context.order_state_id < 3);
+});
+can.mustache.registerHelper("orderIsOnList",function(data){
+  return (data.context.order_state_id == 3);
+});
+can.mustache.registerHelper("orderIsWaiting",function(data){
+  return (data.context.order_state_id == 4);
+});
+
+/*======================================================================*/
+/*======================= RESPONSE INTERPRETERS ========================*/
+/*======================================================================*/
+
+/**
+ * This one gets some parameters and renders a message that comes into the flashContainer on the page.
+ * Used for RestERRORS and Success Messages for example.
+ */
 function addFlashMessage(title, message, type) {
   $('#flashContainer').html("<div class='row bg-"+type+" flashMessage' onclick='$(this).remove();'><div class='col-xs-12'><strong>"+title+"</strong>&nbsp;"+message+"</div></div>");
   setTimeout(function(){ $("#flashContainer").html(""); }, 10000);
 }
+// Some shortcuts for addFlashMessage
+var handleRestCreate = function(title,message) { addFlashMessage(title,message,"success");}
+var handleRestDestroy = function(title,message) { addFlashMessage(title,message,"warning");}
+var handleRestUpdate = function(title,message) { addFlashMessage(title,message,"info");}
 
+/**
+ * This gets a restError Message String and parses for a flash Message.
+ * Can always be used for restError Handling
+ * adds it to a flash message
+ **/
 var handleRestError = function(error) {
   //console.log(error.statusText);
   var responseText = JSON.parse(error.responseText);
   var errorMessage = responseText.error.message;
-  // TODO MAKE FIELD TO PROVIDE ERROR MESSAGE TO USER.
-  addFlashMessage("Fehler:",errorMessage,"danger");
+  var msg = "";
+  // Can handle JSON and STRING
+  try {
+    // JSON?
+    var msgArr = JSON.parse(errorMessage);
+    for (var property in msgArr) if (msgArr.hasOwnProperty(property)) eval("msg = msg+'<br>'+msgArr."+property);
+  } catch(e) { 
+    // STRING!
+    msg = errorMessage; 
+  } 
+  addFlashMessage("Fehler:",msg,"danger");
 };
 
-var handleRestCreate = function(title,message) {
-  addFlashMessage(title,message,"success");
-}
 
-var handleRestDestroy = function(title,message) {
-  addFlashMessage(title,message,"warning");
-}
-
-var handleRestUpdate = function(title,message) {
-  addFlashMessage(title,message,"info");
-}
+/*======================================================================*/
+/*======================= UI ACTIONS AND EVENTS ========================*/
+/*======================================================================*/
 
 function gotoIndex() {
   $("#tabIndexControl").trigger("click");
+}
+
+/**
+ * show: id (without hash) of element to show
+ * affects: group of elements (including that one with id) to hide
+ * see example in orders.blade.php and orders.js
+ **/
+function tabToggler(show,affects) {
+  $("#"+show).removeClass("hidden");
+  $("."+affects).not("#"+show).addClass('hidden');
 }

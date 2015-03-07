@@ -18,7 +18,12 @@ Route::get("login",function(){
 
 Route::post("login",function(){
 	$user = User::find(1);
-	Auth::login($user);
+//	Auth::login($user);
+// var_dump(Input::get("name"));
+// var_dump(Input::get("password"));
+// var_dump(Crypt::encrypt(Input::get("password")));
+// die;
+	Auth::attempt(array('username' => Input::get("name"), 'password' => Input::get("password")));
 	/* DO REAL AUTHENTIFICATION HERE ASAP */
 	return Redirect::intended("dashboard.html");
 });
@@ -33,9 +38,11 @@ Route::get("{controller}.html", array('before' => "auth", function($controller) 
 
 
 Route::get('products/search/{merchantId}/{term}','ProductsController@search');
-Route::get('products/marketplace',function(){
-	return Order::marketplace()->get();
-});
+Route::get('products/marketplace',function(){ return Order::marketplace()->get();});
+Route::get('orders/byProduct/{product_id?}/{order_state?}','OrdersController@byProduct');
+Route::post("orders/bulk/{product_id}/{order_state_id}",'OrdersController@updateBulk');
+Route::post("orders/bulk/{order_state_id}","OrdersController@updateBulk");
+Route::get("orders/bulk/applyOrder","OrdersController@orderBulk");
 
 Route::resource('products', 'ProductsController');
 Route::resource('productTypes', 'ProductTypesController');
@@ -51,4 +58,5 @@ Route::resource('memberStatus', 'MemberStatusController');
 Route::get('users/byMember/{id}', function($id){ return User::where("member_id",$id)->get()->toJson(); });
 
 Route::resource('users', 'UsersController');
+Route::resource("userGroups", "UserGroupsController");
 
