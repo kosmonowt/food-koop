@@ -322,7 +322,7 @@
 							@{{/each}}
 							</select>
 						</td>
-					    <td><button class="btn btn-success btn-sm" can-click="userCreate"><span class="glyphicon glyphicon-ok" title="Hinzufügne"></span></button></td>
+					    <td><button class="btn btn-success btn-sm" can-click="userCreate"><span class="glyphicon glyphicon-ok" title="Hinzufügen"></span></button></td>
 				    </tr>				    
 			    </tbody>
 			</table>

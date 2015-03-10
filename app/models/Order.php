@@ -50,8 +50,6 @@ class Order extends Model {
      **/
     public function scopeByProductVerbose($query) {
         $query->byProduct();
-        $query->leftJoin("product_types","products.product_type_id","=","product_types.id");
-        $query->with("product_type");
         $query->addSelect(DB::raw(
             'CEIL(SUM(orders.amount) / products.units) as bulkToOrder, '.
             'COUNT(orders.id) as countOrders, '.
@@ -64,6 +62,8 @@ class Order extends Model {
 
     public function scopeByProduct($query) {
         $query->leftJoin("products","orders.product_id","=","products.id");
+        $query->leftJoin("product_types","products.product_type_id","=","product_types.id");
+        $query->with("product_type");
         $query->groupBy("orders.product_id");
         $query->select(DB::raw(
             'MOD(SUM(orders.amount),products.units) as remainingAmount, '.

@@ -12,15 +12,34 @@ class ProductsController extends \BaseController {
 	 */
 	public function index()
 	{
-		return Product::take(50)->get()->toJson();
+		return Product::orderCount()->get()->toJson();
 	}
 
 	public function search($merchantId, $term) {
-		$Product = Product::with("product_type")->where("sku","LIKE","$term%");
+		$Product = Product::with("product_type");
+		$Product->where("sku","LIKE","$term%");
+		$Product->orWhere("name","LIKE","$term%");
 
 		if($merchantId > 0) $Product->where("merchant_id",$merchantId);
 
 		return $Product->get()->toJson();
+	}
+
+	public function searchCount($merchantId = null, $term = null) {
+		$Product = Product::with("product_type");
+		$Product->where("sku","LIKE","$term%");
+		$Product->orWhere("name","LIKE","$term%");
+
+		if($merchantId > 0) $Product->where("merchant_id",$merchantId);
+
+		return $Product->count()->toJson();		
+	}
+
+	public function mostWanted() {
+	}
+
+	public function standards() {
+
 	}
 
 
@@ -111,10 +130,18 @@ class ProductsController extends \BaseController {
 	 */
 	public function update($id)
 	{
+
 		$p = Product::find($id);
 		$p->fill(Input::all());
 
-		return ($p->save()) ? "true" : "false";
+		$isAdmin = 1;
+
+		if ($isAdmin && Input::get("product_state_id")) {
+			// Todo: Change only for admins
+			$p->product_state_id = Input::get("product_state_id");
+		}
+
+		return ($p->save()) ? $p->toJson(); : "false";
 	}
 
 

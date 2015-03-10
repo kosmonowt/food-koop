@@ -105,6 +105,9 @@ class OrdersController extends \BaseController {
 		$data = Input::all();
 
 		$product = Product::findOrFail($data['product_id']);
+
+		if ($product->blocked) return App::abort(403, "Dieses Produkt ist gesperrt und kann nicht bestellt werden."); //" (".$product->comment.")";
+		
 		$merchant = Merchant::findOrFail($data['merchant_id']);
 
 		$order = new Order();
@@ -122,6 +125,11 @@ class OrdersController extends \BaseController {
 		
 		// TODO: Check if can do better.
 		$order->order_state_id = 0;
+		if (!is_null(Input::get("order_state_id"))) {
+			// Authentification here, as well
+			$order->order_state_id = Input::get("order_state_id");
+		}
+
 
 		$order->save();
 

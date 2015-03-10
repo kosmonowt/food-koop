@@ -36,8 +36,9 @@ Route::get("{controller}.html", array('before' => "auth", function($controller) 
 	return View::make("app.$controller");
 }));
 
-
+Route::get("products/mostPopular",function(){ return Product::mostPopular()->take(20)->get();});
 Route::get('products/search/{merchantId}/{term}','ProductsController@search');
+Route::get('products/count/{merchantId?}/{term?}','ProductsController@searchCount');
 Route::get('products/marketplace',function(){ return Order::marketplace()->get();});
 Route::get('orders/byProduct/{product_id?}/{order_state?}','OrdersController@byProduct');
 Route::post("orders/bulk/{product_id}/{order_state_id}",'OrdersController@updateBulk');

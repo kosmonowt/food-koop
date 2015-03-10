@@ -7,7 +7,7 @@ class Product extends Model {
 
 	protected $fillable = ["merchant_id","product_type_id","sku","name","comment","price","units","weight_per_unit","unit_unit","tare_unit"];
 
-	protected $appends = array('taxrate');
+	protected $appends = array('taxrate','standardProduct','blocked','merchantName',"productTypeName");
 
     protected static $rules = [
 		'merchant_id'  => 'required|exists:merchants,id',
@@ -58,8 +58,42 @@ class Product extends Model {
 
     }
 
+    public function getMerchantNameAttribute() {
+        return Merchant::find($this->merchant_id)->name;
+    }
+
 	public function getTaxrateAttribute() {
 		return ProductType::find($this->product_type_id)->tax;
 	}
+
+    public function getProductTypeNameAttribute() {
+        return ProductType::find($this->product_type_id)->name;
+    }
+
+    public function getStandardProductAttribute() {
+        return $this->product_state_id == 3;
+    }
+
+    public function getBlockedAttribute() {
+        return $this->product_state_id == 2;
+    }
+
+    public function scopeOrderCount($query) {
+        $query->leftJoin("orders","products.id","=","orders.product_id");
+        $query->addSelect(DB::raw('products.*, COUNT(orders.id) as countOrders'));
+        $query->groupBy("products.id");
+        return $query;        
+    }
+
+    public function scopeMostPopular($query) {
+        $query->orderCount();
+        $query->orderBy("countOrders","DESC");
+        return $query;
+    }
+
+    public function scopeStandardProduct($query) {
+        $query->orderCount();
+        return $query-where("product_state_id","=","3");
+    }
 
 }

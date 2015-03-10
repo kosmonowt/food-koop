@@ -32,18 +32,40 @@ It is thought to use
 
 ## Release History
 
+### 2015-03-08
+* Make Product Overview Page
+* Block ordering blocked products with 403
+* Product Filtering in Product View
+* Direct Ordering in Product View
+
+### 2015-03-10
+* Edit Product Attributes after Create
+
 ## Todo
 
 ### Orders
 
+* Set Active to
+	* grouped View (for admins)
+	* newOrder Form (for ordinary members)
 * Add Badges with (number of orders) to Übersicht
+* Redefine All Orders view 
+	* add Filters
+	* add Limit
+* Product Search with more than 3 letters to define better
 
 ### Products
 
-* Edit Product Attributes after Create
-* Make Product Overview Page
 * Make "Most famous Products" Page
 * Generate Product XLS File
+* Perform Search for Product Catalogue:
+	* Add reload on count only when more than listable items (for larger databases)
+* DELETE not working yet.
+* Add Badges with product.count on product overview
+* Direct Ordering in Product View only for admin
+* Switching product_state only for admin
+* After Updating Product also update in list view and product order list
+* Allow only Admin to edit product attribute!
 
 ### Users
 
@@ -51,4 +73,3 @@ It is thought to use
 
 ### Known Issues
 
-* Product Search with more than 3 letters to define better
