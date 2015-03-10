@@ -141,7 +141,7 @@ class ProductsController extends \BaseController {
 			$p->product_state_id = Input::get("product_state_id");
 		}
 
-		return ($p->save()) ? $p->toJson(); : "false";
+		return ($p->save()) ? $p->toJson() : "false";
 	}
 
 

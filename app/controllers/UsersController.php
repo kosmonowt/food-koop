@@ -35,7 +35,7 @@ class UsersController extends \BaseController {
 
 		$user = new User();
 		$user->fill($data);
-		$user->password = Hash::make($user->password);
+		$user->password = $user->password;
 
 		if(!$user->save()) {
 			App::abort(403,$user->getErrors());
@@ -97,7 +97,7 @@ class UsersController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$Uuer = User::find($id);
+		$user = User::find($id);
 
 		if(!$user->delete()) {
 			App::abort(403,$user->getErrors());

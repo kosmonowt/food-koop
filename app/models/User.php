@@ -58,5 +58,4 @@ class User extends Model implements UserInterface, RemindableInterface {
         'email' => 'trim',
         'telephone' => "trim"
     ];
-
 }

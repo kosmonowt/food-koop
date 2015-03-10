@@ -175,13 +175,12 @@ can.Component.extend({
     orderStates: new OrderState.List({}), // OrderStates existing
     merchants: new Merchant.List({}), // Merchants existing
     productTypes: new ProductType.List({}), // Product Types existing
-    orders: new Order.List({}), // All Orders View
-    ordersByProduct: new can.List(), // Orders By Product View
+    orders: new can.List(), // All Orders View
+    ordersByProduct: new can.List(OrderSearch.findByProduct(["waiting"]).then(function(newList,xhr){ return JSON.parse(newList);})), // Orders By Product View
     ordersByProductUnfiltered: new can.List(), // Second list for caching values
     ordersByProductScope: null, // Scope for Orders By Product View
     ordersByProductShowResume: new can.Map({"show":false}), // Indicates if onList Orders are now shown and if to show "Order Now" Button
     orderStateSettersActive: new can.List({}), // In Orders By Product View, list that indicates the actions that could be taken (states to set) with the orders
-    ordersList: new can.List({}), // List all Orders
     newProduct: new can.Map({}), // Product to be edited/created
     newOrderFormProductList: new can.List(),
     createProductForm: new can.Map({"titleCaption":"Neues Produkt Hinzufügen","showOrderAndSave":true,"buttonCaption":"Produkt Erstellen","buttonName":"create"}),
@@ -193,13 +192,16 @@ can.Component.extend({
     products: new Product.List({}), // All Products existing
     allProducts: new can.List(),  // Cached view for products
     productsScopes: new can.Map({"merchant_id":"all","product_state_id":"all","term":""}),
+
     /** Is called when New Product is being Clicked **/
     resetCreateProductForm: function(b,el,ev) {
-      this.newProduct = new Product({});
-      this.currentProductForm.attr("titleCaption",this.createProductForm.titleCaption);
-      this.currentProductForm.attr("showOrderAndSave",this.createProductForm.showOrderAndSave);
-      this.currentProductForm.attr("buttonCaption",this.createProductForm.buttonCaption);
-      this.currentProductForm.attr("buttonName",this.createProductForm.buttonName);
+      removeAllAttr(this.newProduct);
+      $("#productCreate form").trigger("reset");
+      replaceAllAttr(this.currentProductForm,this.createProductForm);
+      // this.currentProductForm.attr("titleCaption",this.createProductForm.titleCaption);
+      // this.currentProductForm.attr("showOrderAndSave",this.createProductForm.showOrderAndSave);
+      // this.currentProductForm.attr("buttonCaption",this.createProductForm.buttonCaption);
+      // this.currentProductForm.attr("buttonName",this.createProductForm.buttonName);
     },
     /** Toggle order_state for particluar order **/
     toggle: function(b,el,ev) {
@@ -260,6 +262,7 @@ can.Component.extend({
     },
     /** UI Action when Pill Menu Button "All orders" is clicked **/
     showOrders: function(scope,el,ev) {
+      if (!this.orders.length) this.orders = new Order.List({});
       tabToggler($(el).data("shows"),$(el).data("affects"));
     },
     /** UI Action when Pill Menu Button "Orders by Product" is clicked **/
@@ -394,7 +397,14 @@ can.Component.extend({
       });
       var product = new Product(data);
       product.save(
-        function(product){ scope.newOrderFormProductList.push(product);},  // Success
+        function(product){
+          if (typeof(data.id) == "undefined") { 
+          scope.newOrderFormProductList.push(product); // create product
+          } else {
+            // Load Updated Product into view
+          }
+
+        },  // Success
         handleRestError // Error
         );
     },

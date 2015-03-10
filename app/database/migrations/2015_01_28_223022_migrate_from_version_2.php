@@ -193,7 +193,6 @@ class MigrateFromVersion2 extends Migration {
 		Schema::dropIfExists('user_groups');
 		Schema::dropIfExists('member_ledger');
 
-
 	}
 
 }

@@ -70,12 +70,18 @@ class OrdersController extends \BaseController {
 		} elseif ($order_state_id == 2) {
 			// Apply only for orders pending or ordered (not for completed ones)
 			$order->where("order_state_id","<=",4);
+		} elseif ($order_state_id == 100) {
+			// Set completed
+			$order->where("order_state_id","==",4);
 		}
 
 		if (!is_null(Input::get("latestOrder"))) $order->where("created_at","<=",Input::get("latestOrder"));
 		if (!is_null(Input::get("earliestOrder"))) $order->where("created_at",">=",Input::get("earliestOrder"));
 
+		Event::fire("orders.setState",array($order->get()));
+
 		$order->update(array("order_state_id" => $order_state_id));
+
 		return $order->get()->toJson();
 	}
 

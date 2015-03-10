@@ -41,6 +41,12 @@ It is thought to use
 ### 2015-03-10
 * Edit Product Attributes after Create
 
+### 2015-03-10 rev. 2
+* User import with password in migration
+* Replaced Password-Hashing to event
+* Added event listener for setState (Order)
+* Email for New Users (on Migration and on Create through app)
+
 ## Todo
 
 ### Orders
@@ -53,6 +59,7 @@ It is thought to use
 	* add Filters
 	* add Limit
 * Product Search with more than 3 letters to define better
+* Reorder Orders View Tab: 1. ByProduct 2. All Orders
 
 ### Products
 
@@ -66,10 +73,19 @@ It is thought to use
 * Switching product_state only for admin
 * After Updating Product also update in list view and product order list
 * Allow only Admin to edit product attribute!
+* Redesign colors: Only <td> on checkbox will have colors indicating the completeness of the order.
+* Email to user and member when order was sent as well as wenn order arrived
+	* Do not inform change-applying user
 
 ### Users
+* Edit User Group Settings needs update
 
-* User import with password in migration
+### MemberLedger
+
+### Shifts
+* Create migration for shifts
+* Create view for shifts
+* Count and evaluate shifts from members
 
 ### Known Issues
 

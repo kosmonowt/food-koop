@@ -34,10 +34,23 @@ function ucfirst(str) {
  * Converts a datetime (mysql) - string to a date
  */
 function datefromdatetime(datetime) {
+  
+  if (typeof(datetime) == "undefined") return "";
+
   var parts = datetime.substr(0,10).split('-');
   var d = new Date(parts[0], parts[1]-1, parts[2]);
   tototo = d;
   return ('0'+d.getDate()).slice(-2)+"."+('0'+(d.getMonth()+1)).slice(-2)+"."+d.getFullYear();
+}
+
+function removeAllAttr(canMap) {
+  for (var attr in canMap) canMap.removeAttr(attr);
+  return canMap;
+}
+
+function replaceAllAttr(canMap,oCanMap) {
+  for (var attr in oCanMap) canMap.attr("attr",oCanMap.attr(attr));
+  return canMap;
 }
 
 /*======================================================================*/
@@ -137,7 +150,6 @@ var Product = can.Model.extend({
   create : 'POST '+sUrl+'products'  
 }, {});
 
-
 /*======================================================================*/
 /*============================ MUSTACHE SECTION ========================*/
 /*======================================================================*/
@@ -149,6 +161,7 @@ can.mustache.registerHelper("dmY",function(data){
 
 /** Used in Orders to point out if one or more dates to be parsed for the cumulated order */
 can.mustache.registerHelper("oneOrTwoDates",function(data){
+  if (typeof (eval("data.context."+data.hash.field1)) == "undefined") return "";
   var date1 = eval("data.context."+data.hash.field1+".substr(0,10)");
   var date2 = eval("data.context."+data.hash.field2+".substr(0,10)");
   var ret = "";

@@ -106,7 +106,17 @@ class MoveDataAndClearOldTables extends Migration {
 					$user->lastname = $gruppenmitglied->nachname;
 					$user->telephone = $gruppenmitglied->telefon;
 					if ($gruppenmitglied->email !== "") $user->email = $gruppenmitglied->email;
-					$user->password = $mitglied->passwort;
+					if (strlen($mitglied->passwort) == 40) {
+						$words = ["Apfel","Birne","Kirsche","Banane","Orange","Maulbeere","Brombeere","Yoghurt","Sonnenblume","Hirsch","Pferd","Detektiv","Geranie","Begonie","Kamille","Veilchen","Vergissmeinicht"];
+						$number1 = rand(10,99);
+						$number2 = rand(10,99);
+						$w1 = $words[rand(0,(count($words)-1))];
+						$w2 = $words[rand(0,(count($words)-1))];
+						$pw = $number1.$w1.$w2.$number2;
+					} else {
+						$pw = $mitglied->passwort;
+					}
+					$user->password = $pw;
 					$user->user_group_id = 1;
 					$user->save();
 
@@ -133,11 +143,14 @@ class MoveDataAndClearOldTables extends Migration {
 		$os->save();		
 		$os = new OrderState();
 		$os->id = 3;
-		$os->name = "Bestellt";
+		$os->name = "Auf Bestelliste";
 		$os->save();		
 		$os = new OrderState();
 		$os->id = 4;
-		$os->name = "Angekommen";
+		$os->name = "Bestellt";
+		$os->save();
+		$os->id = 100;
+		$os->name = "Abgeschlossen";
 		$os->save();
 
 		// Seed Product State
@@ -151,7 +164,7 @@ class MoveDataAndClearOldTables extends Migration {
 		$ps->save();
 		$ps = new ProductState();
 		$ps->id = 3;
-		$ps->name = "Vorzugsprodukt";
+		$ps->name = "Grundbedarf";
 		$ps->save();		
 
 		if (Schema::hasTable('bestellungen')) {

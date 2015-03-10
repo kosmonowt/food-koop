@@ -9,59 +9,15 @@
 		<div class="col-xs-12">
 			<br>
 			<ul class="nav nav-pills" id="orderFilterButtons">
-				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrders" data-shows="ordersTable" data-affects="orderToggleTables">Übersicht</a></li>
-				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrdersByProduct" data-value="waiting" data-shows="ordersByProductTable" data-affects="orderToggleTables">Wartend</a></li>
+				<li role="presentation"><a href="#" class="tabToggler active" can-click="showOrdersByProduct" data-value="waiting" data-shows="ordersByProductTable" data-affects="orderToggleTables">Wartend</a></li>
 				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrdersByProduct" data-value="listed" data-shows="ordersByProductTable" data-affects="orderToggleTables">Bestelliste</a></li>				
 				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrdersByProduct" data-value="pending" data-shows="ordersByProductTable" data-affects="orderToggleTables">Bestellt</a></li>
+				<li role="presentation"><a href="#" id="showAllOrdersControl" class="tabToggler" can-click="showOrders" data-shows="ordersTable" data-affects="orderToggleTables">Übersicht</a></li>
 			</ul>
 			<br>
 	</div>
 	</div>
-	<div class="orderToggleTables" id="ordersTable">
-		<div class="row">
-			<div class="col-xs-12">
-				<table class="table table-striped table-hover">
-					<tbody>
-						<tr>
-							<th></th>
-							<th>Datum</th>
-							<th>Nummer</th>
-							<th>Bezeichnung</th>
-							<th>Anbieter</th>
-							<th>Anzahl</th>
-							<th>Nettopreis</th>
-							<th>Mitglied</th>
-							<th colspan="2">Aktion</th>
-						</tr>
-						@{{#each orders}}
-						<tr class="status-@{{order_state_id}}">
-							<td><input type="checkbox" can-value="complete"></td>
-							<td>@{{dmY data=created_at field="created_at"}}</td>
-							<td>@{{product.sku}}</td>
-							<td>@{{product.name}}</td>
-							<td>@{{merchant.name}}</td>
-							<td>@{{amount}} <small>(@{{product.units}})</small></td>
-							<td>@{{product.price}}</td>
-					        <td>@{{member.name}}</td>
-							<td>
-								<div class="statusIcon status-@{{order_state_id}}" onclick="$(this).children('.statusSetter').toggle();">
-									<div class='statusSetter' style="display:none;">
-										<div class='setStatus status-1' data-order_state_id='1' can-click="toggle">Wartend</div>
-										<div class='setStatus status-2' data-order_state_id='2' can-click="toggle">Zurückgestellt</div>
-										<div class='setStatus status-3' data-order_state_id='3' can-click="toggle">Auf Bestelliste</div>
-										<div class='setStatus status-4' data-order_state_id='4' can-click="toggle">Bestellt</div>
-										</div>
-								</div>
-							</td>
-						    <td><button class="btn btn-danger" can-click="delete"><span class="glyphicon glyphicon-remove"></span></button></td>
-					    </tr>
-					    @{{/each}}
-				    </tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div class="hidden orderToggleTables" id="ordersByProductTable">
+	<div class="orderToggleTables" id="ordersByProductTable">
 		<div class="row">
 			<div class="col-xs-12">				
 				<div class="btn-toolbar">
@@ -140,6 +96,50 @@
 			</div>
 		</div>		
 	</div>
+	<div class="hidden orderToggleTables" id="ordersTable">
+		<div class="row">
+			<div class="col-xs-12">
+				<table class="table table-striped table-hover">
+					<tbody>
+						<tr>
+							<th></th>
+							<th>Datum</th>
+							<th>Nummer</th>
+							<th>Bezeichnung</th>
+							<th>Anbieter</th>
+							<th>Anzahl</th>
+							<th>Nettopreis</th>
+							<th>Mitglied</th>
+							<th colspan="2">Aktion</th>
+						</tr>
+						@{{#each orders}}
+						<tr class="status-@{{order_state_id}}">
+							<td><input type="checkbox" can-value="complete"></td>
+							<td>@{{dmY data=created_at field="created_at"}}</td>
+							<td>@{{product.sku}}</td>
+							<td>@{{product.name}}</td>
+							<td>@{{merchant.name}}</td>
+							<td>@{{amount}} <small>(@{{product.units}})</small></td>
+							<td>@{{product.price}}</td>
+					        <td>@{{member.name}}</td>
+							<td>
+								<div class="statusIcon status-@{{order_state_id}}" onclick="$(this).children('.statusSetter').toggle();">
+									<div class='statusSetter' style="display:none;">
+										<div class='setStatus status-1' data-order_state_id='1' can-click="toggle">Wartend</div>
+										<div class='setStatus status-2' data-order_state_id='2' can-click="toggle">Zurückgestellt</div>
+										<div class='setStatus status-3' data-order_state_id='3' can-click="toggle">Auf Bestelliste</div>
+										<div class='setStatus status-4' data-order_state_id='4' can-click="toggle">Bestellt</div>
+										</div>
+								</div>
+							</td>
+						    <td><button class="btn btn-danger" can-click="delete"><span class="glyphicon glyphicon-remove"></span></button></td>
+					    </tr>
+					    @{{/each}}
+				    </tbody>
+				</table>
+			</div>
+		</div>
+	</div>	
 </div>
 @stop
 
@@ -225,7 +225,7 @@
 			<input type="hidden" name="id" value="@{{newProduct.id}}">
 		    <label for="createProductForm_merchant_id" class="col-sm-6 control-label">Anbieter</label>
 		    <div class="col-sm-6">
-				<select class="form-control" id="createProductForm_merchant_id" name="merchant_id" required >
+				<select class="form-control" id="createProductForm_merchant_id" name="merchant_id" required>
 					<option value="">Bitte Wählen</option>
 					@{{#each merchants}}
 					<option value="@{{id}}">@{{name}}</option>
