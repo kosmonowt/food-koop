@@ -61,3 +61,7 @@ Route::get('users/byMember/{id}', function($id){ return User::where("member_id",
 Route::resource('users', 'UsersController');
 Route::resource("userGroups", "UserGroupsController");
 
+Route::get("memberLedger/starteinlage", function(){ return MemberLedger::starteinlage()->own()->first()->toJson(); });
+Route::get("memberLedger/balance", function(){ return MemberLedger::balance()->own()->first()->toJson(); });
+Route::get("memberLedger/member/{member_id}",function($member_id){ return MemberLedger::from($member_id)->ordered()->get()->toJson();});
+Route::resource('memberLedger', 'MemberLedgerController');

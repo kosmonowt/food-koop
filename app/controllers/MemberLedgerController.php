@@ -1,6 +1,5 @@
 <?php
-
-class MembersController extends \BaseController {
+class MemberLedgerController extends BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -9,14 +8,8 @@ class MembersController extends \BaseController {
 	 */
 	public function index()
 	{
-		$Member = new Member();
-		$members = $Member->with("user")->with("memberGroup")->get();
-/*		foreach ($members as $m) {
-			$m->balance = MemberLedger::balance()->where("member_id","=",$this->id)->first()->balance;
-		}*/
-		return $members->toJson();
+		return MemberLedger::get()->toJson();
 	}
-
 
 	/**
 	 * Show the form for creating a new resource.
@@ -34,16 +27,16 @@ class MembersController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store()
-	{
+	public function store()	{
+
 		$data = Input::all();
-		$member = new Member();
-		$member->fill($data);
-		if (!$member->save()) {
-			App::abort(403,$member->getErrors());			
+		$ledger = new MemberLedger();
+		$ledger->fill($data);
+		if(!$ledger->save()) {
+			App::abort(403,$ledger->getErrors());
 		}
-		return $member->toJson();
-		//
+
+		return $ledger->toJson();		
 	}
 
 
@@ -79,10 +72,10 @@ class MembersController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		$Member = Member::find($id);
-		$Member->fill(Input::all());
+		$p = Merchant::find($id);
+		$p->fill(Input::all());
 
-		return ($Member->save()) ? "true" : "false";
+		return ($p->save()) ? "true" : "false";
 	}
 
 
@@ -94,8 +87,8 @@ class MembersController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$Member = Member::find($id);
-		return ($Member->delete()) ? "true" : "false";
+		$p = Merchant::find($id);
+		return ($p->delete()) ? "true" : "false";
 	}
 
 

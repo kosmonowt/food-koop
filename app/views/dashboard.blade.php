@@ -17,5 +17,6 @@
 	</div>
 	<div class="row">
 		@yield("myProfile")		
+		@yield("myLedger")
 	</div>
 @stop

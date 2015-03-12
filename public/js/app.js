@@ -30,11 +30,16 @@ function ucfirst(str) {
   return f + str.substr(1);
 }
 
+Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+});
+
 /**
  * Converts a datetime (mysql) - string to a date
  */
 function datefromdatetime(datetime) {
-  
   if (typeof(datetime) == "undefined") return "";
 
   var parts = datetime.substr(0,10).split('-');
@@ -142,6 +147,11 @@ var MemberStatus = can.Model.extend({
   destroy: 'DELETE '+sUrl+'memberStatus/{id}'
 }, {});
 
+var MemberLedger = can.Model.extend({
+  create :'POST '+sUrl+'memberLedger'
+});
+
+
 var Product = can.Model.extend({
   findAll: 'GET '+sUrl+'products',
   findOne: 'GET '+sUrl+'products/{id}',
@@ -153,6 +163,11 @@ var Product = can.Model.extend({
 /*======================================================================*/
 /*============================ MUSTACHE SECTION ========================*/
 /*======================================================================*/
+
+can.mustache.registerHelper("posNeg",function(data){
+  var balance = data.context.balance;
+  return (parseFloat(balance) > 0) ? "text-info" : "text-danger";
+});
 
 can.mustache.registerHelper("dmY",function(data){
   var date = eval("data.context."+data.hash.field);

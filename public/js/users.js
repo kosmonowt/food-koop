@@ -6,7 +6,8 @@ can.Component.extend({
     memberStatus: new MemberStatus.List({}),
     memberUsers: new can.List({}),
     userGroups: new UserGroup.List({}),
-    currentMember: new can.Map({"id":"test"}),
+    currentMember: new can.Map(),
+    currentLedger: new can.List(),
     select: function(members){
       this.attr('selectedMember', members);
     },
@@ -26,11 +27,15 @@ can.Component.extend({
       });
       var member = new Member(data);
       member.save(
-        function(member){ scope.members.push(member);},  // Success
+        function(member){
+          scope.members.push(member);
+          handleRestCreate("Erfolg","Mitglied wurde erfolgreich angelegt");
+          el.find("input").each(function(i,x){$(this).val("");});
+          $("#tabIndexControl").trigger("click");
+        },  // Success
         handleRestError // Error
         );
     },
-
     filterUsersByMember: function(m,el,ev) { this.memberUsers.replace(m.user); this.currentMember.attr("id", m.id);  },
     /** Create User **/
     userCreate: function(scope,el,ev) {
@@ -87,6 +92,56 @@ can.Component.extend({
           // SAVE
         }
       }
+    },
+    /*******************************************************************/
+    /******************* LEDGER SECTION ********************************/
+    /*******************************************************************/
+    calculateTotal: function() {
+      var currentMember = this.currentMember;
+      currentMember.attr("balance",0);
+      var currentLedger = this.currentLedger;
+      currentLedger.each(function(m,x){
+        currentMember.attr("balance",currentMember.attr("balance") + parseFloat(m.attr("balance")));
+      });
+    },
+    checkBalanceValue: function(scope, el, ev) {
+      if ($(el).val() < 0 && $("#memberLedgerVwz").val() == "Einzahlung") $("#memberLedgerVwz").val("Belastung");
+      else if ($(el).val() > 0 && $("#memberLedgerVwz").val() == "Belastung") $("#memberLedgerVwz").val("Einzahlung");
+    },
+    openLedger: function(scope, el, ev) {
+      var currentMember = this.currentMember;
+      var controller = this;
+      currentMember.attr("name",scope.name);
+      currentMember.attr("id",scope.id);
+
+      var currentLedger = this.currentLedger;
+      can.$.get(sUrl+"memberLedger/member/"+scope.id).then(
+        function(data,xhr){ 
+          currentLedger.replace(JSON.parse(data));
+          controller.calculateTotal();
+        }, handleRestError);
+      $('.tab-pane').removeClass('active');
+      $('#tabNav li.active').removeClass('active');
+      $('#ledger').addClass("active");
+      $('#memberLedgerBalance').trigger("focus");
+      $('#memberLedgerDate').val(new Date().toDateInputValue());
+    },
+    submitLedgerTransaction: function(scope, el, ev) {
+      ev.preventDefault();
+      var currentLedger = this.currentLedger;
+      var controller = this;
+      var data = {};
+      data.balance = parseFloat($("#memberLedgerBalance").val());
+      data.vwz = $("input[name='memberLedgerVwz']").val();
+      data.date = $("input[name='memberLedgerDate']").val();
+      data.member_id = this.currentMember.attr("id");
+      
+      var l = new MemberLedger(data);
+      l.save().then(function(data,xhr){
+        currentLedger.push(data);
+        controller.calculateTotal();
+      },handleRestError);
+      $("#memberLedgerBalance").val("");
     }
   }
 });

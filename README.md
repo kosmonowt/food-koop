@@ -46,6 +46,18 @@ It is thought to use
 * Replaced Password-Hashing to event
 * Added event listener for setState (Order)
 * Email for New Users (on Migration and on Create through app)
+* Added latest Ledger Action to Dashboard
+* Added Balance and Given Credit Information to Dashboard
+
+### 2015-03-12
+* Add Widget to Dashboard
+	* Total Balance
+	* Einlage
+	* Letzte Vorgänge
+* On Create.success in user.js reset form and throw succes!
+* Validation Response in MembersController::create
+* Init Ledger on Member Create
+* Ledger Add Today into date field
 
 ## Todo
 
@@ -62,7 +74,6 @@ It is thought to use
 * Reorder Orders View Tab: 1. ByProduct 2. All Orders
 
 ### Products
-
 * Make "Most famous Products" Page
 * Generate Product XLS File
 * Perform Search for Product Catalogue:
@@ -80,7 +91,19 @@ It is thought to use
 ### Users
 * Edit User Group Settings needs update
 
+### Members
+* OnDelete Cascade!
+
 ### MemberLedger
+* Limit Member Ledger Access!!!
+* Add view "Säumige"
+* SEPA IMPORT
+* Seed ledger VWZ Table
+* Connect Ledger VWZ Table with dropdown
+* Add "Undo" Ledger Action
+* Color in TotalBalance must work properly 
+* ON Create Succes throw success!
+* Dashboard: See History
 
 ### Shifts
 * Create migration for shifts

@@ -10,7 +10,7 @@ class Member extends Model {
 
 	protected static $rules = [
 		'name'  => 'required|unique:members,name,:id',
-        'email' => 'reuqired|unique:members,email,:id',
+        'email' => 'required|unique:members,email,:id',
         "street" => 'required',
         "telephone" => "required",
         "plz" => "required|digits:5",
@@ -43,12 +43,22 @@ class Member extends Model {
         'telephone' => 'trim',
     ];
 
+
+
 	public function user() {
         return $this->hasMany('User','member_id');
     }
 
 	public function memberGroup() {
         return $this->belongsTo('MemberGroup','member_group_id');
-    }    
+    }
+
+    public function memberLedger() {
+        return $this->hasMany("MemberLedger","member_id");
+    }
+
+    public function getLedgerBalanceAttribute($member) {
+        return MemberLedger::balance()->where("member_id","=",$this->id)->first()->balance;
+    }
 
 }

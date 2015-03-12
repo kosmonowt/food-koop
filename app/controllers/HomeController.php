@@ -31,6 +31,9 @@ class HomeController extends BaseController {
 		View::share("member",Member::with("user")->find(Auth::user()->member_id));
 		View::share("myOrders",Order::my()->open()->with("product")->get());
 		View::share("marketplace",Order::marketplace()->get());
+		View::share("kontostand",MemberLedger::balance()->own()->first()->balance);
+		View::share("starteinlage",MemberLedger::starteinlage()->own()->first()->balance);
+		View::share("ledger",MemberLedger::own()->latest()->get());
 		View::share("user",Auth::user());
 		$this->layout->content = View::make("dashboard");
 	}
