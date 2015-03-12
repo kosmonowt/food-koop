@@ -31,23 +31,7 @@ It is thought to use
 * Orders can have OrderStates
 
 ## Release History
-
-### 2015-03-08
-* Make Product Overview Page
-* Block ordering blocked products with 403
-* Product Filtering in Product View
-* Direct Ordering in Product View
-
-### 2015-03-10
-* Edit Product Attributes after Create
-
-### 2015-03-10 rev. 2
-* User import with password in migration
-* Replaced Password-Hashing to event
-* Added event listener for setState (Order)
-* Email for New Users (on Migration and on Create through app)
-* Added latest Ledger Action to Dashboard
-* Added Balance and Given Credit Information to Dashboard
+### 2015-03-13
 
 ### 2015-03-12
 * Add Widget to Dashboard
@@ -58,6 +42,23 @@ It is thought to use
 * Validation Response in MembersController::create
 * Init Ledger on Member Create
 * Ledger Add Today into date field
+
+### 2015-03-10 rev. 2
+* User import with password in migration
+* Replaced Password-Hashing to event
+* Added event listener for setState (Order)
+* Email for New Users (on Migration and on Create through app)
+* Added latest Ledger Action to Dashboard
+* Added Balance and Given Credit Information to Dashboard
+
+### 2015-03-10
+* Edit Product Attributes after Create
+
+### 2015-03-08
+* Make Product Overview Page
+* Block ordering blocked products with 403
+* Product Filtering in Product View
+* Direct Ordering in Product View
 
 ## Todo
 
@@ -109,6 +110,17 @@ It is thought to use
 * Create migration for shifts
 * Create view for shifts
 * Count and evaluate shifts from members
+
+### News
+* Create News Migration
+* Create News Model
+* Create News Controller
+
+### Messages
+* Create Message Migration
+* Create Message Model
+* Create Message Controller
+* Create Message System
 
 ### Known Issues
 
