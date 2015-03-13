@@ -15,11 +15,30 @@ class CreateLedgerVWZStandards extends Migration {
 		if (!Schema::hasTable('ledgerVwzs')) {
 
 			Schema::create('ledgerVwzs', function($table){
-				$table->integer('id')->unsigned();
+				$table->increments('id')->unsigned();
 				$table->string('name',64);
 				$table->unique('name');
-				$table->primary('id');
 			});
+
+			$lvwz = new LedgerVwz();
+			$lvwz->name = "Starteinlage";
+			$lvwz->save();
+
+			$lvwz = new UserGroup();
+			$lvwz->name = "Einzahlung";
+			$lvwz->save();		
+
+			$lvwz = new UserGroup();
+			$lvwz->name = "Belastung";
+			$lvwz->save();
+
+			$lvwz = new LedgerVwz();
+			$lvwz->name = "Quartalsbeitrag";
+			$lvwz->save();
+
+			$lvwz = new LedgerVwz();
+			$lvwz->name = "Auszahlung Starteinlage";
+			$lvwz->save();
 
 		}
 

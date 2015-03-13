@@ -32,6 +32,8 @@ It is thought to use
 
 ## Release History
 ### 2015-03-13
+* Create migration for TASKS
+* Created TASK Model, Controller, js and blades
 
 ### 2015-03-12
 * Add Widget to Dashboard
@@ -104,12 +106,16 @@ It is thought to use
 * Add "Undo" Ledger Action
 * Color in TotalBalance must work properly 
 * ON Create Succes throw success!
-* Dashboard: See History
+* Dashboard: See History (more than just latest)
+* Substitution from Ledger every 1/1 4/1 7/1 10/1
 
-### Shifts
-* Create migration for shifts
+### Tasks
 * Create view for shifts
 * Count and evaluate shifts from members
+* Task Creation via cronjob: 90days in advance
+* View Open Tasks
+* View Member Task History
+* Messages for open Shifts
 
 ### News
 * Create News Migration
