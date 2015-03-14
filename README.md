@@ -31,6 +31,10 @@ It is thought to use
 * Orders can have OrderStates
 
 ## Release History
+
+### 2015-03-14
+* CREATE and INDEX view-scaffold for TaskTypes
+
 ### 2015-03-13
 * Create migration for TASKS
 * Created TASK Model, Controller, js and blades
@@ -108,6 +112,9 @@ It is thought to use
 * ON Create Succes throw success!
 * Dashboard: See History (more than just latest)
 * Substitution from Ledger every 1/1 4/1 7/1 10/1
+
+### Member Groups
+* CRUD Views for Member Groups
 
 ### Tasks
 * Create view for shifts

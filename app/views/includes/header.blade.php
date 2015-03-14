@@ -13,7 +13,7 @@
 			<ul class="nav navbar-nav">
 				<li class="@if ($controller == 'dashboard') active @endif"><a href="dashboard.html">Dashboard <span class="sr-only">(current)</span></a></li>
 				<li class="@if ($controller == 'orders') active @endif"><a href="orders.html">Bestellungen</a></li>
-				<li class="@if ($controller == 'shifts') active @endif"><a href="shifts.html">Dienstplan</a></li>
+				<li class="@if ($controller == 'shifts') active @endif"><a href="tasks.html">Dienstplan</a></li>
 				<li class="@if ($controller == 'users') active @endif"><a href="users.html">Mitglieder</a></li>
 			</ul>
 			<ul class="nav navbar-nav pull-right">
