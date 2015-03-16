@@ -8,9 +8,8 @@ class TaskTypesController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function index()
-	{
-		//
+	public function index()	{
+		return TaskType::with("memberGroup")->orderBy("day_of_week","ASC")->orderBy("time_start","ASC")->get()->toJson();
 	}
 
 	/**
@@ -32,7 +31,14 @@ class TaskTypesController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
+		$taskType = new TaskType();
+		$taskType->fill(Input::all());
+
+		if(!$taskType->save()) {
+			App::abort(403,$taskType->getErrors());
+		}
+
+		return $taskType->toJson();
 	}
 
 	/**
@@ -80,7 +86,8 @@ class TaskTypesController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		$t = TaskType::find($id);
+		return ($t->delete()) ? "true" : "false";
 	}
 
 }

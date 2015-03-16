@@ -192,8 +192,9 @@ return array(
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
 
-		'Model' => 'Way\Database\Model',
+		'Collection'		=> 'Illuminate\Database\Eloquent\Collection',
 		'Filter' => 'Filter\Facades\Filter',
+		'Model' => 'Way\Database\Model',
 
 	),
 

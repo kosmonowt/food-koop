@@ -18,7 +18,7 @@ class CreateShiftsSystem extends Migration {
 			$table->string("short_description",160);
 			$table->text("long_description")->default("");
 			$table->tinyInteger("day_of_week")->unsigned();
-			$table->tinyInteger("repeat_days")->unsigned()->default(7);
+			$table->string("repeat_days",2);
 			$table->time("time_start")->nullable();
 			$table->time("time_stop")->nullable();
 			$table->date("published_start")->nullable();
@@ -34,6 +34,9 @@ class CreateShiftsSystem extends Migration {
 			$table->integer("member_id")->unsigned()->nullable();
 			$table->integer("task_type_id")->unsigned();
 			$table->date("date");
+			$table->time("start");
+			$table->time("stop");
+			$table->integer("repeat_in")->nullable->unsigned();
 			$table->string("comment",128)->nullable();
 			$table->tinyInteger("status")->default(0)->unsigned();
 			$table->foreign('member_id')->references('id')->on('members');

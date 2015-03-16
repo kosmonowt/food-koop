@@ -151,13 +151,32 @@ var MemberLedger = can.Model.extend({
   create :'POST '+sUrl+'memberLedger'
 });
 
-
 var Product = can.Model.extend({
   findAll: 'GET '+sUrl+'products',
   findOne: 'GET '+sUrl+'products/{id}',
   update: 'PUT '+sUrl+'products/{id}',
   destroy: 'DELETE '+sUrl+'products/{id}',
   create : 'POST '+sUrl+'products'  
+}, {});
+
+var WeekList = can.Model.extend({
+  findAll: 'GET '+sUrl+'tasks/byWeek'
+});
+
+var Task = can.Model.extend({
+  findAll: 'GET '+sUrl+'tasks',
+  findOne: 'GET '+sUrl+'tasks/{id}',
+  update: 'PUT '+sUrl+'tasks/{id}',
+  destroy: 'DELETE '+sUrl+'tasks/{id}',
+  create : 'POST '+sUrl+'tasks'  
+}, {});
+
+var TaskType = can.Model.extend({
+  findAll: 'GET '+sUrl+'taskTypes',
+  findOne: 'GET '+sUrl+'taskTypes/{id}',
+  update: 'PUT '+sUrl+'taskTypes/{id}',
+  destroy: 'DELETE '+sUrl+'taskTypes/{id}',
+  create : 'POST '+sUrl+'taskTypes'  
 }, {});
 
 /*======================================================================*/
@@ -172,6 +191,29 @@ can.mustache.registerHelper("posNeg",function(data){
 can.mustache.registerHelper("dmY",function(data){
   var date = eval("data.context."+data.hash.field);
   return datefromdatetime(date);
+});
+
+/** Forms a String HH:ii:ss into HH:ii **/
+can.mustache.registerHelper("timeHI",function(data){
+  var val = eval("data.context."+data.hash.field);
+  return (typeof(val) == "string") ? val.substr(0,5) : "";
+});
+
+/** Parses a Date-Range for Table view **/
+can.mustache.registerHelper("publishedStartStop",function(data){
+  var pStart = data.context.published_start;
+  var pStop = data.context.published_stop;
+  var out = "";
+
+  if (pStart == "0000-00-00" || typeof(pStart) == "object") out += "-/-";
+  else if (pStart != "0000-00-00") out += datefromdatetime(pStart);
+
+  out += "&nbsp;-<br>";
+
+  if (pStop == "0000-00-00" || typeof(pStart) == "object") out += "-/-";
+  else if (pStop != "0000-00-00") out += datefromdatetime(pStop);
+
+  return can.mustache.safeString(out);
 });
 
 /** Used in Orders to point out if one or more dates to be parsed for the cumulated order */
@@ -209,6 +251,11 @@ can.mustache.registerHelper("orderIsOnList",function(data){
 });
 can.mustache.registerHelper("orderIsWaiting",function(data){
   return (data.context.order_state_id == 4);
+});
+
+can.mustache.registerHelper("dowName",function(data){
+   var days = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
+   return days[data.context.day_of_week];
 });
 
 /*======================================================================*/

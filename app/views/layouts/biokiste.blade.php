@@ -1,9 +1,12 @@
 <!doctype HTML>
 <html>
 	<head>
-		<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/can.custom.js"></script>
-		<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	    <script type="text/javascript" src="js/underscore.min.js"></script>
+	    <script type="text/javascript" src="js/calendar.js"></script>		
+	    <script type="text/javascript" src="js/calendar-de-DE.js"></script>
 	    <meta charset="utf-8">
     	<title>{{{$title}}}</title>
 	
@@ -15,9 +18,10 @@
 	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 	
 	    <!--<link href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet"> -->
-	    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="css/bootstrap.min.css" rel="stylesheet">
 	    <link href="css/app.css" rel="stylesheet">
 	    <link href="css/webfont.css" rel="stylesheet">
+	    <link href="css/calendar.css" rel="stylesheet">
 	</head>
 	<body>
 		@yield("mustacheStart")

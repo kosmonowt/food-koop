@@ -32,6 +32,14 @@ It is thought to use
 
 ## Release History
 
+### 2015-03-16
+* Added Calendar View to Tasks
+* Added Read View for Calendar Events
+* Created Command to create Tasks from CLI
+
+### 2015-03-15
+* Added basic create &delete on tasktypes
+
 ### 2015-03-14
 * CREATE and INDEX view-scaffold for TaskTypes
 
@@ -98,8 +106,14 @@ It is thought to use
 ### Users
 * Edit User Group Settings needs update
 
+### User Groups
+* CRUD Views for User Groups
+
 ### Members
 * OnDelete Cascade!
+
+### Member Groups
+* CRUD Views for Member Groups
 
 ### MemberLedger
 * Limit Member Ledger Access!!!
@@ -113,8 +127,6 @@ It is thought to use
 * Dashboard: See History (more than just latest)
 * Substitution from Ledger every 1/1 4/1 7/1 10/1
 
-### Member Groups
-* CRUD Views for Member Groups
 
 ### Tasks
 * Create view for shifts
@@ -123,6 +135,20 @@ It is thought to use
 * View Open Tasks
 * View Member Task History
 * Messages for open Shifts
+* Soft DELETE
+* ICAL List
+* implement 2w 3w 4w 1x 2x 3x 4x
+* DELETE AND DISACTIVATE IN CLI - APPLICATION
+* DELETE AND DISACTIVATE IN ADMIN
+* Update Calendar possibility
+
+### TaskTypes
+* Soft DELETE
+* ADD VALIDATION RULES
+	* INCLUDING start_time / stop_time comparison
+* make SELECT in CREATE/UPDATEVIEW assignable
+* ADD EDIT BUTTON to INDEX-VIEW
+* ACTIVATE ACTIVE BUTTON
 
 ### News
 * Create News Migration
@@ -135,5 +161,7 @@ It is thought to use
 * Create Message Controller
 * Create Message System
 
-### Known Issues
+### Long Term Backlog
+* Language Files
+* Variable Benutzereinlage (also add in users.blade.php)
 

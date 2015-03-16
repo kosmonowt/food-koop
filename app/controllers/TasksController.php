@@ -13,6 +13,50 @@ class TasksController extends \BaseController {
 		//
 	}
 
+	public function byWeek($startWeek = null, $taskType = null) {
+		$weeksToShow = 4;
+		$daysInWeek = 7;
+		// Generate days
+		$weeks = new Collection();
+		$daysOfWeek = new Collection();
+		$i = 0;
+
+		$tasks = Task::untilDay(date("Y-m-d",strtotime("monday this week +".($weeksToShow*$daysInWeek)." days")))->with("TaskType")->get();
+		
+		while ($i < ($weeksToShow*7)) {
+			$dayTs = strtotime("monday this week +$i days");
+
+		
+			$day = new Model();
+			$day->id = intval(date("Yz",$dayTs));
+			$day->date = date("Y-m-d",$dayTs);
+			$day->day_of_week = date("w",$dayTs);
+			$day->task = new Collection();
+
+			foreach($tasks as $task) if ($task->date == $day->date) $day->task->add($task);
+
+			$daysOfWeek->add($day);
+
+			$i++;
+		
+			if (! ($i % 7)) {
+				$week = new Model();
+				$week->id = intval(date("YW",$dayTs));
+				$week->number = date("W",$dayTs);
+				$week->year = date("Y",$dayTs);	
+				$week->days = $daysOfWeek;
+				
+				$weeks->add($week);
+				
+				$daysOfWeek = new Collection();
+
+			}
+		}
+		
+		return $weeks->toJson();
+
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /tasks/create

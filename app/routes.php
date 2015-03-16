@@ -24,7 +24,6 @@ Route::post("login",function(){
 // var_dump(Crypt::encrypt(Input::get("password")));
 // die;
 	Auth::attempt(array('username' => Input::get("name"), 'password' => Input::get("password")));
-	/* DO REAL AUTHENTIFICATION HERE ASAP */
 	return Redirect::intended("dashboard.html");
 });
 
@@ -65,3 +64,7 @@ Route::get("memberLedger/starteinlage", function(){ return MemberLedger::startei
 Route::get("memberLedger/balance", function(){ return MemberLedger::balance()->own()->first()->toJson(); });
 Route::get("memberLedger/member/{member_id}",function($member_id){ return MemberLedger::from($member_id)->ordered()->get()->toJson();});
 Route::resource('memberLedger', 'MemberLedgerController');
+
+Route::get("tasks/byWeek/{number?}/{taskType?}","TasksController@byWeek");
+Route::resource("tasks","TasksController");
+Route::resource("taskTypes","TaskTypesController");
