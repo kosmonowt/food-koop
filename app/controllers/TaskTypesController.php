@@ -54,18 +54,6 @@ class TaskTypesController extends \BaseController {
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 * GET /tasktypes/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
 	 * Update the specified resource in storage.
 	 * PUT /tasktypes/{id}
 	 *
@@ -74,7 +62,15 @@ class TaskTypesController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$t = TaskType::findOrFail($id);
+
+		$t->fill(Input::all());
+
+		if(!$t->save()) {
+			App::abort(403,$t->getErrors());
+		}
+
+		return $t->toJson();
 	}
 
 	/**
@@ -86,7 +82,8 @@ class TaskTypesController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$t = TaskType::find($id);
+		$t = TaskType::findOrFail($id);
+
 		return ($t->delete()) ? "true" : "false";
 	}
 

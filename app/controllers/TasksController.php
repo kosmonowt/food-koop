@@ -92,18 +92,6 @@ class TasksController extends \BaseController {
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 * GET /tasks/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
 	 * Update the specified resource in storage.
 	 * PUT /tasks/{id}
 	 *
@@ -112,7 +100,18 @@ class TasksController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$input = Input::all();
+
+		$task = Task::findOrFail($id);
+
+		if ($input['member_id'] == "") $input['member_id'] = null;
+
+		$task->fill($input);
+
+		
+		if (!$task->save()) App::abort(403,$taskType->getErrors());
+
+		return $task->toJson();
 	}
 
 	/**

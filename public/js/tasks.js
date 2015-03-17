@@ -2,6 +2,7 @@ can.Component.extend({
 	tag: 'members-app',
 	scope : {
 		memberGroups: new MemberGroup.List({}),
+		members: new Member.List({}),
 		weekList: new WeekList.List({}),
 		taskTypes: new TaskType.List({}),
 		taskType: new TaskType(),
@@ -20,7 +21,7 @@ can.Component.extend({
 			});
 			taskType.save().then(function(data,xhr){
 				taskTypes.push(JSON.parse(data));
-				handleRestSuccess("Dienst hinzugefügt.");
+				handleRestUpdate("Dienst hinzugefügt.");
 				$("div.tab-pane.active").removeClass('active');
 				$('#tabTaskTypes').addClass('active');
 			},handleRestError);
@@ -28,6 +29,19 @@ can.Component.extend({
 		deleteTaskType: function(scope, el, ev) {
 			ev.preventDefault();
 			if (confirm("Möchtest Du diesen Dienst vollständig löschen?")) scope.destroy().then(function(){handleRestDestroy("Gelöscht:","Die Dienstart wurde gelöscht.")},handleRestError);
+		},
+		toggleTaskTypeState: function(scope, el, ev) {
+			ev.preventDefault();
+			// Only Toggle When confirmed or not active yet
+			if ((scope.attr("active") && 
+				 confirm("Wenn Du den Status auf Inaktiv stellst werden alle zukünftigen Dienste (die zu diesem Dienst gehören) auf inaktiv gestellt.")
+				|| (!scope.attr("active")))) {
+				scope.attr("active",(scope.attr("active")+1)%2);
+				new TaskType(scope).save().then(function(){handleRestUpdate("Erfolg","Dienstartstatus geändert.")},handleRestError);
+			}
+		},
+		updateTask: function(scope, el, ev) {
+			new Task(scope).save().then(function(){handleRestUpdate("Erfolg","Dienst Aktualisiert")}, handleRestError);
 		}
 	}
 });

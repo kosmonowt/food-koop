@@ -1,7 +1,7 @@
 <?php
 
 class Task extends \Eloquent {
-	protected $fillable = [];
+	protected $fillable = ["member_id","comment"];
 
 	public function scopeDay($query,$day) {
 		return $query->where("date","=",$day);

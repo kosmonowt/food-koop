@@ -131,7 +131,9 @@ class ProductsController extends \BaseController {
 	public function update($id)
 	{
 
-		$p = Product::find($id);
+		$p = Product::findOrFail($id);
+
+		
 		$p->fill(Input::all());
 
 		$isAdmin = 1;
@@ -153,7 +155,7 @@ class ProductsController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$p = Product::find($id);
+		$p = Product::findOrFail($id);
 		return ($p->delete()) ? "true" : "false";
 	}
 

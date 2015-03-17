@@ -36,7 +36,7 @@ class TaskType extends Model {
 
     public function save(array $options = array()) {
     	
-    	$this->active = (isset($this->active) && $this->active == "on");
+    	$this->active = ( ( ($this->active == 0) || ($this->active == 1) ) || (isset($this->active) && $this->active == "on") ) ;
 
     	return parent::save($options);
     }

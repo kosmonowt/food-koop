@@ -11,25 +11,34 @@
 		</div>
 	</div>
 	<div class="row">
-		@{{#each weekList}}
-		<div class="col-sm-6 col-xs-12">
-			<div class="panel panel-default">
-				<div class="panel-heading">Woche @{{number}}/@{{year}}</div>
-		  		<div class="panel-body">
+			@{{#each weekList}}
+			<div class="col-sm-6 col-xs-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Woche @{{number}}/@{{year}}</div>
 		  			<div class="list-group">
 		  				@{{#each days}}
 						<div href="#" class="list-group-item">
 							<h4 class="list-group-item-heading">@{{dowName data=day_of_week}}, @{{dmY data=date field="date"}}</h4>
 							@{{#each task}}
-							<p class="list-group-item-text">@{{timeHI data=start field="start"}} - @{{timeHI data=stop field="stop"}} @{{task_type.name}}</p>
+							<div class="well well-sm">
+								<form>
+									<input type="hidden" name="id" value="@{{id}}">
+									<p class="list-group-item-text">@{{timeHI data=start field="start"}} - @{{timeHI data=stop field="stop"}} @{{task_type.name}}</p>
+									<select class="form-control" name="member_id" can-value="member_id" can-change="updateTask">
+											<option value="">unbesetzt</option>
+										@{{#each members}}
+											<option value="@{{id}}">@{{name}}</option>
+										@{{/each}}
+									</select>
+								</form>
+							</div>
 							@{{/each}}
 						</div>
 		  				@{{/each}}
 					</div>
-		  		</div>
+				</div>
 			</div>
-		</div>
-		@{{/each}}
+			@{{/each}}
 	</div>	
 </div>
 @stop
@@ -79,9 +88,9 @@
 							</td>
 							<td>
 								@{{#if active}}
-									<button class="btn btn-success btn-sm"><span class="glyphicon glyphicon-play"></span></button>
+									<button class="btn btn-success btn-sm" can-click="toggleTaskTypeState"><span class="glyphicon glyphicon-play"></span></button>
 								@{{else}}
-									<button class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-pause"></span></button>
+									<button class="btn btn-warning btn-sm" can-click="toggleTaskTypeState"><span class="glyphicon glyphicon-pause"></span></button>
 								@{{/if}}
 							</td>
 						    <td><button class="btn btn-danger btn-sm" can-click="deleteTaskType" data-id="@{{id}}"><span class="glyphicon glyphicon-remove" title="Löschen"></span></button></td>
@@ -126,7 +135,7 @@
 		<div class="row">
 			<label class="control-label col-sm-2 col-xs-6">Wochentag</label>
 			<div class="col-sm-2 col-xs-6">
-				<select class="form-control" name="day_of_week" id="taskTypeDayOfWeek">
+				<select class="form-control" name="day_of_week" id="taskTypeDayOfWeek" can-value="day_of_week">
 					<option value="">wählen</option>
 					<option value="1">Montag</option>
 					<option value="2">Dienstag</option>
@@ -139,7 +148,7 @@
 			</div>
 			<label class="control-label col-sm-2 col-xs-6">Wiederholung</label>
 			<div class="col-sm-2 col-xs-6">
-				<select class="form-control" name="repeat_days" id="taskTypeRepeatDays">
+				<select class="form-control" name="repeat_days" id="taskTypeRepeatDays" can-value="repeat_days">
 					<option value="">wählen</option>
 					<option value="1w">Wöchentlich</option>
 					<option value="2w">Alle 2 Wochen</option>
@@ -181,7 +190,7 @@
 		<div class="row">
 			<label class="control-label col-sm-2">Dienstgruppe</label>
 			<div class="col-sm-4">
-				<select class="form-control" name="member_group_id" id="taskTypeMemberGroupId">
+				<select class="form-control" name="member_group_id" id="taskTypeMemberGroupId" can-value="member_group_id">
 					<option value="">wählen</option>
 					@{{#each memberGroups}}
 						<option value="@{{id}}">@{{name}}</option>

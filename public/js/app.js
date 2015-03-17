@@ -258,6 +258,10 @@ can.mustache.registerHelper("dowName",function(data){
    return days[data.context.day_of_week];
 });
 
+can.mustache.registerHelper("optList",function(data){
+  console.log(data);
+});
+
 /*======================================================================*/
 /*======================= RESPONSE INTERPRETERS ========================*/
 /*======================================================================*/
@@ -267,7 +271,7 @@ can.mustache.registerHelper("dowName",function(data){
  * Used for RestERRORS and Success Messages for example.
  */
 function addFlashMessage(title, message, type) {
-  $('#flashContainer').html("<div class='row bg-"+type+" flashMessage' onclick='$(this).remove();'><div class='col-xs-12'><strong>"+title+"</strong>&nbsp;"+message+"</div></div>");
+  $('#flashContainer').html("<div class='alert alert-"+type+" alert-dismissalbe' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Schließen'><span aria-hidden='true'>&times;</span></button><strong>"+title+"</strong>&nbsp;"+message+"</div>");
   setTimeout(function(){ $("#flashContainer").html(""); }, 10000);
 }
 // Some shortcuts for addFlashMessage

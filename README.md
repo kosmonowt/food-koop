@@ -32,6 +32,14 @@ It is thought to use
 
 ## Release History
 
+### 2015-03-17
+* Flash Message Bootstrapified
+* TASKS View updated: Tasks now can be assigned to member
+* TASKTYPES 
+	* Selectbox now bound
+	* Implemented setActive on Client
+	* Implemented update() on Server
+
 ### 2015-03-16
 * Added Calendar View to Tasks
 * Added Read View for Calendar Events
@@ -102,15 +110,19 @@ It is thought to use
 * Redesign colors: Only <td> on checkbox will have colors indicating the completeness of the order.
 * Email to user and member when order was sent as well as wenn order arrived
 	* Do not inform change-applying user
+* CHECK findOr404 in controller
 
 ### Users
 * Edit User Group Settings needs update
+* CHECK findOr404 in controller
 
 ### User Groups
 * CRUD Views for User Groups
+* CHECK findOr404 in controller
 
 ### Members
 * OnDelete Cascade!
+* CHECK findOr404 in controller
 
 ### Member Groups
 * CRUD Views for Member Groups
@@ -126,13 +138,12 @@ It is thought to use
 * ON Create Succes throw success!
 * Dashboard: See History (more than just latest)
 * Substitution from Ledger every 1/1 4/1 7/1 10/1
-
+* CHECK findOr404 in controller
 
 ### Tasks
-* Create view for shifts
-* Count and evaluate shifts from members
-* Task Creation via cronjob: 90days in advance
+* Cancel and Close Events
 * View Open Tasks
+* Count and evaluate shifts from members
 * View Member Task History
 * Messages for open Shifts
 * Soft DELETE
@@ -140,15 +151,13 @@ It is thought to use
 * implement 2w 3w 4w 1x 2x 3x 4x
 * DELETE AND DISACTIVATE IN CLI - APPLICATION
 * DELETE AND DISACTIVATE IN ADMIN
-* Update Calendar possibility
+* CHECK findOr404 in controller
 
 ### TaskTypes
 * Soft DELETE
 * ADD VALIDATION RULES
 	* INCLUDING start_time / stop_time comparison
-* make SELECT in CREATE/UPDATEVIEW assignable
-* ADD EDIT BUTTON to INDEX-VIEW
-* ACTIVATE ACTIVE BUTTON
+* ADD "edit" button to list
 
 ### News
 * Create News Migration
