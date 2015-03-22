@@ -38,11 +38,12 @@ Route::get("{controller}.html", array('before' => "auth", function($controller) 
 Route::get("products/mostPopular",function(){ return Product::mostPopular()->take(20)->get();});
 Route::get('products/search/{merchantId}/{term}','ProductsController@search');
 Route::get('products/count/{merchantId?}/{term?}','ProductsController@searchCount');
-Route::get('products/marketplace',function(){ return Order::marketplace()->get();});
+Route::get('orders/marketplace',function(){ return Order::marketplace()->get()->toJson();});
 Route::get('orders/byProduct/{product_id?}/{order_state?}','OrdersController@byProduct');
 Route::post("orders/bulk/{product_id}/{order_state_id}",'OrdersController@updateBulk');
 Route::post("orders/bulk/{order_state_id}","OrdersController@updateBulk");
 Route::get("orders/bulk/applyOrder","OrdersController@orderBulk");
+Route::get('orders/my',"OrdersController@my");
 
 Route::resource('products', 'ProductsController');
 Route::resource('productTypes', 'ProductTypesController');

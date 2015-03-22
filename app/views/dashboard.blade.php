@@ -4,6 +4,7 @@
 @include("dashboard.admin")
 
 @section('content')
+<dashboard-app>
 	<div class="row">
 		@yield("latestNews")
 	</div>
@@ -19,4 +20,9 @@
 		@yield("myProfile")		
 		@yield("myLedger")
 	</div>
+</dashboard-app>
+@stop
+
+@section("bottomJs")
+	<script type="text/javascript" src="js/dashboard.js"></script>
 @stop

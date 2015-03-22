@@ -1,3 +1,5 @@
+@include("includes.mustache")
+
 @section("latestNews")
 		<div class="col-sm-12">
 			<div class="panel panel-default">
@@ -13,41 +15,43 @@
 
 @section("myOrders")
 		<div class="col-sm-6">
-			<div class="panel panel-default">
+			<div class="panel panel-default dashboard-sized">
 				<div class="panel-heading">
 					<strong>Meine aktuellen Bestellungen</strong><br><a href="orders.html#tab=order"><small>Neue Bestellung</small></a>
 				</div>
-				<div class="panel-body">
-					@if (count($myOrders))
+				<div class="scrollable">
 					<table class="table table-striped table-condensed">
 						<tbody>
 							<th colspan="3">Übersicht</th>
-							<th colspan="2">Total <small>inkl. MwSt.</small></th>
-						@foreach ($myOrders as $order)
+							<th colspan="3">Total <small>inkl. MwSt.</small></th>
+						@{{#each myOrders}}
 						<tr>
 							<td>
-								<div class="statusIcon status-{{$order->order_state_id}}"></div>
+								<div class="statusIcon status-@{{order_state_id}}"></div>
 							</td>
 							<td>
-								{{$order->amount}}x
+								@{{amount}}x
 							</td>
 							<td>
-								{{$order->product->name}}
+								@{{product.name}} (@{{product.weight_per_unit}}@{{product.tare_unit}})
 							</td>
 							<td>
-								{{round($order->amount * $order->product->price * (1+ ($order->product->taxrate/100)),2)}}€
+								@{{orderPrice data=product}}€
 							</td>
 							<td>
-								<small>({{round($order->product->price * (1+ ($order->product->taxrate/100)),2)}}€)</small>
+								<small>(@{{productPrice data=product}}€/@{{product.unit_unit}})</small>
+							</td>
+							<td>
+								@{{#if isUserDeleteable}}
+								<form class="form-inline">
+									<button class="btn btn-danger btn-xs" type="button" can-click="deleteMyOrder"><span class="glyphicon glyphicon-remove-sign"></span></button>
+								</form>
+								@{{/if}}
 							</td>
 						</tr>
-						@endforeach
+						@{{/each}}
 						</tbody>
 					</table>
-					@else
-					<p>Derzeit keine Bestellungen
-					</p>
-					@endif
 				</div>
 			</div>
 		</div>
@@ -55,37 +59,44 @@
 
 @section("marketplace")
 		<div class="col-sm-6">
-			<div class="panel panel-default">
+			<div class="panel panel-default dashboard-sized">
 				<div class="panel-heading">
 					<strong>Marktplatz</strong>
 				</div>
-				<div class="panel-body">
-					@if (count($marketplace))
+				<div class="scrollable">
 					<table class="table table-striped table-condensed">
 						<tbody>
 							<th>Verfügbar</th>
 							<th>Produkt</th>
-							<th>Preis <small>(inkl. MwST)</small></th>
-						@foreach ($marketplace as $order)
+							<th colspan="2">Preis <small>(inkl. MwST)</small></th>
+						@{{#each marketplace}}
 						<tr>
 							<td>
-								{{($order->units - $order->remainingAmount)}} / {{$order->units}}
+								@{{availableAmount}} / @{{units}}
 							</td>
 							<td>
-								{{$order->name}}
+								@{{name}} (@{{weight_per_unit}}@{{tare_unit}})
 							</td>
 							<td>
-								{{round($order->price * (1+ ($order->product_type->tax / 100)),2)}} €
+								<span class="text-nowrap">@{{marketplacePrice data=price}} €</span>
 							</td>
+							<td>
+								<form class="form-inline" can-submit="marketplaceOrder">
+									<div class="input-group input-group-sm">
+										<input type="number" min="1" class="form-control" placeholder="anzahl" name="amount">
+										<input type="hidden" name="product_id" value="@{{id}}">
+										<input type="hidden" name="merchant_id" value="@{{merchant_id}}">
+										<span class="input-group-addon">@{{unit_unit}}</span>
+										<span class="input-group-btn">
+											<button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-shopping-cart"></span></button>
+										</span>
+									</div>
+								</form>
+	  						</td>
 						</tr>
-						@endforeach
+						@{{/each}}
 						</tbody>
 					</table>
-					@else
-					<p>Keine Bestellung zum Vervollständigen<br>
-					</p>
-					@endif
-
 				</div>
 			</div>
 		</div>
@@ -93,33 +104,52 @@
 
 @section("myShifts")
 		<div class="col-sm-6">
-			<div class="panel panel-default">
+			<div class="panel panel-default dashboard-sized">
 				<div class="panel-heading">
-					<strong>Dienste</strong>
+					<strong>Dienste, für die Du eingetragen bist</strong>
 				</div>
-				<div class="panel-body">
-					## HIER MEINE DIENSTE ##
-				</div>
+					@if(!count($myTasks))
+					<div class="panel-body">
+							Derzeit hast Du Dich für keinen Dienst eingetragen.
+					</div>
+					@else
+					<ul class="list-group scrollable">
+					@foreach($myTasks as $task)
+						<li class="list-group-item">
+							<strong>{{$task->task_type->name}} am {{date("d.m.Y",strtotime($task->date))}}</strong> von {{substr($task->start,0,5) }}Uhr bis {{substr($task->stop,0,5)}}Uhr
+							<button class="btn btn-danger btn-xs pull-right"><span class="glyphicon glyphicon-remove-sign"></span></button>
+						</li>
+					@endforeach
+					</ul>
+					@endif
 			</div>
 		</div>
 @stop
 
 @section("upcomingShifts")
 		<div class="col-sm-6">
-			<div class="panel panel-default">
+			<div class="panel panel-default dashboard-sized">
 				<div class="panel-heading">
-					<strong>Kommende Dienste</strong>
+					<strong>Offene Dienste</strong>
 				</div>
-				<div class="panel-body">
-					## Hier Dienstplan für kommende Woche ##
-				</div>
+				<ul class="list-group scrollable">
+				@foreach($upcomingTasks as $task)
+					<li class="list-group-item">
+						<strong>{{$task->task_type->name}} am {{date("d.m.Y",strtotime($task->date))}}</strong> von {{substr($task->start,0,5) }}Uhr bis {{substr($task->stop,0,5)}}Uhr
+						<div class="btn-group btn-group-xs pull-right" role="group" aria-label="Dienst Bearbeiten">
+							<button class="btn btn-success btn-xs"><span class="glyphicon glyphicon-log-in"></span></button>
+							<button class="btn btn-info btn-xs"><span class="glyphicon glyphicon-info-sign"></span></button>
+						</div>
+					</li>
+				@endforeach
+				</ul>
 			</div>
 		</div>
 @stop
 
 @section("myProfile")
 		<div class="col-sm-6">
-			<div class="panel panel-default">
+			<div class="panel panel-default dashboard-sized">
 				<div class="panel-heading">
 					<strong>Bestellgruppe / Benutzer</strong>
 				</div>
@@ -135,12 +165,12 @@
 
 @section("myLedger")
 		<div class="col-sm-6">
-			<div class="panel panel-default">
+			<div class="panel panel-default dashboard-sized">
 				<div class="panel-heading">
 					<strong>Kontoauszug</strong>
 				</div>
-				<div class="panel-body">
-					<table class="table">
+				<div class="scrollable">
+					<table class="table table-striped table-condensed">
 						<tbody>
 							<tr>
 								<th><samp>Datum</samp></th>

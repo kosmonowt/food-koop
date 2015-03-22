@@ -1,6 +1,6 @@
 <?php
 
-class Task extends \Eloquent {
+class Task extends Model {
 	protected $fillable = ["member_id","comment"];
 
 	public function scopeDay($query,$day) {
@@ -11,8 +11,16 @@ class Task extends \Eloquent {
 		return $query->where("date","<=",$day);
 	}
 
+	public function scopeUpcoming($query) {
+		return $query->where("date",">=",date("Y-m-d"));
+	}
+
 	public function scopeDayAsc($query) {
 		return $query->orderBy("date","ASC");
+	}
+
+	public function scopeOwn($query) {
+		return $query->where("member_id","=",Auth::user()->member_id);
 	}
 
 	public function taskType() {

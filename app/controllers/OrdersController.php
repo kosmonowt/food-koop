@@ -198,5 +198,9 @@ class OrdersController extends \BaseController {
 		return ($order->delete()) ? "true" : "false";
 	}
 
+	public function my() {
+		return Order::my()->open()->with("product")->get()->toJson();
+	}
+
 
 }

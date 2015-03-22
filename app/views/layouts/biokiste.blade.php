@@ -4,9 +4,6 @@
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/can.custom.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	    <script type="text/javascript" src="js/underscore.min.js"></script>
-	    <script type="text/javascript" src="js/calendar.js"></script>		
-	    <script type="text/javascript" src="js/calendar-de-DE.js"></script>
 	    <meta charset="utf-8">
     	<title>{{{$title}}}</title>
 	

@@ -71,6 +71,16 @@ var Order = can.Model.extend({
   create : 'POST '+sUrl+'orders'
 }, {});
 
+var MyOrder = can.Model.extend({
+  findAll: 'GET '+sUrl+"orders/my",
+  destroy: 'DELETE '+sUrl+'orders/{id}'
+}, {});
+
+var Marketplace = can.Model.extend({
+  findAll: 'GET '+sUrl+"orders/marketplace",
+  create: 'POST '+sUrl+''
+}, {});
+
 /**
  * For Order By Product. Can handle Params
  * first should be the product_id.
@@ -257,6 +267,28 @@ can.mustache.registerHelper("dowName",function(data){
    var days = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
    return days[data.context.day_of_week];
 });
+
+/**
+ * Returns the calculated price for an order from amount and taxes and product price (for product)
+ **/
+can.mustache.registerHelper("orderPrice",function(data){
+  return parseFloat(parseInt(data.context.amount) * parseFloat(data.context.product.price) * (1+ (data.context.product.taxrate/100)),2).toFixed(2);
+});
+
+/**
+ * Returns the calculated prace for an order from taxes and product price (for marketplace model)
+ **/
+can.mustache.registerHelper("marketplacePrice",function(data){
+  return parseFloat(parseFloat(data.context.price) * (1+ (data.context.product_type.tax / 100)),2).toFixed(2);
+});
+
+/**
+ * Returns the calculated price for an order from taxes and product price
+ **/
+can.mustache.registerHelper("productPrice",function(data){
+  return parseFloat(parseFloat(data.context.product.price) * (1+ (data.context.product.taxrate/100)),2).toFixed(2);
+});
+
 
 can.mustache.registerHelper("optList",function(data){
   console.log(data);

@@ -15,11 +15,6 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
-	{
-		return View::make('hello');
-	}
-
 	public function login() {
 		View::share('title', "Biokiste Login");
 		$this->layout->content = View::make('authentication.login');
@@ -29,10 +24,10 @@ class HomeController extends BaseController {
 		View::share("title","MyBiokiste");
 		View::share("controller","dashboard");
 		View::share("member",Member::with("user")->find(Auth::user()->member_id));
-		View::share("myOrders",Order::my()->open()->with("product")->get());
-		View::share("marketplace",Order::marketplace()->get());
 		View::share("kontostand",MemberLedger::balance()->own()->first()->balance);
 		View::share("starteinlage",MemberLedger::starteinlage()->own()->first()->balance);
+		View::share("myTasks",Task::own()->upcoming()->dayAsc()->with("taskType")->get());
+		View::share("upcomingTasks",Task::untilDay("sunday this week +21 days")->with("taskType")->dayAsc()->get());
 		View::share("ledger",MemberLedger::own()->latest()->get());
 		View::share("user",Auth::user());
 		$this->layout->content = View::make("dashboard");

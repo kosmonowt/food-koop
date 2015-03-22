@@ -32,6 +32,16 @@ It is thought to use
 
 ## Release History
 
+### 2015-03-22
+* DASHBOARD:
+	* MyOrders put into CanJs (Delete Order now possible)
+	* Marketplace put into CanJs (Add to MyOrders now possible)
+	* Marketplace and MyOrders affect each other in CanJs View
+* Changed Marketplace view into waiting (<3) from open (<100)
+
+### 2015-03-18
+* Added Buttons to Dashboard
+
 ### 2015-03-17
 * Flash Message Bootstrapified
 * TASKS View updated: Tasks now can be assigned to member
@@ -84,8 +94,16 @@ It is thought to use
 
 ## Todo
 
-### Orders
+### Dashboard
+* CanJS-ify
+	* Ledger
+	* Tasks
+* Activate Buttons
+	* Tasks
+	* Ledger
+* Solve Problem: When buying from marketplace - remove orders with 0 remaining items.
 
+### Orders
 * Set Active to
 	* grouped View (for admins)
 	* newOrder Form (for ordinary members)
@@ -111,6 +129,7 @@ It is thought to use
 * Email to user and member when order was sent as well as wenn order arrived
 	* Do not inform change-applying user
 * CHECK findOr404 in controller
+* BUG: Uncaught TypeError: undefined is not a function
 
 ### Users
 * Edit User Group Settings needs update
@@ -165,6 +184,9 @@ It is thought to use
 * Create News Controller
 
 ### Messages
+* Create Dashboard Field to place Request regarding
+	* Order
+	* Task
 * Create Message Migration
 * Create Message Model
 * Create Message Controller

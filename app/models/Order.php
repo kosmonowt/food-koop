@@ -22,6 +22,8 @@ class Order extends Model {
         'comment' => "trim"
     ];
 
+    protected $appends = ["isUserDeleteable"];
+
 
 
 
@@ -35,13 +37,17 @@ class Order extends Model {
     /** Orders that are not forwarded to merchant yet **/
     public function scopeUnordered($query) { return $query->where("order_state_id","<",3); }
 
+    public function getIsUserDeleteableAttribute() {
+        return $this->order_state_id < 3;
+    }
+
     /**
      * Query used for members to see what order can be joined in with.
      **/
     public function scopeMarketplace($query) {
         $query->byProduct();
         $query->having('remainingAmount',">","0");
-        $query->open();
+        $query->waiting();
         return $query;
     }
 
@@ -53,7 +59,8 @@ class Order extends Model {
         $query->addSelect(DB::raw(
             'CEIL(SUM(orders.amount) / products.units) as bulkToOrder, '.
             'COUNT(orders.id) as countOrders, '.
-            'MIN(orders.created_at) as earliestOrder, '.
+            'MIN(orders.created_at
+                ) as earliestOrder, '.
             'MAX(orders.created_at) as latestOrder, '.
             'TRUNCATE(products.units * products.price * (1+product_types.tax/100),2) as totalForBulk'
             ));
@@ -67,6 +74,7 @@ class Order extends Model {
         $query->groupBy("orders.product_id");
         $query->select(DB::raw(
             'MOD(SUM(orders.amount),products.units) as remainingAmount, '.
+            '(products.units - MOD(SUM(orders.amount),products.units)) as availableAmount, '.
             '(orders.amount / products.units * 100) as demand, '.
             'SUM(orders.amount) as totalAmount, '.
             'product_types.tax as taxrate, '.
