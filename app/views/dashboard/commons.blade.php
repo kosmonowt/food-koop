@@ -108,20 +108,14 @@
 				<div class="panel-heading">
 					<strong>Dienste, für die Du eingetragen bist</strong>
 				</div>
-					@if(!count($myTasks))
-					<div class="panel-body">
-							Derzeit hast Du Dich für keinen Dienst eingetragen.
-					</div>
-					@else
 					<ul class="list-group scrollable">
-					@foreach($myTasks as $task)
+					@{{#each myTasks}}
 						<li class="list-group-item">
-							<strong>{{$task->task_type->name}} am {{date("d.m.Y",strtotime($task->date))}}</strong> von {{substr($task->start,0,5) }}Uhr bis {{substr($task->stop,0,5)}}Uhr
-							<button class="btn btn-danger btn-xs pull-right"><span class="glyphicon glyphicon-remove-sign"></span></button>
+							<strong>@{{task_type.name}} am @{{dmY data=date field="date"}}</strong> von @{{timeHI data=date field="start"}}Uhr bis @{{timeHI data=date field="stop"}}Uhr
+							<button class="btn btn-danger btn-xs pull-right" can-click="myTaskUndo"><span class="glyphicon glyphicon-remove-sign"></span></button>
 						</li>
-					@endforeach
+					@{{/each}}
 					</ul>
-					@endif
 			</div>
 		</div>
 @stop
@@ -133,15 +127,15 @@
 					<strong>Offene Dienste</strong>
 				</div>
 				<ul class="list-group scrollable">
-				@foreach($upcomingTasks as $task)
+				@{{#each upcomingTasks}}
 					<li class="list-group-item">
-						<strong>{{$task->task_type->name}} am {{date("d.m.Y",strtotime($task->date))}}</strong> von {{substr($task->start,0,5) }}Uhr bis {{substr($task->stop,0,5)}}Uhr
+						<strong>@{{task_type.name}} am @{{dmY data=date field="date"}}</strong> von @{{timeHI data=date field="start"}}Uhr bis @{{timeHI data=date field="stop"}}Uhr
 						<div class="btn-group btn-group-xs pull-right" role="group" aria-label="Dienst Bearbeiten">
-							<button class="btn btn-success btn-xs"><span class="glyphicon glyphicon-log-in"></span></button>
+							<button class="btn btn-success btn-xs" can-click="upcomingTaskAssign"><span class="glyphicon glyphicon-log-in"></span></button>
 							<button class="btn btn-info btn-xs"><span class="glyphicon glyphicon-info-sign"></span></button>
 						</div>
 					</li>
-				@endforeach
+				@{{/each}}
 				</ul>
 			</div>
 		</div>

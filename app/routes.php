@@ -17,16 +17,11 @@ Route::get("login",function(){
 });
 
 Route::post("login",function(){
-	$user = User::find(1);
-//	Auth::login($user);
-// var_dump(Input::get("name"));
-// var_dump(Input::get("password"));
-// var_dump(Crypt::encrypt(Input::get("password")));
-// die;
 	Auth::attempt(array('username' => Input::get("name"), 'password' => Input::get("password")));
 	return Redirect::intended("dashboard.html");
 });
 
+Route::get("/",function(){return Redirect::to("dashboard.html");});
 Route::get("logout",function(){Auth::logout(); return Redirect::to("login");});
 Route::get("dashboard.html",array("before"=>"auth","uses" => "HomeController@dashboard"));
 Route::get("{controller}.html", array('before' => "auth", function($controller) {
@@ -67,5 +62,12 @@ Route::get("memberLedger/member/{member_id}",function($member_id){ return Member
 Route::resource('memberLedger', 'MemberLedgerController');
 
 Route::get("tasks/byWeek/{number?}/{taskType?}","TasksController@byWeek");
+
+Route::get("tasks/upcoming","TasksController@upcomingUnassigned");
+Route::put("tasks/upcoming/{id}","TasksController@assign");
+Route::get("tasks/my","TasksController@my");
+Route::put("tasks/my/{id}","TasksController@myUndo");
+
+
 Route::resource("tasks","TasksController");
 Route::resource("taskTypes","TaskTypesController");

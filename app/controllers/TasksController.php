@@ -13,6 +13,52 @@ class TasksController extends \BaseController {
 		//
 	}
 
+	/**
+	 * Display a listing of the resource of upcoming free tasks for dashboard view
+	 * 
+	 */
+	public function upcoming() { return Task::untilDay("sunday this week +21 days")->with("taskType")->dayAsc()->get()->toJson(); }
+	
+	public function upcomingUnassigned() { return Task::untilDay("sunday this week +21 days")->unassigned()->with("taskType")->dayAsc()->get()->toJson(); }
+
+	/**
+	 * Assigns a task to the current user
+	 */
+	public function assign($id) {
+		$task = Task::findOrFail($id);
+		$task->member_id = Auth::user()->member_id;
+		
+		if (!$task->save()) App::abort(403,$task->getErrors());
+
+		return $task->toJson();		
+	}
+
+	/**
+	 * Display a listing of all tasks with current member_id
+	 */
+	public function my() { return Task::own()->upcoming()->dayAsc()->with("taskType")->get()->toJson();}
+
+	/**
+	 * Remove a task assignment (only when the current user applies to a task that he is assigned to)
+	 */
+	public function myUndo($id) {
+		$task = Task::findOrFail($id);
+		
+		if (!$task->member_id == Auth::user()->member_id) App::abort(403,"Fehler: Du bist nicht für diesen Dienst eingetragen.");
+		
+		$task->member_id = null;
+		Event::fire("tasks.unassign",$task);
+
+		if (!$task->save()) App::abort(403,$task->getErrors());
+
+
+		return $task->toJson();				
+	}
+
+	/**
+	 * Produces a calendar-like listing of the current tasks.
+	 * Segmentated by weeks and days
+	 */
 	public function byWeek($startWeek = null, $taskType = null) {
 		$weeksToShow = 4;
 		$daysInWeek = 7;

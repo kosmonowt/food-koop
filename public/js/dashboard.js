@@ -2,6 +2,10 @@ can.Component.extend({
   tag: 'dashboard-app',
   scope: {
   	myOrders : new MyOrder.List({}),
+  	marketplace : new Marketplace.List({}),
+  	upcomingTasks : new UpcomingTask.List({}),
+  	myTasks : new MyTask.List({}),
+
   	deleteMyOrder : function(scope,el,ev) {
   		var marketplace = this.marketplace;
   		var id = scope.product_id;
@@ -17,7 +21,6 @@ can.Component.extend({
   				});
   			},handleRestError);
   	},
-  	marketplace : new Marketplace.List({}),
   	marketplaceOrder : function(scope,el,ev) {
   		ev.preventDefault();
   		var amount = el.find("input[name='amount']").val();
@@ -42,6 +45,30 @@ can.Component.extend({
   			// 	marketplace.replace(nmp);
   			// }
   		},handleRestError);
+  	},
+  	upcomingTaskAssign : function (scope,el,ev) {
+  		var upcomingTasks = this.upcomingTasks;
+  		var myTasks = this.myTasks;
+  		scope.save().then(function(task,x){
+			myTasks.push(new MyTask(task));
+			// Make this work: 
+  			// myTasks.comparator = "date";
+			// myTasks.sort();
+			upcomingTasks.replace(upcomingTasks.filter(function(ut,i,x){ return (ut.attr("id") != task.id); })); // Remove SCOPE object from list.
+  		},handleRestError);
+  	},
+  	myTaskUndo : function(scope,el,ev) {
+  		if (confirm("Möchtest Du Dich wirklich aus diesem Dienst austragen?")) {
+
+	  		var upcomingTasks = this.upcomingTasks;
+	  		var myTasks = this.myTasks;  		
+
+	  		scope.save().then(function(task,x){
+	  			upcomingTasks.unshift(new UpcomingTask(task)); // Make NEW because otherwise we assign a myTask object (wrong routes)
+	  			myTasks.replace(myTasks.filter(function(my,i,x){ return (my.attr("id") != task.id); })); // Remove SCOPE object from list.
+	  		},handleRestError);
+	  		
+  		}
   	}
   }
 });

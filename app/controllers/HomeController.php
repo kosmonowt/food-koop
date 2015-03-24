@@ -26,8 +26,6 @@ class HomeController extends BaseController {
 		View::share("member",Member::with("user")->find(Auth::user()->member_id));
 		View::share("kontostand",MemberLedger::balance()->own()->first()->balance);
 		View::share("starteinlage",MemberLedger::starteinlage()->own()->first()->balance);
-		View::share("myTasks",Task::own()->upcoming()->dayAsc()->with("taskType")->get());
-		View::share("upcomingTasks",Task::untilDay("sunday this week +21 days")->with("taskType")->dayAsc()->get());
 		View::share("ledger",MemberLedger::own()->latest()->get());
 		View::share("user",Auth::user());
 		$this->layout->content = View::make("dashboard");

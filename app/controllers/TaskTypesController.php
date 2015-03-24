@@ -8,9 +8,7 @@ class TaskTypesController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function index()	{
-		return TaskType::with("memberGroup")->orderBy("day_of_week","ASC")->orderBy("time_start","ASC")->get()->toJson();
-	}
+	public function index()	{ return TaskType::with("memberGroup")->orderBy("day_of_week","ASC")->orderBy("time_start","ASC")->get()->toJson();	}
 
 	/**
 	 * Show the form for creating a new resource.

@@ -7,7 +7,10 @@
  **/
 
 
-
+/**
+ * This catches created order event
+ * - adds a Tag on the order if the product is ordered first time
+ **/
 Order::creating(function($order) {
 	$product_id = $order->product_id;
 	if (!Order::where("product_id","=",$product_id)->count()) {
@@ -16,6 +19,12 @@ Order::creating(function($order) {
 	return $order;
 });
 
+/**
+ * This catches a changed state of an order
+ * - inform the member (on change to "ordered")
+ * - inform the user (on change to "ordered")
+ * - don't inform the user (when he fired the event)
+ **/
 Event::listen('orders.setState',function($orders){
 	foreach ($orders as $order) {
 		// Bestellgruppe Informieren
@@ -24,6 +33,21 @@ Event::listen('orders.setState',function($orders){
 	}
 });
 
+Event::listen('tasks.unassign',function($task){
+
+	$taskDate = new DateTime($task->date);
+	$dueDate = new DateTime ("NOW + 14 DAYS"); // less then 14 days before the task we will send an email if task is without member now
+	if ($dueDate >= $taskDate) {
+		// Create E-Mail 
+	}
+
+});
+
+/**
+ * This catches created User event
+ * - creates password hash
+ * - creates email to member (on migration)
+ **/
 User::creating(function($user){
 	$password = $user->password;
 	$user->password = Hash::make($password);
@@ -41,7 +65,8 @@ User::creating(function($user){
 });
 
 /** 
- * This event catches when a member is created and adds the first ledger entry ("Starteinlage")
+ * This catches when a member is created and 
+ * - adds the first ledger entry ("Starteinlage")
  **/
 Member::created(function($member){
 	$ML = new MemberLedger();

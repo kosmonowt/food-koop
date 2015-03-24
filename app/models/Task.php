@@ -23,6 +23,10 @@ class Task extends Model {
 		return $query->where("member_id","=",Auth::user()->member_id);
 	}
 
+	public function scopeUnassigned($query) {
+		return $this->whereNull("member_id");
+	}
+
 	public function taskType() {
 		return $this->belongsTo("TaskType");
 	}

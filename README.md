@@ -32,12 +32,21 @@ It is thought to use
 
 ## Release History
 
+### 2015-03-24
+* DASHBOARD:
+	* MyTasks put into CanJs: Possible view and delete myTasks
+	* Upcoming Tasks put into CanJs: Possible to view and assign to Task
+* Added Sort-Plugin to app.js
+* Added Routing for MyTasks and Upcoming Tasks in Dashboard
+* When member removes himself from task event is fired
+
 ### 2015-03-22
 * DASHBOARD:
 	* MyOrders put into CanJs (Delete Order now possible)
 	* Marketplace put into CanJs (Add to MyOrders now possible)
 	* Marketplace and MyOrders affect each other in CanJs View
 * Changed Marketplace view into waiting (<3) from open (<100)
+* Added Routing for MyOrders and upcoming orders
 
 ### 2015-03-18
 * Added Buttons to Dashboard
@@ -97,11 +106,12 @@ It is thought to use
 ### Dashboard
 * CanJS-ify
 	* Ledger
-	* Tasks
 * Activate Buttons
-	* Tasks
 	* Ledger
 * Solve Problem: When buying from marketplace - remove orders with 0 remaining items.
+* Solve Problem: When adding task to dashboard - re-sort myTasks
+* When unassigning from task: catch event and send to group leader
+* When unassigning from task: send message with reason given!
 
 ### Orders
 * Set Active to
@@ -145,6 +155,7 @@ It is thought to use
 
 ### Member Groups
 * CRUD Views for Member Groups
+* Assign Group Leader
 
 ### MemberLedger
 * Limit Member Ledger Access!!!
@@ -160,7 +171,7 @@ It is thought to use
 * CHECK findOr404 in controller
 
 ### Tasks
-* Cancel and Close Events
+* Close Event
 * View Open Tasks
 * Count and evaluate shifts from members
 * View Member Task History
@@ -191,8 +202,9 @@ It is thought to use
 * Create Message Model
 * Create Message Controller
 * Create Message System
+* Create own EventListener File for Messages and Email
 
 ### Long Term Backlog
 * Language Files
 * Variable Benutzereinlage (also add in users.blade.php)
-
+* Create configuration page and configuration table
