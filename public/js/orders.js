@@ -8,162 +8,49 @@ var productInformationTemplate = can.mustache('{{#product}}'+
 ' <label class="col-sm-2">Name:</label>'+
 ' <div class="col-sm-4">'+
 '   <div class="input-group">'+
-'     <input type="text" class="form-control" name="product.name" value="{{name}}" disabled>'+
+'     <input type="text" class="form-control" name="product.name" value="{{name}}" readonly>'+
 '     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.name"></span></span>'+
 '   </div>'+
 ' </div>'+
 ' <label class="col-sm-2">Nettopreis:</label>'+
 ' <div class="col-sm-4">'+
 '   <div class="input-group">'+
-'     <input type="number" class="form-control" id="newOrderFormProductPrice" name="product.price" value="{{price}}" min="0.01" range="0.01" disabled>'+
+'     <input type="number" class="form-control" id="newOrderFormProductPrice" name="product.price" value="{{price}}" min="0.01" range="0.01" readonly>'+
 '     <span class="input-group-addon productTaxrate" id="newOrderFormProductTaxrate" data-taxrate="{{taxrate}}">€ + {{taxrate}}% </span>'+
 '     <span class="input-group-addon"><span class="glyphicon glyphicon-edit" title="Bearbeiten" can-click="enableInput" data-enable="product.price,product.product_type_id"></span></span>'+
-'   </div>    '+
+'   </div>'+
 ' </div>'+
 '</div>'+
 '<div class="form-group form-group-sm">'+
 ' <label class="col-sm-2">Gebinde:</label>'+
 ' <div class="col-sm-2"><div class="input-group">'+
-'  <input type="text" class="form-control" name="product.units" value="{{units}}" disabled>'+
+'  <input type="text" class="form-control" name="product.units" value="{{units}}" readonly>'+
 '     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.units,product.unit_unit"></span></span>'+
 ' </div></div>'+
 '<div class="col-sm-2">'+
-'  <select class="form-control" name="product.unit_unit" disabled><option value="{{unit_unit}}">{{unit_unit}}</select>'+
+'  <select class="form-control" name="product.unit_unit" readonly><option value="{{unit_unit}}">{{unit_unit}}</select>'+
 ' </div>'+
 ' <label class="col-sm-2">Gewicht:</label>'+
-' <div class="col-sm-2"><div class="input-group"><input type="text" class="form-control" name="product.weight_per_unit" value="{{weight_per_unit}}">'+
+' <div class="col-sm-2"><div class="input-group"><input type="text" class="form-control" name="product.weight_per_unit" value="{{weight_per_unit}}" readonly>'+
 '     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.weight_per_unit,product.tare_unit"></span></span>'+
 '</div></div>'+
 '<div class="col-sm-2">'+
-'  <select class="form-control" name="product.tare_unit" disabled><option value="{{tare_unit}}">{{tare_unit}}</select>'+
+'  <select class="form-control" name="product.tare_unit" readonly><option value="{{tare_unit}}">{{tare_unit}}</select>'+
 '</div>'+
 '</div>'+
 '<div class="form-group form-group-sm">'+
 ' <label class="col-sm-2">Produktart:</label>'+
 '<div class="col-sm-4">'+
-'  <select class="form-control" name="product.product_type_id" disabled><option value="{{product_type_id}}">{{product_type.name}}</select>'+
+'  <select class="form-control" name="product.product_type_id" readonly><option value="{{product_type_id}}">{{product_type.name}}</select>'+
 '</div>'+
 ' <label class="col-sm-2">Anmerkungen:</label>'+
 ' <div class="col-sm-4"><div class="input-group">'+
-'  <input type="text" class="form-control" name="product.comment" value="{{comment}}" disabled>'+
+'  <input type="text" class="form-control" name="product.comment" value="{{comment}}" readonly>'+
 '     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.comment"></span></span>'+
 ' </div></div>'+
 '{{#if blocked}}<div class="row"><div class="col-sm-12"><span class="text-danger text-center">Dieses Produkt ist derzeit blockiert. Bitte wende Dich an die Bestellgruppe um mehr zu erfahren.</span></div></div>{{/if}}'+
 '</div>'+
   '{{/product}}');
-
-// var editProductForm = can.mustache(
-// '<div role="tabpanel" class="tab-pane" id="productEdit">'+
-// '    <div class="row">'+
-// '      <div class="col-ms-6">'+
-// '  <form class="form-horizontal" can-submit="createProduct" can-reset="resetOrder">'+
-// '        <h3>Neues Produkt Hinzufügen</h3>'+
-// '      </div>'+
-// '      <div class="col-ms-6">'+
-// '      </div>'+
-// '    </div>'+
-// '    <div class="form-group">'+
-// '      <input type="hidden" name="id" value="@{{newProduct.id}}">'+
-// '        <label for="createProductForm_merchant_id" class="col-sm-6 control-label">Anbieter</label>'+
-// '        <div class="col-sm-6">'+
-// '        <select class="form-control" id="createProductForm_merchant_id" name="merchant_id" required >'+
-// '          <option value="">Bitte Wählen</option>'+
-// '          @{{#each merchants}}'+
-// '          <option value="@{{id}}">@{{name}}</option>'+
-// '            @{{/each}}'+
-// '        </select>'+
-// '        </div>'+
-// '      </div>'+
-// '    <div class="form-group">'+
-// '        <label for="createProductForm_productTypeId" class="col-sm-6 control-label">Produktart</label>'+
-// '        <div class="col-sm-6">'+
-// '        <select class="form-control" id="createProductForm_product_type_id" name="product_type_id" onchange="$(\'#priceInclTax\').html('+'+$(this).children(\':selected\').data(\'tax\')+\'% MwSt.\'); $(\'#priceInclTax\').data(\'factor\',(1 + (parseInt($(this).children(\':selected\').data(\'tax\'))/100)));" required >'+
-// '          <option value="">Bitte Wählen</option>'+
-// '          @{{#each productTypes}}'+
-// '          <option value="@{{id}}" data-tax="@{{tax}}">@{{name}}</option>'+
-// '            @{{/each}}'+
-// '        </select>'+
-// '        </div>'+
-// '      </div>'+
-// '      <div class="form-group">'+
-// '        <label for="createProductForm_sku" class="col-sm-6 control-label">Artikelnummer / SKU</label>'+
-// '        <div class="col-sm-6">'+
-// '          <input type="text" class="form-control" id="createProductForm_sku" name="sku" placeholder="z.B. 112233" value="@{{newProduct.sku}}" required >'+
-// '        </div>'+
-// '    </div>'+
-// '      <div class="form-group">'+
-// '        <label for="createProductForm_name" class="col-sm-6 control-label">Bezeichnung</label>'+
-// '        <div class="col-sm-6">'+
-// '          <input type="text" class="form-control" id="createProductForm_name" name="name" placeholder="z.B. Brot für die Welt, groß" value="@{{newProduct.name}}" required >'+
-// '        </div>'+
-// '    </div>'+
-// '      <div class="form-group">'+
-// '        <label for="createProductForm_price" class="col-sm-6 control-label">Einzelpreis (netto), wie im Katalog</label>'+
-// '        <div class="col-sm-6">'+
-// '          <div class="input-group">'+
-// '              <input type="number" class="form-control" id="createProductForm_price" name="price" value="@{{newProduct.price}}" placeholder="z.B. 2,99" min="0.01" step="0.01" required >'+
-// '              <span class="input-group-addon">€</span>'+
-// '              <span class="input-group-addon" id="priceInclTax" data-factor="0">Produktart auswählen</span>'+
-// '            </div>'+
-// '        </div>'+
-// '    </div>'+
-// '    <div class="form-group">'+
-// '      <label for="createProductForm_unit_unit" class="col-sm-6 control-label">Verpackungseinheit</label>'+
-// '      <div class="col-sm-6">'+
-// '            <select class="form-control" id="createProductForm_unit_unit" name="unit_unit" onchange="$(\'.newProductFormUnitUnitAddon\').html($(this).val());" required >'+
-// '              <option value="Stk" selected>Stk (Stück / Packungen)</option>'+
-// '              <option value="g">g (Gramm)</option>'+
-// '              <option value="kg">kg (Kilogramm)</option>'+
-// '              <option value="l">l (Liter)</option>'+
-// '              <option value="Fl">Fl (Flasche)</option>'+
-// '              <option value="Sck">Sck (Sack)</option>'+
-// '            </select>'+
-// '          </div>'+
-// '    </div>'+
-// '      <div class="form-group">'+
-// '        <label for="createProductForm_units" class="col-sm-6 control-label">Verpackungseinheit / Anzahl pro Gebinde</label>'+
-// '        <div class="col-sm-6">'+
-// '          <div class="input-group">'+
-// '              <input type="number" class="form-control" id="createProductForm_units" name="units" value="@{{newProduct.units}}" placeholder="z.B. 6 (Packungen Nudeln)" min="1" required >'+
-// '              <span class="input-group-addon newProductFormUnitUnitAddon">Stk</span>'+
-// '          </div>'+
-// '          '+
-// '        </div>'+
-// '    </div>'+
-// '    <div class="form-group">'+
-// '      <label for="createProductForm_tare_unit" class="col-sm-6 control-label">Gewichtseinheit</label>'+
-// '      <div class="col-sm-6">'+
-// '            <select class="form-control" id="createProductForm_tare_unit" name="tare_unit" onchange="$(\'.newProductFormTareUnitAddon\').html($(this).val());">'+
-// '              <option value="mg">mg (Milligramm)</option>'+
-// '              <option value="g" selected>g (Gramm)</option>'+
-// '              <option value="kg">kg (Kilogramm)</option>'+
-// '              <option value="ml">ml (Milliliter)</option>'+
-// '              <option value="l">l (Liter)</option>'+
-// '            </select>'+
-// '          </div>'+
-// '    </div>'+
-// '      <div class="form-group">'+
-// '        <label for="createProductForm_weight_per_unit" class="col-sm-6 control-label">Gewicht Pro Stück (falls bekannt)</label>'+
-// '        <div class="col-sm-6">'+
-// '          <div class="input-group">'+
-// '              <input type="number" class="form-control" id="createProductForm_weight_per_unit" value="@{{newProduct.weight_per_unit}}" name="weight_per_unit" placeholder="z.B. 500" min="1">'+
-// '              <span class="input-group-addon newProductFormTareUnitAddon">g</span>'+
-// '          </div>'+
-// '        </div>'+
-// '    </div>'+
-// '    <div class="form-group">'+
-// '      <label for="createProductForm_comment" class="col-sm-6 control-label">Anmerkungen zu diesem Produkt</label>'+
-// '      <div class="col-sm-6">'+
-// '        <input type="text" class="form-control" id="createProductForm_comment" name="comment" value="@{{newProduct.comment}}" placeholder="optional">'+
-// '      </div>'+
-// '    </div>'+
-// '    <div class="form-group">'+
-// '      <div class="col-sm-6">'+
-// '        <button class="btn btn-primary pull-right" type="submit" name="update">Änderungen Speichern</button>'+
-// '      </div>'+
-// '    </div>'+
-// '  </form>'+
-// '</div>');
 
 /*======================================================================*/
 /*================== COMPONENT CONTROLLER SECTION ======================*/
@@ -198,10 +85,6 @@ can.Component.extend({
       removeAllAttr(this.newProduct);
       $("#productCreate form").trigger("reset");
       replaceAllAttr(this.currentProductForm,this.createProductForm);
-      // this.currentProductForm.attr("titleCaption",this.createProductForm.titleCaption);
-      // this.currentProductForm.attr("showOrderAndSave",this.createProductForm.showOrderAndSave);
-      // this.currentProductForm.attr("buttonCaption",this.createProductForm.buttonCaption);
-      // this.currentProductForm.attr("buttonName",this.createProductForm.buttonName);
     },
     /** Toggle order_state for particluar order **/
     toggle: function(b,el,ev) {
@@ -262,7 +145,10 @@ can.Component.extend({
     },
     /** UI Action when Pill Menu Button "All orders" is clicked **/
     showOrders: function(scope,el,ev) {
-      if (!this.orders.length) this.orders = new Order.List({});
+      if (!this.orders.length) {
+        var orders = this.orders;
+        Order.findAll().then(function(d){orders.replace(d);},handleRestError);
+      }
       tabToggler($(el).data("shows"),$(el).data("affects"));
     },
     /** UI Action when Pill Menu Button "Orders by Product" is clicked **/
@@ -357,15 +243,32 @@ can.Component.extend({
         $("#newOrderFormProductListWrapper").show();
       }
     },
+    /** Removes a Product from the database **/
+    deleteProduct: function(product) {
+      var products = this.products;
+      if (confirm("Soll dieses Produkt wirklich aus der Datenbank entfernt werden?")) {
+        var p = new Product(product);
+        var id = p.attr("id");
+        p.destroy().then(function(){
+          products.replace(products.filter(function(i,x,l){return i.attr("id") != id;}));
+          handleRestDestroy("Gelöscht:","Das Produkt wurde aus der Datenbank entfernt.");
+        },handleRestError);
+      } 
+    },
     select: function(orders){ this.attr('selectedOrder', orders); },
     save: function(order) {
       order.save(function(order){},handleRestError);
       this.removeAttr('selectedOrder');
     },
     delete: function(order) {
-      if (confirm("Willst Du diese Bestellung wirklich löschen?")) order.destroy().then(function(){
-          handleRestDestroy("Gelöscht:","Die Bestellung wurde gelöscht.")},
-          handleRestError);
+      if (confirm("Willst Du diese Bestellung wirklich löschen?")) {
+        var orders = this.orders;
+        var id = order.attr("id");
+        order.destroy().then(function(){
+          handleRestDestroy("Gelöscht:","Die Bestellung wurde gelöscht.");
+          orders.replace(orders.filter(function(i,x,l){return i.attr("id") != id;}));
+        },handleRestError);
+      }
     },    
     submitOrder: function(scope, el, ev) {
       ev.preventDefault();
@@ -403,7 +306,9 @@ can.Component.extend({
           } else {
             // Load Updated Product into view
           }
-
+          handleRestCreate("Produkt:","Das Produkt wurde erfolgreich erstellt");
+          el.trigger("reset"); // Reset Form
+          $("#controlProductIndex > a").trigger("click"); // Switch Tabs
         },  // Success
         handleRestError // Error
         );
@@ -435,8 +340,6 @@ can.Component.extend({
       this.currentProductForm.attr("buttonName",this.updateProductForm.buttonName);
       $(".tab-pane.active").removeClass('active');
       $("#productCreate").addClass('active');
-//      $("ul.nav-tabs .active").removeClass('active');
-//      $("#controlProductCreate").addClass('active');
     },
     calculateOrderPrice: function(scope, el, ev) {
       /** CALC THE PRICE **/
@@ -453,14 +356,12 @@ can.Component.extend({
         $('#newOrderFormOrderPriceTotalBrt').val("-/-");        
       }
     },
+    /** This adds the opportunity to edit the properties of a product in the order-form **/
     enableInput: function(scope,el,ev) {
-      console.log(scope);
-      console.log(el);
-      console.log(ev);      
       if ($(this).hasClass('glyphicon-edit')) {
         $(this).removeClass('glyphicon-edit').addClass("glyphicon-ok");
         enable = el.data("enable").split(",").each(function(i,x){
-          $("input[name='"+x+"'], select[name='"+x+"']").removeAttr("disabled");
+          $("input[name='"+x+"'], select[name='"+x+"']").removeAttr("readonly");
         });
       } else if($(this).hasClass("glyphicon-ok")) {
         console.log("check");

@@ -15,8 +15,10 @@
 						<th>Adresse &amp; Kontakt</th>
 						<th>Dienstgruppe</th>
 						<th>Mitglied Seit</th>
+				        @if($myself->isAdmin)	
 						<th>Kontostand</th>
 						<th>Aktion</th>
+						@endif
 					</tr>
 					@{{#each members}}
 					<tr class="">
@@ -31,17 +33,20 @@
 								<button class='btn btn-success btn-xs' can-click='editSubmit'><span class="glyphicon glyphicon-ok"></span></button>
 								<button class='btn btn-warning btn-xs' can-click='editAttr'><span class="glyphicon glyphicon-remove"></span></button>
 							</div>
-						    <div class="memberUsers" can-click="filterUsersByMember" onclick="$('a[href=\'#group\']').tab('show');">
+						    <div class="memberUsers" can-click="filterUsersByMember">
 						    	<small>
 							    @{{#user}}
 							    	<span class="userName" data-id="@{{id}}">
 							    	@{{firstname}} @{{lastname}}
 							    	</span>
 							    @{{/each}}
+							    @if($myself->isAdmin)
 							    @{{^user}}
 							    	<span class="userName">User Hinzufügen.</span>
 							    @{{/user}}
 							    </small>
+				        		@endif
+				        		<button class="btn btn-info btn-xs" title="User anzeigen" can-click="filterUsersByMember" onclick="$('a[href=\'#group\']').tab('show');"><span class="glyphicon glyphicon-zoom-in"></span></button>							    
 						    </div>
 						</td>
 						<td>
@@ -103,11 +108,14 @@
 						<td>
 							<div class="memberMemberGroupName can-id" onclick="$(this).children('.statusSetter').toggle();" data-id="@{{id}}" data-model="member_group">
 								@{{member_group.name}}
+								@if($myself->isAdmin)
 								<div class='statusSetter' style="display:none;">
 									@{{#each memberGroups}}
 										<input type="hidden" class="editValue" name="member_group_id" value="@{{id}}">
 										<div class='setStatus' onclick="$(this).parent('.statusSetter').toggle();" can-click="editSubmit" data-scope="members">@{{name}}</div>
 									@{{/each}}
+								</div>
+								@endif
 							</div>											
 						</td>
 				        <td>
@@ -120,16 +128,17 @@
 								<button class='btn btn-warning btn-xs' can-click='editAttr'><span class="glyphicon glyphicon-remove"></span></button>
 							</div>									        
 				        </td>
+				        @if($myself->isAdmin)
 				        <td>
 				        	<div class="memberBalance">
-				        		<span>xx,xx&euro;</span><br>
+				        		<span>@{{ledger_balance.ledgerBalance}}&euro;</span><br>
 				        		<button class="btn btn-info btn-xs" title="Kontoübersicht" can-click="openLedger"><span class="glyphicon glyphicon-piggy-bank"></span></button>
-				        		<button class="btn btn-success btn-xs" title="Schnellbuchung" can-click="quickLedgerTransaction"><span class="glyphicon glyphicon-transfer"></span></button>
 				        	</div>
 				        </td>
 					    <td>
 					    	<br><button class="btn btn-danger btn-xs" can-click="delete"><span class="glyphicon glyphicon-remove" title="Löschen"></span></button>
 					    </td>
+				        @endif
 				    </tr>
 				    @{{/each}}
 			    </tbody>
@@ -274,9 +283,12 @@
 						<th>Passwort</th>
 						<th>E-Mail</th>
 						<th>Telefon</th>
+						@if ($myself->isAdmin)
 						<th>Letzter Login</th>
 						<th>Usergruppe</th>
 						<th>Aktion</th>
+						@endif
+
 					</tr>
 					@{{#each memberUsers}}
 					<tr>
@@ -341,6 +353,7 @@
 								<button class='btn btn-warning btn-xs' can-click='editAttr'><span class="glyphicon glyphicon-remove"></span></button>
 							</div>
 						</td>
+						@if ($myself->isAdmin)
 						<td>
 							<div class="userLastLogin">
 								<span>@{{last_login}}</span>
@@ -350,8 +363,10 @@
 							<div class="userUserGroup">@{{userGroup}}</div>
 						</td>
 					    <td><button class="btn btn-danger btn-sm" can-click="delete"><span class="glyphicon glyphicon-remove" title="Löschen"></span></button></td>
+						@endif
 				    </tr>
 				    @{{/each}}
+					@if ($myself->isAdmin)
 					<tr id="userCreateForm">
 						<td><input type="checkbox" can-value="complete"></td>
 						<td>
@@ -382,6 +397,7 @@
 						</td>
 					    <td><button class="btn btn-success btn-sm" can-click="userCreate"><span class="glyphicon glyphicon-ok" title="Hinzufügen"></span></button></td>
 				    </tr>				    
+					@endif
 			    </tbody>
 			</table>
 		</div>
@@ -394,12 +410,16 @@
 				@yield("appHeader")
 				<ul class="nav nav-tabs" id="tabNav">
 				  <li role="presentation" class="active"><a href="#index" aria-controls="index" id="tabIndexControl">Übersicht</a></li>
+   				  @if ($myself->isAdmin)
 				  <li role="presentation"><a href="#create" aria-controls="create">Neue Bestellgruppe</a></li>
+				  @endif
 				  <li role="presentation"><a href="#group" aria-controls="group">Gruppenmitglieder</a></li>
 				</ul>
 				<div class="tab-content">
 					@yield("tabIndex")
+					@if ($myself->isAdmin)
 					@yield("tabCreate")
+					@endif
 					@yield("tabLedger")
 					@yield("tabUsers")
 				</div>

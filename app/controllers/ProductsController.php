@@ -156,6 +156,11 @@ class ProductsController extends \BaseController {
 	public function destroy($id)
 	{
 		$p = Product::findOrFail($id);
+
+        if ($count = Order::where("product_id","=",$id)->open()->count()) {
+            App::abort(403,"Es ist nicht möglich, dieses Produkt (".$p->sku.") zu löschen, da derzeit offene Bestellungen ($count) vorliegen.");
+        }
+
 		return ($p->delete()) ? "true" : "false";
 	}
 

@@ -23,7 +23,9 @@
 	<body>
 		@yield("mustacheStart")
 		@yield("header")
-		<div class="container" id="flashContainer">
+		<div class="navbar-fixed-bottom">
+			<div class="container" id="flashContainer">
+			</div>
 		</div>		
 		<div class="container">
 			@yield("content")

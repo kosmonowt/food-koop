@@ -205,12 +205,12 @@ function datefromdatetime(datetime) {
 }
 
 function removeAllAttr(canMap) {
-  for (var attr in canMap) canMap.removeAttr(attr);
+  canMap.each(function(i,n){canMap.removeAttr(n);});
   return canMap;
 }
 
 function replaceAllAttr(canMap,oCanMap) {
-  for (var attr in oCanMap) canMap.attr("attr",oCanMap.attr(attr));
+  oCanMap.each(function(i,n){canMap.attr(n,oCanMap.attr(n));});
   return canMap;
 }
 
@@ -297,6 +297,11 @@ var Member = can.Model.extend({
   update: 'PUT '+sUrl+'members/{id}',
   destroy: 'DELETE '+sUrl+'members/{id}',
   create : 'POST '+sUrl+'members'
+}, {});
+
+var Myself = can.Model.extend({
+  findOne: 'GET '+sUrl+'members/myself',
+  update: 'PUT '+sUrl+'members/{id}',
 }, {});
 
 var MemberGroup = can.Model.extend({
@@ -454,6 +459,10 @@ can.mustache.registerHelper("marketplacePrice",function(data){
  **/
 can.mustache.registerHelper("productPrice",function(data){
   return parseFloat(parseFloat(data.context.product.price) * (1+ (data.context.product.taxrate/100)),2).toFixed(2);
+});
+
+can.mustache.registerHelper("toFixed",function(data){
+  return parseFloat().toFixed(2);
 });
 
 

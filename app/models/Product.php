@@ -1,7 +1,7 @@
 <?php
 use Filter\HasFilters;
 
-class Product extends Model {
+class Product extends AppModel {
 
 	use SoftDeletingTrait, HasFilters;
 

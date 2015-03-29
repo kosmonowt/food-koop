@@ -21,6 +21,7 @@
 							<h4 class="list-group-item-heading">@{{dowName data=day_of_week}}, @{{dmY data=date field="date"}}</h4>
 							@{{#each task}}
 							<div class="well well-sm">
+								@if ($myself->isAdmin)
 								<form>
 									<input type="hidden" name="id" value="@{{id}}">
 									<p class="list-group-item-text">@{{timeHI data=start field="start"}} - @{{timeHI data=stop field="stop"}} @{{task_type.name}}</p>
@@ -29,8 +30,11 @@
 										@{{#each members}}
 											<option value="@{{id}}">@{{name}}</option>
 										@{{/each}}
-									</select>
+								</select>
 								</form>
+								@else
+								<p>@{{member_id}} - #ADD MEMBERID#</p>
+								@endif
 							</div>
 							@{{/each}}
 						</div>
@@ -215,12 +219,16 @@
 				@yield("appHeader")
 				<ul class="nav nav-tabs" id="tabNav">
 				  <li role="presentation" class="active"><a href="#tabTasks" aria-controls="index" id="tabTasksControl">Dienstplan</a></li>
+	  			  @if ($myself->isAdmin)
 				  <li role="presentation"><a href="#tabTaskTypes" aria-controls="index" id="tabTaskTypesControl">Dienstarten</a></li>
+		  		  @endif
 				</ul>
 				<div class="tab-content">
 					@yield("tabTasks")
+					@if ($myself->isAdmin)
 					@yield("tabTaskTypes")
 					@yield("tabTaskTypeEditor")
+					@endif
 				</div>
 			</members-app>
 @stop

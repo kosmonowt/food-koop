@@ -12,13 +12,16 @@
 				<li role="presentation"><a href="#" class="tabToggler active" can-click="showOrdersByProduct" data-value="waiting" data-shows="ordersByProductTable" data-affects="orderToggleTables">Wartend</a></li>
 				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrdersByProduct" data-value="listed" data-shows="ordersByProductTable" data-affects="orderToggleTables">Bestelliste</a></li>				
 				<li role="presentation"><a href="#" class="tabToggler" can-click="showOrdersByProduct" data-value="pending" data-shows="ordersByProductTable" data-affects="orderToggleTables">Bestellt</a></li>
+				@if ($myself->isAdmin)
 				<li role="presentation"><a href="#" id="showAllOrdersControl" class="tabToggler" can-click="showOrders" data-shows="ordersTable" data-affects="orderToggleTables">Übersicht</a></li>
+				@endif
 			</ul>
 			<br>
 	</div>
 	</div>
 	<div class="orderToggleTables" id="ordersByProductTable">
 		<div class="row">
+			@if ($myself->isAdmin)
 			<div class="col-xs-12">				
 				<div class="btn-toolbar">
 					<div class="btn-group btn-group-sm">
@@ -56,22 +59,28 @@
 				    @{{/if}}
 				</div>
 			</div>
+			@endif
 		</div>		
 		<div class="row">
 			<div class="col-xs-12">
 				<table class="table table-striped table-hover" id="byProductTable">
 					<tbody>
-						<tr>
+						<tr>@if ($myself->isAdmin)
 							<th></th>
+							@endif
 							<th>Produkt</th>
 							<th>Menge</th>
 							<th>Bestellt zwischen / am</th>
+							@if ($myself->isAdmin)
 							<th>Einheiten Bestellen</th>
 							<th>Aktion</th>
+							@endif
 						</tr>
 						@{{#each ordersByProduct}}
 						<tr class="@{{colormark totalAmount}} orderState-@{{order_state_id}}">
+							@if ($myself->isAdmin)
 							<td onclick="$(this).children('input').click();"><input type="checkbox" value="@{{id}}"></td>
+							@endif
 							<td>
 								<strong>@{{sku}}</strong> - @{{name}}<br>
 								<strong>@{{totalForBulk}}€</strong> inkl. @{{taxrate}}% MwSt. (Einzelpreis: @{{price}}€)<br>
@@ -82,13 +91,16 @@
 								<br>in @{{countOrders}} Bestellungen
 							</td>
 							<td>@{{oneOrTwoDates data=earliestOrder field1="earliestOrder" field2="latestOrder"}}</td>
+							@if ($myself->isAdmin)
 							<td>
 								<strong>@{{bulkToOrder}}</strong><br>
+							</td>
 							<td>
 								<button class="btn btn-success btn-sm setOrderState-3"   can-click="toggle" data-order_state_id="3"><span class="glyphicon glyphicon-send" title="Auf die Bestelliste"></span></button>
 								<button class="btn btn-warning btn-sm setOrderState-2"   can-click="toggle" data-order_state_id="2"><span class="glyphicon glyphicon-remove-sign" title="Zurück in Wartezustand"></span></button>
 								<button class="btn btn-success btn-sm setOrderState-100" can-click="toggle" data-order_state_id="100"><span class="glyphicon glyphicon-ok-sign" title="Vollständig angekommen"></span></button>
 							</td>
+							@endif
 					    </tr>
 					    @{{/each}}
 				    </tbody>
@@ -96,13 +108,14 @@
 			</div>
 		</div>		
 	</div>
+	@if ($myself->isAdmin)
 	<div class="hidden orderToggleTables" id="ordersTable">
 		<div class="row">
 			<div class="col-xs-12">
 				<table class="table table-striped table-hover">
 					<tbody>
 						<tr>
-							<th></th>
+							@if ($myself->isAdmin)<th></th>@endif
 							<th>Datum</th>
 							<th>Nummer</th>
 							<th>Bezeichnung</th>
@@ -114,7 +127,7 @@
 						</tr>
 						@{{#each orders}}
 						<tr class="status-@{{order_state_id}}">
-							<td><input type="checkbox" can-value="complete"></td>
+							@if ($myself->isAdmin)<td><input type="checkbox" can-value="complete"></td>@endif
 							<td>@{{dmY data=created_at field="created_at"}}</td>
 							<td>@{{product.sku}}</td>
 							<td>@{{product.name}}</td>
@@ -124,15 +137,19 @@
 					        <td>@{{member.name}}</td>
 							<td>
 								<div class="statusIcon status-@{{order_state_id}}" onclick="$(this).children('.statusSetter').toggle();">
+									@if ($myself->isAdmin)
 									<div class='statusSetter' style="display:none;">
 										<div class='setStatus status-1' data-order_state_id='1' can-click="toggle">Wartend</div>
 										<div class='setStatus status-2' data-order_state_id='2' can-click="toggle">Zurückgestellt</div>
 										<div class='setStatus status-3' data-order_state_id='3' can-click="toggle">Auf Bestelliste</div>
 										<div class='setStatus status-4' data-order_state_id='4' can-click="toggle">Bestellt</div>
-										</div>
+									</div>
+									@endif
 								</div>
 							</td>
+							@if ($myself->isAdmin)
 						    <td><button class="btn btn-danger" can-click="delete"><span class="glyphicon glyphicon-remove"></span></button></td>
+							@endif
 					    </tr>
 					    @{{/each}}
 				    </tbody>
@@ -140,6 +157,7 @@
 			</div>
 		</div>
 	</div>	
+	@endif
 </div>
 @stop
 
@@ -375,8 +393,10 @@
 						<th>Produkt</th>
 						<th>Menge</th>
 						<th>Orders</th>
+						@if ($myself->isAdmin)
 						<th>Gebinde bestellen</th>
-						<th>GB</th>
+						@endif						
+						<th title="Grundbedarf">GB</th>
 						<th>Aktion</th>
 					</tr>
 					@{{#each products}}
@@ -392,26 +412,33 @@
 							@{{weight_per_unit}} @{{tare_unit}}
 						</td>
 						<td>@{{countOrders}}</td>
+						@if ($myself->isAdmin)
 						<td class="col-xs-2">
 							<div class="input-group input-group-sm">
 								<input class="form-control" type="number" min="1" range="1" name="amount">
 								<span class="input-group-addon bg-succes"><a class="glyphicon glyphicon-send" can-click="quickOrder"></a></span>
 							</div>
+						</td>
+						@endif
 						<td>
 							@{{#if standardProduct}}
-							<button class="btn btn-success btn-sm" can-click="toggleProductState" data-state="1"><span class="glyphicon glyphicon-star" title="Grundbedarf"></span></button>
+							<button class="btn btn-success btn-sm" @if ($myself->isAdmin)can-click="toggleProductState" data-state="1"@endif><span class="glyphicon glyphicon-star" title="Grundbedarf"></span></button>
 							@{{else}}
-							<button class="btn btn-default btn-sm" can-click="toggleProductState" data-state="3"><span class="glyphicon glyphicon-star-empty" title="Zum Grundbedarf"></span></button>
+							<button class="btn btn-default btn-sm" @if ($myself->isAdmin)can-click="toggleProductState" data-state="3"@endif><span class="glyphicon glyphicon-star-empty" title="Zum Grundbedarf"></span></button>
 							@{{/if}}
 						</td>
 					    <td>
 							<button class="btn btn-info btn-sm" can-click="editProduct" data-id="@{{id}}"><span class="glyphicon glyphicon-edit"></span></button>
+							@if ($myself->isAdmin)
 					    	@{{#if blocked}}
 					    	<button class="btn btn-default btn-sm" can-click="toggleProductState" data-state="1"><span class="glyphicon glyphicon-lock" title="Entsperren"></span></button>
 					    	@{{else}}
 					    	<button class="btn btn-warning btn-sm" can-click="toggleProductState" data-state="2"><span class="glyphicon glyphicon-ban-circle" title="Sperren"></span></button>
 					    	@{{/if}}
-					    	<button class="btn btn-danger btn-sm" can-click="deleteProduct"><span class="glyphicon glyphicon-trash"></span></button></td>
+					    	<button class="btn btn-danger btn-sm" can-click="deleteProduct"><span class="glyphicon glyphicon-trash"></span></button>
+					    	@endif
+				    	</td>
+
 				    </tr>
 				    @{{/each}}
 			    </tbody>

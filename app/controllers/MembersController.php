@@ -9,12 +9,14 @@ class MembersController extends \BaseController {
 	 */
 	public function index()
 	{
-		$Member = new Member();
-		$members = $Member->with("user")->with("memberGroup")->get();
-/*		foreach ($members as $m) {
-			$m->balance = MemberLedger::balance()->where("member_id","=",$this->id)->first()->balance;
-		}*/
-		return $members->toJson();
+		if (Auth::user()->isAdmin) {
+			$m = Member::with("user")->with("memberGroup")->with("ledgerBalance");
+		} else {
+			$m = Member::with("user")->with("memberGroup");
+		}
+		
+
+		return $m->get()->toJson();
 	}
 
 

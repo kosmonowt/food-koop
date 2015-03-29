@@ -1,6 +1,6 @@
 <?php
 
-class LedgerVwzs extends \Eloquent {
+class LedgerVwzs extends AppModel {
 
 	protected $fillable = ["name"];
 	protected $table = "LedgerVwzs";

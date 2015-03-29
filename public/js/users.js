@@ -1,6 +1,7 @@
 can.Component.extend({
   tag: 'members-app',
   scope: {
+    myself: new Myself.findOne(),
     members: new Member.List({}),
     memberGroups: new MemberGroup.List({}),
     memberStatus: new MemberStatus.List({}),
@@ -98,10 +99,15 @@ can.Component.extend({
     /*******************************************************************/
     calculateTotal: function() {
       var currentMember = this.currentMember;
-      currentMember.attr("balance",0);
+      currentMember.attr("balance",0.0);
       var currentLedger = this.currentLedger;
+      console.log(currentLedger);
       currentLedger.each(function(m,x){
-        currentMember.attr("balance",currentMember.attr("balance") + parseFloat(m.attr("balance")));
+        console.log(currentMember.attr("balance"));
+        console.log(m.attr("balance"));
+        var newBalance = parseFloat(currentMember.attr("balance")) + parseFloat(m.attr("balance"))
+        console.log(currentMember.attr("balance"));
+        currentMember.attr("balance",newBalance);
       });
     },
     checkBalanceValue: function(scope, el, ev) {

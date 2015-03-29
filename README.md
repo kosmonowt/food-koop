@@ -32,6 +32,19 @@ It is thought to use
 
 ## Release History
 
+### 2015-03-29
+* Debugged ProductCreate (click on "Produkt Hinzufügen")
+	* BUG: Uncaught TypeError: undefined is not a function
+* Direct Ordering in Product View only for admin
+* Switching product_state only for admin
+* can now delete products (when no open orders found)
+* deleted orders and products are removed from list view.
+* on product create form is now cleared, form tab is opened
+* detail order view is hidden.
+
+### 2015-03-26
+* Added basic functionality to hide admin-views for non-admins in tasks, users, orders
+
 ### 2015-03-24
 * DASHBOARD:
 	* MyTasks put into CanJs: Possible view and delete myTasks
@@ -131,15 +144,13 @@ It is thought to use
 	* Add reload on count only when more than listable items (for larger databases)
 * DELETE not working yet.
 * Add Badges with product.count on product overview
-* Direct Ordering in Product View only for admin
-* Switching product_state only for admin
 * After Updating Product also update in list view and product order list
-* Allow only Admin to edit product attribute!
 * Redesign colors: Only <td> on checkbox will have colors indicating the completeness of the order.
 * Email to user and member when order was sent as well as wenn order arrived
 	* Do not inform change-applying user
 * CHECK findOr404 in controller
-* BUG: Uncaught TypeError: undefined is not a function
+* Solve Problem: enableInput (products should be editable in order-form)
+* Allow only Admin to edit product attribute! (ZURÜCKGESTELLT)
 
 ### Users
 * Edit User Group Settings needs update

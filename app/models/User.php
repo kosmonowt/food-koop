@@ -6,7 +6,7 @@ use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Filter\HasFilters;
 
-class User extends Model implements UserInterface, RemindableInterface {
+class User extends AppModel implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait, HasFilters;
 
@@ -19,12 +19,16 @@ class User extends Model implements UserInterface, RemindableInterface {
 
 	protected $fillable = ['user_group_id','username','firstname','lastname','password','email','telephone','member_id'];
 
+    protected $appends = ['isAdmin','isSuperAdmin'];
+
+    protected $dynamicHidden = ["last_login" => array("<2"), "user_group_id" => array("<2"), "username" => array("<2"), "isSuperAdmin" => array("<2"), "isAdmin" => array("<2")  ];
+
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token');
+	protected $hidden = ['password', 'remember_token'];
 
 	protected static $rules = [
 		'user_group_id'  => 'required|exists:user_groups,id',
@@ -58,4 +62,17 @@ class User extends Model implements UserInterface, RemindableInterface {
         'email' => 'trim',
         'telephone' => "trim"
     ];
+
+    public function member() {
+        return $this->belongsTo("member","member_id");
+    }
+
+    public function getIsAdminAttribute() {
+        return ($this->user_group_id > 1);
+    }
+
+    public function getIsSuperAdminAttribute() {
+        return ($this->user_group_id == 3);
+    }
+
 }

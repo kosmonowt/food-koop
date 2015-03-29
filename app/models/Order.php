@@ -1,7 +1,7 @@
 <?php
 use Filter\HasFilters;
 
-class Order extends Model {
+class Order extends AppModel {
 
     use HasFilters;
 

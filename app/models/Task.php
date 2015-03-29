@@ -1,6 +1,6 @@
 <?php
 
-class Task extends Model {
+class Task extends AppModel {
 	protected $fillable = ["member_id","comment"];
 
 	public function scopeDay($query,$day) {

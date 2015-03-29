@@ -1,7 +1,7 @@
 <?php
 use Filter\HasFilters;
 
-class TaskType extends Model {
+class TaskType extends AppModel {
 
 	use HasFilters;
 

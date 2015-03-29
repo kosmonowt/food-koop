@@ -1,7 +1,7 @@
 <?php
 use Filter\HasFilters;
 
-class Member extends Model {
+class Member extends AppModel {
 	
 	use SoftDeletingTrait, HasFilters;
 
@@ -57,8 +57,15 @@ class Member extends Model {
         return $this->hasMany("MemberLedger","member_id");
     }
 
+    public function ledgerBalance() {
+        return $this->hasOne('MemberLedger')->selectRaw('member_id, TRUNCATE(SUM(balance),2) as ledgerBalance')->groupBy('member_id');
+    }
+
+
     public function getLedgerBalanceAttribute($member) {
-        return MemberLedger::balance()->where("member_id","=",$this->id)->first()->balance;
+        if (!array_key_exists("ledgerBalance", $this->relations)) $this->load("ledgerBalance");
+        $related = $this->getRelation("ledgerBalance");
+        return ($related) ? (float) $related->ledgerBalance : 0;
     }
 
 }

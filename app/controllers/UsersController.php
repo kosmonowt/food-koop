@@ -9,7 +9,7 @@ class UsersController extends \BaseController {
 	 */
 	public function index()
 	{
-		return User::get()->toJson();
+		return User::dynamicHide()->get()->toJson();
 	}
 
 

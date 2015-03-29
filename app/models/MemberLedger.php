@@ -1,7 +1,7 @@
 <?php
 use Filter\HasFilters;
 
-class MemberLedger extends Model {
+class MemberLedger extends AppModel {
 
 	use SoftDeletingTrait, HasFilters;
 

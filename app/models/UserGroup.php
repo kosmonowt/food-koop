@@ -1,6 +1,6 @@
 <?php
 
-class UserGroup extends \Eloquent {
+class UserGroup extends AppModel {
 	protected $fillable = [];
 	public $timestamps = false;
 }
