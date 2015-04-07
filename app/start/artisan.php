@@ -12,3 +12,4 @@
 */
 
 Artisan::add(new tasksCreator);
+Artisan::add(new ledger);

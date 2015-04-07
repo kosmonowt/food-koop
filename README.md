@@ -32,6 +32,14 @@ It is thought to use
 
 ## Release History
 
+### 2015-04-07
+* Added stubs for event emails to email view folder.
+* Added versatile templates to email view folder.
+* Applied Stub for "Email bei Bestellt"
+
+### 2015-04-05
+* Added Task to deduct balance from the ledger.
+
 ### 2015-03-29
 * Debugged ProductCreate (click on "Produkt Hinzufügen")
 	* BUG: Uncaught TypeError: undefined is not a function

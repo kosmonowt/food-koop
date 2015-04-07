@@ -38,7 +38,7 @@ Event::listen('tasks.unassign',function($task){
 	$taskDate = new DateTime($task->date);
 	$dueDate = new DateTime ("NOW + 14 DAYS"); // less then 14 days before the task we will send an email if task is without member now
 	if ($dueDate >= $taskDate) {
-		// Create E-Mail 
+		// Create E-Mail
 	}
 
 });

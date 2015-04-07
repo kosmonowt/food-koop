@@ -77,3 +77,4 @@ Route::resource("userGroups", "UserGroupsController");
 
 
 Route::get("test/{id}",function($id){return Order::where("product_id","=",$id)->open()->count();});
+

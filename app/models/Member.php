@@ -58,9 +58,12 @@ class Member extends AppModel {
     }
 
     public function ledgerBalance() {
-        return $this->hasOne('MemberLedger')->selectRaw('member_id, TRUNCATE(SUM(balance),2) as ledgerBalance')->groupBy('member_id');
+        return $this->hasOne('MemberLedger')->selectRaw('member_id, TRUNCATE(SUM(balance),2) as ledgerBalance')->where("vwz","NOT LIKE","starteinlage")->groupBy('member_id');
     }
 
+    public function scopePaying($query) {
+        return $query->whereNotIn("member_status_id",[2,3]);
+    }
 
     public function getLedgerBalanceAttribute($member) {
         if (!array_key_exists("ledgerBalance", $this->relations)) $this->load("ledgerBalance");
