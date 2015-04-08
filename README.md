@@ -33,7 +33,7 @@ It is thought to use
 ## Release History
 
 ### 2015-04-08
-* Created Email for taskFreed, newUser, membershipChanged, ledgerDeducted, orderArrived
+* Created Email Template for taskFreed, newUser, membershipChanged, ledgerDeducted, orderArrived
 * Added virtual attribute "name" to UserModel
 
 ### 2015-04-07
