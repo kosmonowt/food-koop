@@ -19,7 +19,7 @@ class User extends AppModel implements UserInterface, RemindableInterface {
 
 	protected $fillable = ['user_group_id','username','firstname','lastname','password','email','telephone','member_id'];
 
-    protected $appends = ['isAdmin','isSuperAdmin'];
+    protected $appends = ['isAdmin','isSuperAdmin','name'];
 
     protected $dynamicHidden = ["last_login" => array("<2"), "user_group_id" => array("<2"), "username" => array("<2"), "isSuperAdmin" => array("<2"), "isAdmin" => array("<2")  ];
 
@@ -65,6 +65,10 @@ class User extends AppModel implements UserInterface, RemindableInterface {
 
     public function member() {
         return $this->belongsTo("member","member_id");
+    }
+
+    public function getNameAttribute() {
+        return $this->firstname." ".$this->lastname;
     }
 
     public function getIsAdminAttribute() {

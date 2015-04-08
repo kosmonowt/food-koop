@@ -32,6 +32,10 @@ It is thought to use
 
 ## Release History
 
+### 2015-04-08
+* Created Email for taskFreed, newUser, membershipChanged, ledgerDeducted, orderArrived
+* Added virtual attribute "name" to UserModel
+
 ### 2015-04-07
 * Added stubs for event emails to email view folder.
 * Added versatile templates to email view folder.
