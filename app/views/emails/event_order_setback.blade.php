@@ -2,7 +2,7 @@
 @include("emails.layouts.usermail")
 
 @section("heading")
-Deine Bestellung bei {{$merchantName}} wurde aufgegeben.
+Deine Bestellung bei {{$merchantName}} ist zurückgestellt worden.
 @stop
 
 @section("content")
@@ -15,6 +15,6 @@ Deine Bestellung bei {{$merchantName}} wurde aufgegeben.
 	&nbsp;bei
 	{{$merchantName}}</p>
 	@yield("includes.ordersList")
-	<p>wurde soeben bestellt.</p>
-	<p>Wenn alles gut geht sollte die Ware bei der nächsten Lieferung mit ankommen.</p>
+	<p>wurde zurückgestellt.</p>
+	<p>Bei Fragen dazu stelle diese bitte an bestellgruppe@biokiste.org.</p>
 @stop

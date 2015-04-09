@@ -1,31 +1,31 @@
-@extends('layouts.mail')
-@include("layouts.usermail")
+@extends('emails.layouts.mail')
+@include("emails.layouts.usermail")
 
 @section("heading")
-@if ($memberLedger->balance < 0)
+@if (!$positive)
 Dein Gruppenkonto wurde Belastet
 @else
-Wir haben Deine Zahlung über {{$memberLedger->balance}}€ erhalten
+Wir haben Deine Zahlung über {{$balance}}€ erhalten
 @endif
 @stop
 
 @section("content")
 <p>Kontobewegung in Deinem Bestellgruppenkonto.</p>
-<p>Datum: {{$memberLedger->date}}<br>
-Betreff: {{$memberLedger->vwz}}<br>
+<p>Datum: {{$date}}<br>
+Betreff: {{$vwz}}<br>
 Betrag:&nbsp;
-@if ($memberLedger->balance < 0)
-<span class="deductedBalance">{{$memberLedger->balance}} €</span>
+@if (!$positive)
+<span class="deductedBalance">{{$balance}} €</span>
 @else
-<span class="addedBalance">{{$memberLedger->balance}} €</span>
+<span class="addedBalance">{{$balance}} €</span>
 @endif
 <br>
 
-@if ($memberLedger->balance < 0)
+@if (!$positive)
 <p>Bitte zahle den überfälligen Betrag auf umgehend auf dem Konto der Biokiste ein.</p>
 @endif
 
-@if ( (strpos("Mitgliedsbeitrag",$memberLedger->vwz) === 0) && ($memberLedger->balance < 0) )
+@if ( (strpos("Mitgliedsbeitrag",$vwz) === 0) && (!$positive) )
 <p>Wenn du einen Dauerauftrag geschaltet hast sollte alles seinen Gang gehen.</p>
 @endif
 

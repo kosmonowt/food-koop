@@ -1,5 +1,5 @@
-@extends('layouts.mail')
-@include("layouts.adminmail")
+@extends('emails.layouts.mail')
+@include("emails.layouts.adminmail")
 
 @section("heading")
 Dienst am {{$task->date}} wieder freigegeben

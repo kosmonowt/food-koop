@@ -1,5 +1,5 @@
-@extends('layouts.mail')
-@include("layouts.membermail")
+@extends('emails.layouts.mail')
+@include("emails.layouts.membermail")
 
 @section("heading")
 Änderung Deines Mitgliedsstatus

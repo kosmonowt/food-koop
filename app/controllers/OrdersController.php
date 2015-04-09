@@ -51,6 +51,9 @@ class OrdersController extends \BaseController {
 		return $orders->get()->toJson();
 	}
 
+	/**
+	 * This function is called when the user changes the state of order(s)
+	 **/
 	public function updateBulk($product_id,$order_state_id = null) {
 		
 		if (is_null($order_state_id)) {
@@ -72,12 +75,11 @@ class OrdersController extends \BaseController {
 			$order->where("order_state_id","<=",4);
 		} elseif ($order_state_id == 100) {
 			// Set completed
-			$order->where("order_state_id","==",4);
+			$order->where("order_state_id","=",4);
 		}
 
 		if (!is_null(Input::get("latestOrder"))) $order->where("created_at","<=",Input::get("latestOrder"));
 		if (!is_null(Input::get("earliestOrder"))) $order->where("created_at",">=",Input::get("earliestOrder"));
-
 		Event::fire("orders.setState",array($order->get(),$order_state_id));
 
 		$order->update(array("order_state_id" => $order_state_id));
@@ -85,8 +87,13 @@ class OrdersController extends \BaseController {
 		return $order->get()->toJson();
 	}
 
+	/**
+	 * This function is called when the user presses "Bestellung jetzt auslösen".
+	 **/
 	public function orderBulk() {
-		$order = Order::where("order_state_id","=",3)->update(array("order_state_id" => 4));
+		$orderStateId = 4;
+		Event::fire("orders.setState",array(Order::where("order_state_id","=",3)->get(),$orderStateId));
+		$order = Order::where("order_state_id","=",3)->update(array("order_state_id" => $orderStateId));
 		return "{\"result\":\"$order\"}";
 	}
 

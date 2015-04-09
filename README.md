@@ -32,11 +32,15 @@ It is thought to use
 
 ## Release History
 
+
 ### 2015-04-09
-* Added Command to quick-edit settings
-* created eventListeners Folder
+* Bugfix on E-Mail Template
+* ORDERS: Made Emails to send during state change
+* ADDED COMMAND to quick-edit settings
+* CREATED eventListeners Folder
 * Moved eventListeners.php into eventListeners/
 * Moved Events that produce mail to mailListeners.php
+* LEDGER: Emails fired on Ledger Transaction
 
 ### 2015-04-08
 * Added Migration on Settings including SEED

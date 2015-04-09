@@ -1,5 +1,5 @@
-@extends('layouts.mail')
-@include("layouts.usermail")
+@extends('emails.layouts.mail')
+@include("emails.layouts.usermail")
 
 @section("heading")
 Neues Mitglied in Dienstgruppe {{$member->name}}

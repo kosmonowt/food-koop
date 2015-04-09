@@ -1,8 +1,8 @@
-@extends('layouts.mail')
-@include("layouts.usermail")
+@extends('emails.layouts.mail')
+@include("emails.layouts.usermail")
 
 @section("heading")
-Deine Bestellung bei {{merchantName}} ist eingetroffen!
+Deine Bestellung bei {{$merchantName}} ist eingetroffen!
 @stop
 
 @section("content")
