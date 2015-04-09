@@ -32,8 +32,19 @@ It is thought to use
 
 ## Release History
 
+### 2015-04-09
+* Added Command to quick-edit settings
+* created eventListeners Folder
+* Moved eventListeners.php into eventListeners/
+* Moved Events that produce mail to mailListeners.php
+
 ### 2015-04-08
-* Created Email Template for taskFreed, newUser, membershipChanged, ledgerDeducted, orderArrived
+* Added Migration on Settings including SEED
+* Added Migration on Contents and ContentTypes including SEED
+* Added Model "Setting"
+* Added Model "Content"
+* Added Model "ContentTypes"
+* Created Email-Template for taskFreed, newUser, membershipChanged, ledgerDeducted, orderArrived
 * Added virtual attribute "name" to UserModel
 
 ### 2015-04-07

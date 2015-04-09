@@ -78,7 +78,7 @@ class OrdersController extends \BaseController {
 		if (!is_null(Input::get("latestOrder"))) $order->where("created_at","<=",Input::get("latestOrder"));
 		if (!is_null(Input::get("earliestOrder"))) $order->where("created_at",">=",Input::get("earliestOrder"));
 
-		Event::fire("orders.setState",array($order->get()));
+		Event::fire("orders.setState",array($order->get(),$order_state_id));
 
 		$order->update(array("order_state_id" => $order_state_id));
 

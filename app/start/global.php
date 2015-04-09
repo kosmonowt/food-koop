@@ -81,7 +81,8 @@ App::down(function()
 require app_path().'/filters.php';
 
 // By Kosmo
-require app_path()."/eventListeners.php";
+require app_path()."/eventListeners/mailListeners.php";
+require app_path()."/eventListeners/eventListeners.php";
 
 
 CONST ledgerDeductionInterval = 3; 	// That's how often (every nth month) the member-fee will be reducted from ledger.
