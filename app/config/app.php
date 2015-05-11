@@ -125,6 +125,8 @@ return array(
 		'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'Filter\FilterServiceProvider',
+		'VTalbot\Markdown\MarkdownServiceProvider',
+		'Maatwebsite\Excel\ExcelServiceProvider',
 	),
 
 	/*
@@ -195,7 +197,8 @@ return array(
 		'Collection'		=> 'Illuminate\Database\Eloquent\Collection',
 		'Filter' => 'Filter\Facades\Filter',
 		'Model' => 'Way\Database\Model',
-
+		'Markdown' => 'VTalbot\Markdown\Facades\Markdown',
+		'Excel' => 'Maatwebsite\Excel\Facades\Excel',
 	),
 
 );

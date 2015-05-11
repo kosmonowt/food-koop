@@ -10,15 +10,28 @@
 			  </button>
 			  <a class="navbar-brand" href="#">MyBiokiste</a>
 			</div>
+			@if (isset($myself))
 			<ul class="nav navbar-nav">
 				<li class="@if ($controller == 'dashboard') active @endif"><a href="dashboard.html">Dashboard <span class="sr-only">(current)</span></a></li>
 				<li class="@if ($controller == 'orders') active @endif"><a href="orders.html">Bestellungen</a></li>
 				<li class="@if ($controller == 'shifts') active @endif"><a href="tasks.html">Dienstplan</a></li>
 				<li class="@if ($controller == 'users') active @endif"><a href="users.html">Mitglieder</a></li>
+				<li class="@if ($controller == 'contents') active @endif"><a href="contents.html">Beiträge</a></li>
 			</ul>
 			<ul class="nav navbar-nav pull-right">
 				<li><a href="logout">Logout</a></li>
 			</ul>
+			@else
+			<ul class="nav navbar-nav">
+				<li><a href="ueber-uns.html">Die Biokiste</a></li>
+				<li><a href="mitglied-werden.html">Mitglied werden</a></li>
+				<li><a href="kontakt.html">Kontakt</a></li>
+				<li><a href="impressum.html">Impressum</a></li>
+			</ul>
+			<ul class="nav navbar-nav pull-right">
+				<li><a href="login">Login</a></li>
+			</ul>
+			@endif
 		</div>
 	</nav>
 @stop

@@ -1,3 +1,30 @@
+@media only screen and (max-width: 767px) {
+    body {
+        background-color: #00a200;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    
+    body {
+        background-image: url(../images/background.jpg);
+        background-repeat: repeat;
+    }
+    
+}
+
+/* Bootstrap Overrides */
+.panel-default {  border-color: #941A25;}
+.panel,
+.tab-content,
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover
+.list-group-item { background-color: #F3E8CF;}
+.panel-default>.panel-heading { background-color: #B69141;}
+.nav-tabs>li>a,
+.table-striped>tbody>tr:nth-of-type(odd) { background-color: #F1DFC9; }
+
+
+
 div.statusIcon		{ position: relative;}
 div.status-0:before { color: orange;}
 div.status-1:before { color: blue;}
@@ -49,33 +76,13 @@ padding: 10px;
 
 
 /** Statusfarben **/
-tr.demand-max {
-    background-color: #9DE59D;
-}
-
-tr.demand-max:nth-of-type(odd) {
-    background-color: #C0FFC0;
-}
-
-tr.demand-50 {
-    background-color: #EDC33E;
-}
-
-tr.demand-50:nth-of-type(odd) {
-    background-color: #EDC33E;
-}
-
-tr.demand-30 {
-    background-color: #F4B988;
-}
-
-tr.demand-30:nth-of-type(odd) {
-    background-color: #f48988;
-}
-
-tr.demand-low {
-    background-color: red;
-}
+tr.demand-max {}
+tr.demand-max:nth-of-type(odd) {}
+tr.demand-50 {}
+tr.demand-50:nth-of-type(odd) {}
+tr.demand-30 {}
+tr.demand-30:nth-of-type(odd) {}
+tr.demand-low {}
 
 /** ORDER STATE LOGICAL SWITCHES (MOVE TO JS SOON) **/
 

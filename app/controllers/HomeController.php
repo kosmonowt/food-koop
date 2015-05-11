@@ -28,6 +28,7 @@ class HomeController extends BaseController {
 		View::share("starteinlage",MemberLedger::starteinlage()->own()->first()->balance);
 		View::share("ledger",MemberLedger::own()->latest()->get());
 		View::share("user",Auth::user());
+		View::share("myself",Auth::user());
 		$this->layout->content = View::make("dashboard");
 	}
 

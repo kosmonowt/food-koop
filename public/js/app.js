@@ -361,6 +361,23 @@ var TaskType = can.Model.extend({
   create : 'POST '+sUrl+'taskTypes'  
 }, {});
 
+var Content = can.Model.extend({
+  findAll: 'GET '+sUrl+'contents',
+  findOne: 'GET '+sUrl+'contents/{id}',
+  update:  'PUT '+sUrl+'contents/{id}',
+  destroy: 'DELETE '+sUrl+'contents/{id}',
+  create:  'POST '+sUrl+'contents'
+}, {});
+
+var DashboardContent = can.Model.extend({
+  findAll: 'GET '+sUrl+'dashboard'
+}, {});
+
+var ContentType = can.Model.extend({
+  findAll: 'GET '+sUrl+'contentTypes',
+}, {});
+
+
 /*======================================================================*/
 /*============================ MUSTACHE SECTION ========================*/
 /*======================================================================*/

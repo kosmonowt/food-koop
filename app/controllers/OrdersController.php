@@ -209,5 +209,63 @@ class OrdersController extends \BaseController {
 		return Order::my()->open()->with("product")->get()->toJson();
 	}
 
+	public function exportForOrderGroup() {
+
+		$merchants = Merchant::get();
+
+		Excel::create(date("Y-m-d")."_bestellung",function($excel) use ($merchants) {
+
+			$excel->setTitle("Bestellungen vom ".date("d.m.Y"));
+			$excel->setCreator("Biokiste Website Backend");
+			$excel->setDescription("Biokiste Bestellungswebsite");
+			
+			foreach ($merchants as $merchant) {
+			
+				$orders = $merchant->orders()->byProductVerbose()->where("orders.order_state_id","=",3)->get();
+				if (count($orders)) {
+ 
+ 					$excel->sheet('Bestellung bei '.$merchant->name, function($sheet) use ($orders,$merchant) {
+ 						View::share("merchant",$merchant);
+ 						View::share("orders",$orders);
+ 						$sheet->loadView("tables.order");
+ 						//$sheet->fromModel($orders, null, 'A4', true,false);
+					});
+
+				}
+
+			}
+
+		})->export("xlsx");
+
+	}
+
+	public function exportForCommissioner() {
+
+		$merchants = Merchant::get();
+
+		Excel::create(date("Y-m-d")."_bestellung",function($excel) use ($merchants) {
+
+			$excel->setTitle("Bestellungen vom ".date("d.m.Y"));
+			$excel->setCreator("Biokiste Website Backend");
+			$excel->setDescription("Biokiste Bestellungswebsite");
+			
+			foreach ($merchants as $merchant) {
+			
+				$orders = $merchant->orders()->with("member")->with("product")->where("orders.order_state_id","=",3)->orderBy("product_id","ASC")->get();
+				if (count($orders)) {
+ 
+ 					$excel->sheet('Bestellung bei '.$merchant->name, function($sheet) use ($orders,$merchant) {
+ 						View::share("merchant",$merchant);
+ 						View::share("orders",$orders);
+ 						$sheet->loadView("tables.commissioner");
+					});
+
+				}
+
+			}
+
+		})->export("xlsx");
+
+	}
 
 }

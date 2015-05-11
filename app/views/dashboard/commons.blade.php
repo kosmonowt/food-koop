@@ -7,7 +7,13 @@
 					<strong>Aktuelles</strong>
 				</div>
 				<div class="panel-body">
-					### AKTUELLES ###
+					@{{#each articles}}
+						<article class="article" id="article_@{{id}}">
+							<h4>@{{name}}</h4>
+							<p><small>Geschrieben am @{{dmY data=published_at field="created_at"}} von @{{author}}</small></p>
+								@{{parsedContent}}
+						</article>
+					@{{/each}}
 				</div>
 			</div>
 		</div>

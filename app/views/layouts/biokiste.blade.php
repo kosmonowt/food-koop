@@ -23,6 +23,7 @@
 	<body>
 		@yield("mustacheStart")
 		@yield("header")
+		
 		<div class="navbar-fixed-bottom">
 			<div class="container" id="flashContainer">
 			</div>
@@ -30,9 +31,8 @@
 		<div class="container">
 			@yield("content")
 		</div>
-		
-		@yield("mustacheEnd")
 
+		@yield("mustacheEnd")
 		<script type="text/javascript" src="js/app.js"></script>
 		@yield("bottomJs")
 	</body>

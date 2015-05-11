@@ -32,6 +32,12 @@ It is thought to use
 
 ## Release History
 
+### 2015-05-03
+* NEWS Display on Dashboard
+* NEWS Section: CRUD now Possible
+* Public Page stubs generated
+* Public Pages Menu generated
+* Put API under auth-only
 
 ### 2015-04-09
 * Bugfix on E-Mail Template
@@ -228,9 +234,8 @@ It is thought to use
 * ADD "edit" button to list
 
 ### News
-* Create News Migration
-* Create News Model
-* Create News Controller
+* Output of NEWS through mustache without escaping!
+* CRUD View: On Update: Update List
 
 ### Messages
 * Create Dashboard Field to place Request regarding

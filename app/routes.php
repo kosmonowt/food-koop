@@ -22,59 +22,74 @@ Route::post("login",function(){
 });
 
 // Master Routes for HTML-Pages
-Route::get("/",function(){return Redirect::to("dashboard.html");});
-Route::get("logout",function(){Auth::logout(); return Redirect::to("login");});
-Route::get("dashboard.html",array("before"=>"auth","uses" => "HomeController@dashboard"));
-Route::get("{controller}.html", array('before' => "auth", function($controller) {
-	View::share("title","Biokiste App");
-	View::share("controller",$controller);
-	View::share("myself",Auth::user());
-	return View::make("app.$controller");
-}));
+Route::get("/",function(){
+	View::share("title","Biokiste Leipzig");
+	View::share("controller","Startseite");
+	View::share("news",Content::where("type_id","=",1)->where("is_published","=",1)->ordered()->get());
+	return View::make("public.index");
+});
 
-// This all returns JSON
-Route::get("products/mostPopular",function(){ return Product::mostPopular()->take(20)->get();});
-Route::get('products/search/{merchantId}/{term}','ProductsController@search');
-Route::get('products/count/{merchantId?}/{term?}','ProductsController@searchCount');
+// All routes behind the login form.
+Route::group(array('before' => 'auth'), function() {
 
-// Special Routes for Order Views
-Route::get('orders/byProduct/{product_id?}/{order_state?}','OrdersController@byProduct');
-Route::get("orders/bulk/applyOrder","OrdersController@orderBulk");
-Route::post("orders/bulk/{product_id}/{order_state_id}",'OrdersController@updateBulk');
-Route::post("orders/bulk/{order_state_id}","OrdersController@updateBulk");
-Route::get('users/byMember/{id}', function($id){ return User::where("member_id",$id)->get()->toJson(); });
+	Route::get("logout",function(){Auth::logout(); return Redirect::to("login");});
+	Route::get("dashboard.html","HomeController@dashboard");
+	Route::get("{controller}.html",function($controller) {
+		View::share("title","Biokiste App");
+		View::share("controller",$controller);
+		View::share("myself",Auth::user());
+		return View::make("app.$controller");
+	});
 
-// Special Dashboard Routes
-Route::get("memberLedger/starteinlage", function(){ return MemberLedger::starteinlage()->own()->first()->toJson(); });
-Route::get("memberLedger/balance", function(){ return MemberLedger::balance()->own()->first()->toJson(); });
-Route::get("memberLedger/member/{member_id}",function($member_id){ return MemberLedger::from($member_id)->ordered()->get()->toJson();});
+	// This all returns JSON
+	Route::get("products/mostPopular",function(){ return Product::mostPopular()->take(20)->get();});
+	Route::get('products/search/{merchantId}/{term}','ProductsController@search');
+	Route::get('products/count/{merchantId?}/{term?}','ProductsController@searchCount');
 
-Route::get('orders/marketplace',function(){ return Order::marketplace()->get()->toJson();});
-Route::get('orders/my',"OrdersController@my");
+	// Special Routes for Order Views
+	Route::get('orders/byProduct/{product_id?}/{order_state?}','OrdersController@byProduct');
+	Route::get("orders/bulk/applyOrder","OrdersController@orderBulk");
+	Route::post("orders/bulk/{product_id}/{order_state_id}",'OrdersController@updateBulk');
+	Route::post("orders/bulk/{order_state_id}","OrdersController@updateBulk");
+	Route::get('users/byMember/{id}', function($id){ return User::where("member_id",$id)->get()->toJson(); });
+	Route::get("orders/export/","OrdersController@exportForCommissioner");
 
-Route::get("tasks/byWeek/{number?}/{taskType?}","TasksController@byWeek");
-Route::get("tasks/upcoming","TasksController@upcomingUnassigned");
-Route::put("tasks/upcoming/{id}","TasksController@assign");
-Route::get("tasks/my","TasksController@my");
-Route::put("tasks/my/{id}","TasksController@myUndo");
+	// Special Dashboard Routes
+	Route::get("memberLedger/starteinlage", function(){ return MemberLedger::starteinlage()->own()->first()->toJson(); });
+	Route::get("memberLedger/balance", function(){ return MemberLedger::balance()->own()->first()->toJson(); });
+	Route::get("memberLedger/member/{member_id}",function($member_id){ return MemberLedger::from($member_id)->ordered()->get()->toJson();});
 
-Route::get("members/myself",function(){ return User::with("member")->where("id","=",Auth::user()->id)->first()->toJson(); });
+	Route::get('orders/marketplace',function(){ return Order::marketplace()->get()->toJson();});
+	Route::get('orders/my',"OrdersController@my");
 
-// General Resource Routes
-Route::resource('members', 'MembersController');
-Route::resource('memberGroups', 'MemberGroupsController');
-Route::resource('memberStatus', 'MemberStatusController');
-Route::resource('memberLedger', 'MemberLedgerController');
-Route::resource('merchants', 'MerchantsController');
-Route::resource('orders', 'OrdersController');
-Route::resource('orderStates', 'OrderStatesController');
-Route::resource('products', 'ProductsController');
-Route::resource('productTypes', 'ProductTypesController');
-Route::resource("tasks","TasksController");
-Route::resource("taskTypes","TaskTypesController");
-Route::resource('users', 'UsersController');
-Route::resource("userGroups", "UserGroupsController");
+	Route::get("tasks/byWeek/{number?}/{taskType?}","TasksController@byWeek");
+	Route::get("tasks/upcoming","TasksController@upcomingUnassigned");
+	Route::put("tasks/upcoming/{id}","TasksController@assign");
+	Route::get("tasks/my","TasksController@my");
+	Route::put("tasks/my/{id}","TasksController@myUndo");
 
+	Route::get("members/myself",function(){ return User::with("member")->where("id","=",Auth::user()->id)->first()->toJson(); });
+
+	Route::get("dashboard",function(){ return Content::where("type_id","=",2)->where("is_published","=",1)->ordered()->get()->toJson(); });
+
+	// General Resource Routes
+	Route::resource('contents', 'ContentsController');
+	Route::resource('contentTypes', 'ContentTypesController');
+	Route::resource('members', 'MembersController');
+	Route::resource('memberGroups', 'MemberGroupsController');
+	Route::resource('memberStatus', 'MemberStatusController');
+	Route::resource('memberLedger', 'MemberLedgerController');
+	Route::resource('merchants', 'MerchantsController');
+	Route::resource('orders', 'OrdersController');
+	Route::resource('orderStates', 'OrderStatesController');
+	Route::resource('products', 'ProductsController');
+	Route::resource('productTypes', 'ProductTypesController');
+	Route::resource("tasks","TasksController");
+	Route::resource("taskTypes","TaskTypesController");
+	Route::resource('users', 'UsersController');
+	Route::resource("userGroups", "UserGroupsController");
+
+});
 
 Route::get("test/{id}",function($id){return Order::where("product_id","=",$id)->open()->count();});
 

@@ -53,9 +53,8 @@
 					  </ul>
 					</div>
 					@{{#if ordersByProductShowResume.show}}
-					<div class="">
-						<button type="button" class="btn btn-success btn-sm" can-click="orderNow">Bestellung jetzt Auslösen&nbsp;<span class="glyphicon glyphicon-share-alt"></span></button>
-					</div>
+					<button type="button" class="btn btn-success btn-sm" can-click="getTable">Tabelle herunterladen&nbsp;<span class="glyphicon glyphicon-save"></span></button>
+					<button type="button" class="btn btn-success btn-sm" can-click="orderNow">Bestellung jetzt Auslösen&nbsp;<span class="glyphicon glyphicon-share-alt"></span></button>
 				    @{{/if}}
 				</div>
 			</div>

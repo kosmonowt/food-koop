@@ -9,7 +9,9 @@
 		"machuga/authority-l4" : "dev-master",
 		"efficiently/authority-controller" : "1.2.*",
         	"way/database": "dev-master",
-		"rmasters/filter": "dev-master"
+		"rmasters/filter": "dev-master",
+		"vtalbot/markdown": "1.5",
+		"maatwebsite/excel": "1.*"
 	},
 	"require-dev": {
 		"way/generators": "~2.0"
