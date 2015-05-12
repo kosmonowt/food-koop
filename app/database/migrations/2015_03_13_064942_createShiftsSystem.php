@@ -12,6 +12,7 @@ class CreateShiftsSystem extends Migration {
 	 */
 	public function up()
 	{
+
 		Schema::create('task_types', function(Blueprint $table) {
 			$table->increments('id')->unsigned();
 			$table->string("name",64);
@@ -36,7 +37,7 @@ class CreateShiftsSystem extends Migration {
 			$table->date("date");
 			$table->time("start");
 			$table->time("stop");
-			$table->integer("repeat_in")->nullable->unsigned();
+			$table->integer("repeat_in")->nullable()->unsigned();
 			$table->string("comment",128)->nullable();
 			$table->tinyInteger("status")->default(0)->unsigned();
 			$table->foreign('member_id')->references('id')->on('members');
