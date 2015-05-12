@@ -24,11 +24,11 @@ class CreateLedgerVWZStandards extends Migration {
 			$lvwz->name = "Starteinlage";
 			$lvwz->save();
 
-			$lvwz = new UserGroup();
+			$lvwz = new LedgerVwzs();
 			$lvwz->name = "Einzahlung";
 			$lvwz->save();		
 
-			$lvwz = new UserGroup();
+			$lvwz = new LedgerVwzs();
 			$lvwz->name = "Belastung";
 			$lvwz->save();
 
