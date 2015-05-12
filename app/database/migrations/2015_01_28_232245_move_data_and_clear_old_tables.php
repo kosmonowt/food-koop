@@ -222,7 +222,7 @@ class MoveDataAndClearOldTables extends Migration {
 					$product->save();
 
 				if ($memberMap[$bestellung->mitglied]['member_id'] < 1) {
-
+var_dump($memberMap[$bestellung->mitglied]['member_id'] < 1);
 					$order = new Order();
 					$order->member_id = $memberMap[$bestellung->mitglied]['member_id'];
 					$order->user_id = $memberMap[$bestellung->mitglied]['user_id'];
