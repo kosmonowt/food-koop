@@ -68,16 +68,21 @@ MemberLedger::saving(function($memberLedger) {
 
 	$positive = ($memberLedger->balance > 0);
 	$member = Member::find($memberLedger->member_id);
-	$email = $member->email;
-	$userName = $member->name;
 
-	Mail::queue(
-		"emails.event_memberLedger_deduction",
-		array("vwz" => $memberLedger->vwz,"balance"=>$memberLedger->balance,"date"=>$memberLedger->date,"userName"=>$userName,"positive"=>$positive),
-		function($message) use ($email) { 
-			$message->to($email)->subject("BIOKISTE: Neue Kontobewegung in Deinem Mitgliedskonto"); 
-		}
-	);
+	if (is_object($member)) {
+	
+		$email = $member->email;
+		$userName = $member->name;
 
-	Log::info("ledger action mail sent: ".$member->email);
+		Mail::queue(
+			"emails.event_memberLedger_deduction",
+			array("vwz" => $memberLedger->vwz,"balance"=>$memberLedger->balance,"date"=>$memberLedger->date,"userName"=>$userName,"positive"=>$positive),
+			function($message) use ($email) { 
+				$message->to($email)->subject("BIOKISTE: Neue Kontobewegung in Deinem Mitgliedskonto"); 
+			}
+		);
+
+		Log::info("ledger action mail sent: ".$member->email);
+
+	}
 });
