@@ -13,9 +13,16 @@ class MoveDataAndClearOldTables extends Migration {
 	public function up()
 	{
 
+		$this->info("Import 'Dienstgruppen'");
 		// Copy Member Workgroups
 		if (Schema::hasTable('dienstgruppen')) {
+
+			$this->info("Found Table: 'dienstgruppen'");
+			
 			$dienstgruppen = DB::table("dienstgruppen")->get();
+
+			$this->info(count($dienstgruppen)." entries.");
+
 			foreach($dienstgruppen as $dg) {
 				$g1 = new MemberGroup();
 				$g1->id = $dg->id;
@@ -25,8 +32,9 @@ class MoveDataAndClearOldTables extends Migration {
 				$g1->save();
 			}
 
-		}
+		} else $this->info("Not found Table: 'dienstgruppen'");
 
+		$this->info("Init 'UserGroups'");
 		// User Groups (initial)
 		$ug = new UserGroup();
 		$ug->id = 1;
@@ -44,6 +52,7 @@ class MoveDataAndClearOldTables extends Migration {
 		$ug->save();		
 
 		// Member Status (initial)
+		$this->info("Init 'MemberStatus'");
 		$ug = new MemberStatus();
 		$ug->name = "Reguläres Mitglied";
 		$ug->save();
@@ -65,13 +74,16 @@ class MoveDataAndClearOldTables extends Migration {
 		$ug->description = "Mitglied, welches noch Mitglied ist, aber derzeit von Aktionen gesperrt ist.";
 		$ug->save();		
 
+		$this->info("Import 'mitglieder'");
 		if (Schema::hasTable('mitglieder')) {
+
+			$this->info("Table found");
 			// Datenübernahme
 
 			$mitglieder = DB::table('mitglieder')->get();
 
 			$memberMap = array();
-
+			$this->info(count($mitglieder)." entries found.");
 			 foreach($mitglieder as $mitglied) {
 
 			 	$member = new Member();

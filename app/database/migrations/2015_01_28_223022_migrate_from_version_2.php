@@ -165,12 +165,19 @@ class MigrateFromVersion2 extends Migration {
 
 
 		//This is only when migrating from other versions
-		// Schema::table('bestellungen', function($table) { 
-		// 	$table->renameColumn('datetime', 'created');
-		// 	$table->renameColumn('mitglied', 'mitglied_id');
-		// 	$table->dropColumn('date');
-
-		// });
+		if (Schema::hasTable('bestellungen')) {			
+			Schema::table('bestellungen', function($table) { 
+				
+				if (Schema::hasColumn('bestellungen',"datetime")) 	
+					$table->renameColumn('datetime', 'created');
+			 	
+			 	if (Schema::hasColumn('bestellungen',"mitglied")) 	
+			 		$table->renameColumn('mitglied', 'mitglied_id');
+			 	
+			 	if (Schema::hasColumn('bestellungen',"date")) 		
+			 		$table->dropColumn('date');
+			});
+		}
 	}
 
 	/**
@@ -181,6 +188,7 @@ class MigrateFromVersion2 extends Migration {
 	public function down()
 	{
 
+		Schema::dropIfExists('member_ledger');
 		Schema::dropIfExists('orders');
 		Schema::dropIfExists('order_states');
 		Schema::dropIfExists('products');
@@ -189,9 +197,8 @@ class MigrateFromVersion2 extends Migration {
 		Schema::dropIfExists('merchants');
 		Schema::dropIfExists('users');
 		Schema::dropIfExists('members');
-		Schema::dropIfExists('member_groups');
 		Schema::dropIfExists('user_groups');
-		Schema::dropIfExists('member_ledger');
+		Schema::dropIfExists('member_groups');
 
 	}
 
