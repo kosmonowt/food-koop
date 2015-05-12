@@ -20,7 +20,7 @@ class CreateLedgerVWZStandards extends Migration {
 				$table->unique('name');
 			});
 
-			$lvwz = new LedgerVwz();
+			$lvwz = new LedgerVwzs();
 			$lvwz->name = "Starteinlage";
 			$lvwz->save();
 
@@ -32,11 +32,11 @@ class CreateLedgerVWZStandards extends Migration {
 			$lvwz->name = "Belastung";
 			$lvwz->save();
 
-			$lvwz = new LedgerVwz();
+			$lvwz = new LedgerVwzs();
 			$lvwz->name = "Quartalsbeitrag";
 			$lvwz->save();
 
-			$lvwz = new LedgerVwz();
+			$lvwz = new LedgerVwzs();
 			$lvwz->name = "Auszahlung Starteinlage";
 			$lvwz->save();
 

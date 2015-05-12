@@ -111,7 +111,7 @@ class CreateSettings extends Migration {
 
 		$s = new Setting();
 		$s->key = "task_unassign_information_mail";
-		$s->description = "Ab wievielen Tagen im Voraus soll die Dienstplanverwaltung bei Austragen aus einem Dienst informiert werden"
+		$s->description = "Ab wievielen Tagen im Voraus soll die Dienstplanverwaltung bei Austragen aus einem Dienst informiert werden";
 		$s->value = "14";
 		$s->type = "int";
 		$s->save();
