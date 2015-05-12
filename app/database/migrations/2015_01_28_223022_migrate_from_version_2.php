@@ -162,22 +162,6 @@ class MigrateFromVersion2 extends Migration {
 			$table->foreign('order_state_id')->references('id')->on('order_states');
 		});
 
-
-
-		//This is only when migrating from other versions
-		if (Schema::hasTable('bestellungen')) {			
-			Schema::table('bestellungen', function($table) { 
-				
-				if (Schema::hasColumn('bestellungen',"datetime")) 	
-					$table->renameColumn('datetime', 'created');
-			 	
-			 	if (Schema::hasColumn('bestellungen',"mitglied")) 	
-			 		$table->renameColumn('mitglied', 'mitglied_id');
-			 	
-			 	if (Schema::hasColumn('bestellungen',"date")) 		
-			 		$table->dropColumn('date');
-			});
-		}
 	}
 
 	/**
