@@ -220,18 +220,21 @@ class MoveDataAndClearOldTables extends Migration {
 					$product->units = $bestellung->gebinde;
 					$product->weight_per_unit = $bestellung->gewicht;
 					$product->save();
-						
 
-				$order = new Order();
-				$order->member_id = $memberMap[$bestellung->mitglied]['member_id'];
-				$order->user_id = $memberMap[$bestellung->mitglied]['user_id'];
-				$order->product_id = $product->id;
-				$order->merchant_id = $merchantMap[$bestellung->anbieter];
-				$order->order_state_id = $bestellung->status;
-				$order->amount = $bestellung->anzahl;
-				$order->comment = $bestellung->kommentar;
-				$order->created_at = $bestellung->datetime;
-				$order->save();
+				if ($memberMap[$bestellung->mitglied]['member_id'] < 1) {
+
+					$order = new Order();
+					$order->member_id = $memberMap[$bestellung->mitglied]['member_id'];
+					$order->user_id = $memberMap[$bestellung->mitglied]['user_id'];
+					$order->product_id = $product->id;
+					$order->merchant_id = $merchantMap[$bestellung->anbieter];
+					$order->order_state_id = $bestellung->status;
+					$order->amount = $bestellung->anzahl;
+					$order->comment = $bestellung->kommentar;
+					$order->created_at = $bestellung->datetime;
+					$order->save();
+
+				}
 
 			}
 
