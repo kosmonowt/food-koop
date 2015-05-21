@@ -139,7 +139,7 @@ can.Component.extend({
       }).fail(handleRestError);
     },
     setSettableOrderStates: function(orderState) {
-      var scopeToState = {"waiting":[3],"listed":[2],"pending":[2,100]};
+      var scopeToState = {"waiting":[4],"listed":[3],"pending":[3,100]};
       var activeStates = eval("scopeToState."+orderState);
       this.orderStateSettersActive.replace(this.orderStates.filter(function(i,x,l){return activeStates.indexOf(i.id) >= 0;}));
     },

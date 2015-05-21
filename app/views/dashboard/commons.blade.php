@@ -23,7 +23,7 @@
 		<div class="col-sm-6">
 			<div class="panel panel-default dashboard-sized">
 				<div class="panel-heading">
-					<strong>Meine aktuellen Bestellungen</strong><br><a href="orders.html#tab=order"><small>Neue Bestellung</small></a>
+					<strong>Meine aktuellen Bestellungen</strong><span style="float:right;text-align:right;"><a href="orders.html#tab=order"><small>Neue Bestellung</small></a></span>
 				</div>
 				<div class="scrollable">
 					<table class="table table-striped table-condensed">

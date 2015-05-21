@@ -64,18 +64,18 @@ class OrdersController extends \BaseController {
 			$order = Order::where("product_id","=",$product_id);
 		}
 		
-		if ($order_state_id == 3) {
+		if ($order_state_id == 4) {
 			// Apply only for orders waiting.
-			$order->where("order_state_id","<",3);
-		} elseif ($order_state_id == 4) {
+			$order->where("order_state_id","<",4);
+		} elseif ($order_state_id == 5) {
 			// Apply only for orders pending
-			$order->where("order_state_id","=",3);
-		} elseif ($order_state_id == 2) {
+			$order->where("order_state_id","=",4);
+		} elseif ($order_state_id == 3) {
 			// Apply only for orders pending or ordered (not for completed ones)
-			$order->where("order_state_id","<=",4);
+			$order->where("order_state_id","<=",5);
 		} elseif ($order_state_id == 100) {
 			// Set completed
-			$order->where("order_state_id","=",4);
+			$order->where("order_state_id","=",5);
 		}
 
 		if (!is_null(Input::get("latestOrder"))) $order->where("created_at","<=",Input::get("latestOrder"));
@@ -91,30 +91,19 @@ class OrdersController extends \BaseController {
 	 * This function is called when the user presses "Bestellung jetzt auslösen".
 	 **/
 	public function orderBulk() {
-		$orderStateId = 4;
-		Event::fire("orders.setState",array(Order::where("order_state_id","=",3)->get(),$orderStateId));
-		$order = Order::where("order_state_id","=",3)->update(array("order_state_id" => $orderStateId));
+		$orderStateId = 5;
+		Event::fire("orders.setState",array(Order::where("order_state_id","=",4)->get(),$orderStateId));
+		$order = Order::where("order_state_id","=",4)->update(array("order_state_id" => $orderStateId));
 		return "{\"result\":\"$order\"}";
 	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @return Response
 	 */
-	public function store()
-	{
+	public function store()	{
+
 		$data = Input::all();
 
 		$product = Product::findOrFail($data['product_id']);
@@ -137,7 +126,7 @@ class OrdersController extends \BaseController {
 		$order->user_id = $user_id;
 		
 		// TODO: Check if can do better.
-		$order->order_state_id = 0;
+		$order->order_state_id = 1;
 		if (!is_null(Input::get("order_state_id"))) {
 			// Authentification here, as well
 			$order->order_state_id = Input::get("order_state_id");
@@ -221,7 +210,7 @@ class OrdersController extends \BaseController {
 			
 			foreach ($merchants as $merchant) {
 			
-				$orders = $merchant->orders()->byProductVerbose()->where("orders.order_state_id","=",3)->get();
+				$orders = $merchant->orders()->byProductVerbose()->where("orders.order_state_id","=",4)->get();
 				if (count($orders)) {
  
  					$excel->sheet('Bestellung bei '.$merchant->name, function($sheet) use ($orders,$merchant) {
@@ -251,7 +240,7 @@ class OrdersController extends \BaseController {
 			
 			foreach ($merchants as $merchant) {
 			
-				$orders = $merchant->orders()->with("member")->with("product")->where("orders.order_state_id","=",3)->orderBy("product_id","ASC")->get();
+				$orders = $merchant->orders()->with("member")->with("product")->where("orders.order_state_id","=",4)->orderBy("product_id","ASC")->get();
 				if (count($orders)) {
  
  					$excel->sheet('Bestellung bei '.$merchant->name, function($sheet) use ($orders,$merchant) {

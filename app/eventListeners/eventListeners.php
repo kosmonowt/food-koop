@@ -19,16 +19,6 @@ Order::creating(function($order) {
 	return $order;
 });
 
-Event::listen('tasks.unassign',function($task){
-
-	$taskDate = new DateTime($task->date);
-	$dueDate = new DateTime ("NOW + 14 DAYS"); // less then 14 days before the task we will send an email if task is without member now
-	if ($dueDate >= $taskDate) {
-		// Create E-Mail
-	}
-
-});
-
 /** 
  * This catches when a member is created and 
  * - adds the first ledger entry ("Starteinlage")
@@ -40,4 +30,24 @@ Member::created(function($member){
 	$ML->balance = Input::get("initialLedger");
 	$ML->vwz = "Starteinlage";
 	$ML->save();
+});
+
+/**
+ * This catches created User event
+ * - creates password hash
+ * - creates email to member (on migration)
+ **/
+User::creating(function($user){
+	$password = $user->password;
+	$user->password = Hash::make($password);
+	$firstname = $user->firstname;
+	$lastname = $user->lastname;
+	$email = $user->email;
+
+	Mail::queue('emails.willkommen_migrated', array("user"=>$user,"password"=>$password,"userName"=>$user->username), function($message) use ($firstname,$lastname,$email) {
+    	$message->to($email, $firstname." ".$lastname)->subject('Dein Zugang zur Biokiste, '.$firstname);
+	});
+
+	return $user;
+
 });

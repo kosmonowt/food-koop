@@ -5,6 +5,20 @@ use Illuminate\Database\Migrations\Migration;
 
 class MoveDataAndClearOldTables extends Migration {
 
+	public function info($text) {
+		echo $text."\n";
+	}
+
+	protected function makePassword() {
+		$words = ["Apfel","Birne","Kirsche","Banane","Orange","Maulbeere","Brombeere","Yoghurt","Sonnenblume","Hirsch","Pferd","Detektiv","Geranie","Begonie","Kamille","Veilchen","Vergissmeinicht"];
+		$number1 = rand(10,99);
+		$number2 = rand(10,99);
+		$w1 = $words[rand(0,(count($words)-1))];
+		$w2 = $words[rand(0,(count($words)-1))];
+		$pw = $number1.$w1.$w2.$number2;
+		return $pw;
+	}
+
 	/**
 	 * Run the migrations.
 	 *
@@ -65,7 +79,7 @@ class MoveDataAndClearOldTables extends Migration {
 
 		$ug = new MemberStatus();
 		$ug->name = "Mitgliedschaft ruhend";
-		$ug->description = "Mitglied, welches noch Mitglied ist, aber derzeit nicht zahlt, da länger auf Reisen o.Ä. Zahlt keinen Beitrag.";		
+		$ug->description = "Mitglied, welches noch Mitglied ist, aber derzeit nicht zahlt, da länger auf Reisen o.Ä. Zahlt keinen Beitrag.";
 		$ug->no_fees = true;
 		$ug->save();
 
@@ -87,14 +101,15 @@ class MoveDataAndClearOldTables extends Migration {
 			 foreach($mitglieder as $mitglied) {
 
 			 	$member = new Member();
-			 	$member->name = ($mitglied->gruppenname != "") ? $mitglied->gruppenname : $mitglied->vorname." ".$mitglied->nachname;
-			 	$member->email = $mitglied->email;
-				$member->telephone = $mitglied->telefon;
-				$member->street = $mitglied->strasse;
-				$member->plz = $mitglied->plz;
-				$member->ort = $mitglied->ort;
+			 	$member->name = ($mitglied->gruppenname != "") ? trim($mitglied->gruppenname) : trim($mitglied->vorname)." ".trim($mitglied->nachname);
+			 	$member->email = trim($mitglied->email);
+				$member->telephone = strlen(trim($mitglied->telefon)) ? trim($mitglied->telefon) : "unbekannt";
+				$member->street = strlen(trim($mitglied->strasse)) ? trim($mitglied->strasse) : "unbekannt";
+				$member->plz = (intval(trim($mitglied->plz)) < 1000) ? "99999" : trim($mitglied->plz);
+				$member->ort = (strlen(trim($mitglied->ort))) ? trim($mitglied->ort) : "Leipzig?";
 				$member->date_of_entry = $mitglied->beitrittsdatum;
 				$member->member_group_id = $mitglied->gruppe;
+				$member->member_status_id = 1;
 				$member->save();
 
 				$memberMap[$mitglied->id]['member_id'] = $member->id;
@@ -109,58 +124,75 @@ class MoveDataAndClearOldTables extends Migration {
 
 				$gruppenmitglieder = DB::table('gruppenmitglieder')->where('mitgliederID',$mitglied->id)->get();
 				foreach($gruppenmitglieder as $key => $gruppenmitglied) {
-
+					if ( (!filter_var($gruppenmitglied->email,FILTER_VALIDATE_EMAIL)) && ($key > 0) ) {
+						$this->info("Skipping User #$key for User $member->email");
+						continue;
+					}
 					// GenericMember
 					$user = new User();
 					$user->member_id = $member->id;
-					$user->username = "gruppe".$member->id."_".$key;
-					$user->firstname = $gruppenmitglied->vorname;
-					$user->lastname = $gruppenmitglied->nachname;
-					$user->telephone = $gruppenmitglied->telefon;
-					if ($gruppenmitglied->email !== "") $user->email = $gruppenmitglied->email;
-					if (strlen($mitglied->passwort) == 40) {
-						$words = ["Apfel","Birne","Kirsche","Banane","Orange","Maulbeere","Brombeere","Yoghurt","Sonnenblume","Hirsch","Pferd","Detektiv","Geranie","Begonie","Kamille","Veilchen","Vergissmeinicht"];
-						$number1 = rand(10,99);
-						$number2 = rand(10,99);
-						$w1 = $words[rand(0,(count($words)-1))];
-						$w2 = $words[rand(0,(count($words)-1))];
-						$pw = $number1.$w1.$w2.$number2;
-					} else {
-						$pw = $mitglied->passwort;
-					}
-					$user->password = $pw;
+					$user->firstname = (strlen(trim($gruppenmitglied->vorname))) ? $gruppenmitglied->vorname : "FIRSTNAME";
+					$user->lastname = (strlen(trim($gruppenmitglied->nachname))) ? $gruppenmitglied->nachname : "LASTNAME";
+					$user->telephone = strlen(trim($gruppenmitglied->telefon)) ? trim($gruppenmitglied->telefon) : "unbekannt";
+					$user->email = (filter_var($gruppenmitglied->email,FILTER_VALIDATE_EMAIL)) ? filter_var($gruppenmitglied->email,FILTER_VALIDATE_EMAIL) : $member->email;
+					$user->username = $member->email;
+					$user->password = $this->makePassword();
 					$user->user_group_id = 1;
+					
+					$this->info("Set User FROM Group Member: ".$user->email." (".$user->username.")");
+					$this->info("Set Password: ".$user->password);
 					$user->save();
-
+					
 					if ($key == 0) $memberMap[$mitglied->id]['user_id'] = $user->id;
 
 				}
 
+				if (!count($gruppenmitglieder)) {
+
+					$user = new User();
+					$user->member_id = $member->id;
+					$user->username = $member->email;
+					$user->firstname = (strlen(trim($mitglied->vorname))) ? $mitglied->vorname : "FIRSTNAME";
+					$user->lastname = (strlen(trim($mitglied->nachname))) ? $mitglied->nachname : "LASTNAME";
+					$user->telephone = $member->telephone;
+					$user->email = $member->email;
+					$user->password = $this->makePassword();
+					$user->user_group_id = 1;
+
+					$this->info("Set User without Group Member: ".$member->email." (".$user->username.")");
+					$this->info("Set Password: ".$user->password);
+					
+					$user->save();
+					$memberMap[$mitglied->id]['user_id'] = $user->id;
+
+				}
 			 }
 
 		}
 
 		// Seed Order State
+
 		$os = new OrderState();
-		$os->id = 0;
+		$os->id = 1;
 		$os->name = "Unbearbeitet";
 		$os->save();		
 		$os = new OrderState();
-		$os->id = 1;
+		$os->id = 2;
 		$os->name = "Wartend";
 		$os->save();		
 		$os = new OrderState();
-		$os->id = 2;
+		$os->id = 3;
 		$os->name = "Zurückgestellt";
 		$os->save();		
 		$os = new OrderState();
-		$os->id = 3;
+		$os->id = 4;
 		$os->name = "Auf Bestelliste";
 		$os->save();		
 		$os = new OrderState();
-		$os->id = 4;
+		$os->id = 5;
 		$os->name = "Bestellt";
 		$os->save();
+		$os = new OrderState();
 		$os->id = 100;
 		$os->name = "Abgeschlossen";
 		$os->save();
@@ -210,6 +242,9 @@ class MoveDataAndClearOldTables extends Migration {
 			}
 
 			$bestellungen = DB::table("bestellungen")->get();
+		
+
+			$statusMaps = array(0 => 1,1 => 2,2 => 3,3 => 4,4 => 5);
 
 			foreach ($bestellungen as $bestellung) {
 				// Don't take orders that have an unknown merchant id.
@@ -229,17 +264,18 @@ class MoveDataAndClearOldTables extends Migration {
 					$product->name = $bestellung->bezeichnung;
 					$product->comment = $bestellung->kommentar;
 					$product->price = $bestellung->nettopreis;
-					$product->units = $bestellung->gebinde;
+					$product->units = intval($bestellung->gebinde);
 					$product->weight_per_unit = $bestellung->gewicht;
 					$product->save();
 
-				if ($memberMap[$bestellung->mitglied]['member_id'] >= 1) {
+				if (($memberMap[$bestellung->mitglied]['member_id'] >= 1) && (array_key_exists($bestellung->status, $statusMaps)) ) {
+
 					$order = new Order();
 					$order->member_id = $memberMap[$bestellung->mitglied]['member_id'];
 					$order->user_id = $memberMap[$bestellung->mitglied]['user_id'];
 					$order->product_id = $product->id;
 					$order->merchant_id = $merchantMap[$bestellung->anbieter];
-					$order->order_state_id = $bestellung->status;
+					$order->order_state_id = $statusMaps[$bestellung->status];
 					$order->amount = $bestellung->anzahl;
 					$order->comment = $bestellung->kommentar;
 					$order->created_at = $bestellung->datetime;

@@ -443,13 +443,13 @@ can.mustache.registerHelper("colormark",function(data){
 });
 
 can.mustache.registerHelper("orderIsPending",function(data){
-  return (data.context.order_state_id < 3);
+  return (data.context.order_state_id < 4);
 });
 can.mustache.registerHelper("orderIsOnList",function(data){
-  return (data.context.order_state_id == 3);
+  return (data.context.order_state_id == 4);
 });
 can.mustache.registerHelper("orderIsWaiting",function(data){
-  return (data.context.order_state_id == 4);
+  return (data.context.order_state_id == 5);
 });
 
 can.mustache.registerHelper("dowName",function(data){

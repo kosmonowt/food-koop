@@ -32,6 +32,11 @@ It is thought to use
 
 ## Release History
 
+### 2015-05-21
+* Bugfixes on Migration (can now be performed perfectly including migration of old table data).
+* i+1 on order states (order state id can not be 0)
+* Commands: Promote / Unpromote / PW-Change on User
+
 ### 2015-05-03
 * NEWS Display on Dashboard
 * NEWS Section: CRUD now Possible
@@ -148,6 +153,11 @@ It is thought to use
 * Direct Ordering in Product View
 
 ## Todo
+
+### Urgent Tasks
+* Debug Dashboard for Members without ledger entry (rene)
+* Debug XLS-Export on Order
+* UN-CanJSify News on Dashboard (for Problems with escaping)
 
 ### Dashboard
 * CanJS-ify

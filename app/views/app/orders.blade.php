@@ -95,8 +95,8 @@
 								<strong>@{{bulkToOrder}}</strong><br>
 							</td>
 							<td>
-								<button class="btn btn-success btn-sm setOrderState-3"   can-click="toggle" data-order_state_id="3"><span class="glyphicon glyphicon-send" title="Auf die Bestelliste"></span></button>
-								<button class="btn btn-warning btn-sm setOrderState-2"   can-click="toggle" data-order_state_id="2"><span class="glyphicon glyphicon-remove-sign" title="Zurück in Wartezustand"></span></button>
+								<button class="btn btn-success btn-sm setOrderState-4"   can-click="toggle" data-order_state_id="4"><span class="glyphicon glyphicon-send" title="Auf die Bestelliste"></span></button>
+								<button class="btn btn-warning btn-sm setOrderState-3"   can-click="toggle" data-order_state_id="3"><span class="glyphicon glyphicon-remove-sign" title="Zurück in Wartezustand"></span></button>
 								<button class="btn btn-success btn-sm setOrderState-100" can-click="toggle" data-order_state_id="100"><span class="glyphicon glyphicon-ok-sign" title="Vollständig angekommen"></span></button>
 							</td>
 							@endif
@@ -138,10 +138,10 @@
 								<div class="statusIcon status-@{{order_state_id}}" onclick="$(this).children('.statusSetter').toggle();">
 									@if ($myself->isAdmin)
 									<div class='statusSetter' style="display:none;">
-										<div class='setStatus status-1' data-order_state_id='1' can-click="toggle">Wartend</div>
-										<div class='setStatus status-2' data-order_state_id='2' can-click="toggle">Zurückgestellt</div>
-										<div class='setStatus status-3' data-order_state_id='3' can-click="toggle">Auf Bestelliste</div>
-										<div class='setStatus status-4' data-order_state_id='4' can-click="toggle">Bestellt</div>
+										<div class='setStatus status-2' data-order_state_id='2' can-click="toggle">Wartend</div>
+										<div class='setStatus status-3' data-order_state_id='3' can-click="toggle">Zurückgestellt</div>
+										<div class='setStatus status-4' data-order_state_id='4' can-click="toggle">Auf Bestelliste</div>
+										<div class='setStatus status-5' data-order_state_id='5' can-click="toggle">Bestellt</div>
 									</div>
 									@endif
 								</div>

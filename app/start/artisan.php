@@ -14,3 +14,4 @@
 Artisan::add(new tasksCreator);
 Artisan::add(new ledger);
 Artisan::add(new biokiste);
+Artisan::add(new userCommand);

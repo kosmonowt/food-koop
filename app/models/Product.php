@@ -12,7 +12,7 @@ class Product extends AppModel {
     protected static $rules = [
 		'merchant_id'  => 'required|exists:merchants,id',
         'product_type_id' => 'required|exists:product_types,id',
-	    'sku' => "required|unique:products,sku,:id",
+	    'sku' => "required|unique:products,sku,:id,id,merchant_id,0",
         'name' => "required",
         "price" => "required|numeric",
         "units" => "required|integer"

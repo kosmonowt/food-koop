@@ -35,7 +35,7 @@ class User extends AppModel implements UserInterface, RemindableInterface {
         'username' => 'required|unique:users,username,:id',
 	    'firstname' => "required",
         'lastname' => "required",
-        "email" => 'required|unique:users,email,:id',
+        "email" => 'required',
         "telephone" => "required",
         "member_id" => "required|exists:members,id"
     ];

@@ -181,7 +181,7 @@
   content: "\e033";
 }
 
-div.status-0:before,
+div.status-1:before,
 .icon-download:before {
   content: "\e034";
 }
@@ -246,7 +246,7 @@ div.status-0:before,
   content: "\e049";
 }
 
-div.status-1:before,
+div.status-2:before,
 .icon-media-loop:before {
   content: "\e050";
 }
@@ -331,7 +331,7 @@ div.status-1:before,
   content: "\e070";
 }
 
-div.status-4:before,
+div.status-5:before,
 .icon-home:before {
   content: "\e071";
 }
@@ -388,12 +388,12 @@ div.status-4:before,
   content: "\e084";
 }
 
-div.status-3:before,
+div.status-4:before,
 .icon-thumbs-up:before {
   content: "\e085";
 }
 
-div.status-2:before,
+div.status-3:before,
 .icon-thumbs-down:before {
   content: "\e086";
 }

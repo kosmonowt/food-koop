@@ -138,7 +138,7 @@ class MigrateFromVersion2 extends Migration {
 
 		if (!Schema::hasTable('order_states'))
 		Schema::create('order_states', function($table) {
-			$table->smallInteger('id')->unsigned();
+			$table->integer('id')->unsigned();
 			$table->string('name',64);
 			$table->primary("id");
 		});
@@ -150,7 +150,7 @@ class MigrateFromVersion2 extends Migration {
     		$table->integer("user_id")->unsigned();
     		$table->integer("product_id")->unsigned();
     		$table->integer("merchant_id")->unsigned();
-    		$table->smallInteger("order_state_id")->unsigned()->default(0);
+    		$table->integer("order_state_id")->unsigned()->default(1);
     		$table->smallInteger("amount")->unsigned();
     		$table->string('comment', 255)->nullable();
     		$table->timestamps();

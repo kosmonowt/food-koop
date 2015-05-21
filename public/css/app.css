@@ -26,11 +26,11 @@
 
 
 div.statusIcon		{ position: relative;}
-div.status-0:before { color: orange;}
-div.status-1:before { color: blue;}
-div.status-2:before { color: red;}
-div.status-3:before { color: green;}
-div.status-4:before { color: #00A094;}
+div.status-1:before { color: orange;}
+div.status-2:before { color: blue;}
+div.status-3:before { color: red;}
+div.status-4:before { color: green;}
+div.status-5:before { color: #00A094;}
 
 .statusSetter {
     position: absolute;
@@ -86,15 +86,15 @@ tr.demand-low {}
 
 /** ORDER STATE LOGICAL SWITCHES (MOVE TO JS SOON) **/
 
-.orderState-0 .setOrderState-100,
-.orderState-0 .setOrderState-2,
 .orderState-1 .setOrderState-100,
-.orderState-1 .setOrderState-2,
+.orderState-1 .setOrderState-3,
 .orderState-2 .setOrderState-100,
-.orderState-2 .setOrderState-2,
+.orderState-2 .setOrderState-3,
 .orderState-3 .setOrderState-100,
 .orderState-3 .setOrderState-3,
-.orderState-4 .setOrderState-3 {
+.orderState-4 .setOrderState-100,
+.orderState-4 .setOrderState-4,
+.orderState-5 .setOrderState-4 {
     display: none;
 }
 

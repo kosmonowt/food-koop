@@ -35,10 +35,10 @@ class Order extends AppModel {
     public function product_type() { return $this->belongsTo("ProductType","product_type_id"); }
     public function scopeMy($query) { return $query->where("member_id","=",Auth::user()->member_id); }
     /** Orders that are not forwarded to merchant yet **/
-    public function scopeUnordered($query) { return $query->where("order_state_id","<",3); }
+    public function scopeUnordered($query) { return $query->where("order_state_id","<",4); }
 
     public function getIsUserDeleteableAttribute() {
-        return $this->order_state_id < 3;
+        return $this->order_state_id < 4;
     }
 
     /**
@@ -86,11 +86,11 @@ class Order extends AppModel {
 
 
     /** Orders not yet ordered (ordered by customer but not at merchant) **/
-    public function scopeWaiting($query) { return $query->where("order_state_id","<=",2); }
+    public function scopeWaiting($query) { return $query->where("order_state_id","<=",3); }
     /** Listed and to be ordered in next step **/
-    public function scopeListed($query) { return $query->where("order_state_id","=",3); }
+    public function scopeListed($query) { return $query->where("order_state_id","=",4); }
     /** Orders requested at merchant **/
-    public function scopePending($query) { return $query->where("order_state_id","=",4); }
+    public function scopePending($query) { return $query->where("order_state_id","=",5); }
     /** Orders processed completely **/
     public function scopeCompleted($query) { return $query->where("order_state_id","=",100); }
     /** All orders NOT processed completely **/
