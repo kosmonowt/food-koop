@@ -37,6 +37,7 @@ It is thought to use
 * Fixed Issue when running command *tasks:create* Show error message when no task is assigned.
 * Fixed Issue with route. Now can configure the javascript routing prefix in start/global.php
 * Dashboard: Rendering of contents (blog article now directly into the HTML, no JS).
+* Seed for content and tasks installed
 
 ### 2015-05-21
 * Bugfixes on Migration (can now be performed perfectly including migration of old table data).
