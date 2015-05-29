@@ -5,7 +5,6 @@ can.Component.extend({
   	marketplace : new Marketplace.List({}),
   	upcomingTasks : new UpcomingTask.List({}),
   	myTasks : new MyTask.List({}),
-    articles : new DashboardContent.List({}),
 
   	deleteMyOrder : function(scope,el,ev) {
   		var marketplace = this.marketplace;

@@ -70,8 +70,6 @@ Route::group(array('before' => 'auth'), function() {
 
 	Route::get("members/myself",function(){ return User::with("member")->where("id","=",Auth::user()->id)->first()->toJson(); });
 
-	Route::get("dashboard",function(){ return Content::where("type_id","=",2)->where("is_published","=",1)->ordered()->get()->toJson(); });
-
 	// General Resource Routes
 	Route::resource('contents', 'ContentsController');
 	Route::resource('contentTypes', 'ContentTypesController');

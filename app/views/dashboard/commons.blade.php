@@ -7,13 +7,13 @@
 					<strong>Aktuelles</strong>
 				</div>
 				<div class="panel-body">
-					@{{#each articles}}
+					@foreach($articles as $article)
 						<article class="article" id="article_@{{id}}">
-							<h4>@{{name}}</h4>
-							<p><small>Geschrieben am @{{dmY data=published_at field="created_at"}} von @{{author}}</small></p>
-								@{{parsedContent}}
+							<h4>{{$article->name}}</h4>
+							<p><small>Geschrieben am {{$article->created_at}} von {{$article->author}}</small></p>
+								{!!$article->parsedContent!!}
 						</article>
-					@{{/each}}
+					@endforeach
 				</div>
 			</div>
 		</div>

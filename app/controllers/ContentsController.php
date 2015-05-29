@@ -14,17 +14,6 @@ class ContentsController extends \BaseController {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 * GET /contents/create
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
 	 * Store a newly created resource in storage.
 	 * POST /contents
 	 *
@@ -42,7 +31,6 @@ class ContentsController extends \BaseController {
 		if(!$content->save()) {
 			App::abort(403,$content->getErrors());
 		}
-
 		return $content->toJson();
 	}
 

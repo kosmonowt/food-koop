@@ -1,4 +1,4 @@
 <?php
 
 //This is needed to route the URL
-Config::set("sUrl","/app/")
+Config::set("sUrl","/app/");

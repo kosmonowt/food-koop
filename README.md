@@ -35,6 +35,7 @@ It is thought to use
 ### 2015-05-29
 * Fixed Issue where members without "Starteinlage" and without any ledger balance were getting a fatal error.
 * Fixed Issue when running command *tasks:create* Show error message when no task is assigned.
+* Fixed Issue with route. Now can configure the javascript routing prefix in start/global.php
 
 ### 2015-05-21
 * Bugfixes on Migration (can now be performed perfectly including migration of old table data).
