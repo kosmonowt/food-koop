@@ -108,10 +108,16 @@ class tasksCreator extends Command {
 			$this->taskTypes[$taskType->day_of_week][] = $taskType;
 		}
 		
+		if (!count($this->taskTypes)) $this->info("No TASKS in List. Please, first add tasks!");
+		else {
 
-		for ($i = 1; $i <= $countDays; $i++) {
-			$this->configureDay($i);
+			for ($i = 1; $i <= $countDays; $i++) {
+				$this->configureDay($i);
+			}
+
 		}
+
+		$this->info("Finished.");
 
 	}
 

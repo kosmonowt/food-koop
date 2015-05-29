@@ -32,6 +32,10 @@ It is thought to use
 
 ## Release History
 
+### 2015-05-29
+* Fixed Issue where members without "Starteinlage" and without any ledger balance were getting a fatal error.
+* Fixed Issue when running command *tasks:create* Show error message when no task is assigned.
+
 ### 2015-05-21
 * Bugfixes on Migration (can now be performed perfectly including migration of old table data).
 * i+1 on order states (order state id can not be 0)
@@ -155,7 +159,6 @@ It is thought to use
 ## Todo
 
 ### Urgent Tasks
-* Debug Dashboard for Members without ledger entry (rene)
 * Debug XLS-Export on Order
 * UN-CanJSify News on Dashboard (for Problems with escaping)
 * Tasks in PAST should not be shown anymore

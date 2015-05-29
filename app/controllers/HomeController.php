@@ -25,7 +25,9 @@ class HomeController extends BaseController {
 		View::share("controller","dashboard");
 		View::share("member",Member::with("user")->find(Auth::user()->member_id));
 		View::share("kontostand",MemberLedger::balance()->own()->first()->balance);
-		View::share("starteinlage",MemberLedger::starteinlage()->own()->first()->balance);
+		$Ledger = MemberLedger::starteinlage()->own()->first();
+		$starteinlage = ($Ledger) ? $Ledger->balance : 0;
+		View::share("starteinlage",$starteinlage);
 		View::share("ledger",MemberLedger::own()->latest()->get());
 		View::share("user",Auth::user());
 		View::share("myself",Auth::user());
