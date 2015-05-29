@@ -158,6 +158,7 @@ It is thought to use
 * Debug Dashboard for Members without ledger entry (rene)
 * Debug XLS-Export on Order
 * UN-CanJSify News on Dashboard (for Problems with escaping)
+* Tasks in PAST should not be shown anymore
 
 ### Dashboard
 * CanJS-ify
