@@ -4,6 +4,9 @@
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/can.custom.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			var sUrl = "{{$sUrl}}";
+		</script>
 	    <meta charset="utf-8">
     	<title>{{{$title}}}</title>
 	
