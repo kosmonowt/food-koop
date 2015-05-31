@@ -11,7 +11,7 @@
 						<article class="article" id="article_@{{id}}">
 							<h4>{{$article->name}}</h4>
 							<p><small>Geschrieben am {{$article->created_at}} von {{$article->author}}</small></p>
-								{!!$article->parsedContent!!}
+								{!! $article->parsedContent !!}
 						</article>
 					@endforeach
 				</div>
