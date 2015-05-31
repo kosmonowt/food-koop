@@ -102,8 +102,8 @@ class tasksCreator extends Command {
 			// $table->date("published_stop")->nullable();
 
 			// Create Datetime objects for every task type for less overhead in processing
-			$taskType->datetime_published_start = ($taskType->published_start != "0000-00-00" && is_null($taskType->published_start)) ? new DateTime($taskType->published_start) : new DateTime ("yesterday");
-			$taskType->datetime_published_stop = ($taskType->published_start != "0000-00-00" && is_null($taskType->published_start)) ? new DateTime($taskType->published_stop) : new DateTime ("now +".($countDays+1)." days ");
+			$taskType->datetime_published_start = ($taskType->published_start != "0000-00-00" && !is_null($taskType->published_start)) ? new DateTime($taskType->published_start) : new DateTime ("yesterday");
+			$taskType->datetime_published_stop = ($taskType->published_stop != "0000-00-00" && !is_null($taskType->published_stop)) ? new DateTime($taskType->published_stop) : new DateTime ("now +$countDays days ");
 
 			$this->taskTypes[$taskType->day_of_week][] = $taskType;
 		}

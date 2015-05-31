@@ -57,12 +57,9 @@ class userCommand extends Command {
 
 		if ($this->option("password")) {
 			$user->password = Hash::make($this->option("password"));
-			$this->info("Setting new password.");
 		}
 
-		var_dump($user->save());
-
-
+		$user->save();
 		
 		$this->info("Changes applied.");
 

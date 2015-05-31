@@ -32,6 +32,11 @@ It is thought to use
 
 ## Release History
 
+### 2015-05-31
+* Fixed Issue with updating validated Models (added way/model into trunk)
+* Fixed Issue with {!! $VAR !!} to show unescaped output
+* Fixed Issue with TASK-Creator (better creation rules and fixed seed)
+
 ### 2015-05-29
 * Fixed Issue where members without "Starteinlage" and without any ledger balance were getting a fatal error.
 * Fixed Issue when running command *tasks:create* Show error message when no task is assigned.
@@ -163,8 +168,9 @@ It is thought to use
 
 ### Urgent Tasks
 * Debug XLS-Export on Order
-* UN-CanJSify News on Dashboard (for Problems with escaping)
 * Tasks in PAST should not be shown anymore
+* ADD Field "identifier" into model user_groups
+* Make TaskTypes Editable
 
 ### Dashboard
 * CanJS-ify

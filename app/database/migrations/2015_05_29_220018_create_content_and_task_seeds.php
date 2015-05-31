@@ -40,6 +40,8 @@ Bis dahin, viel Spaß mit diesem Programm!";
 		$t->name = "Auspackdienst";
 		$t->short_description = "Der Auspackdienst. Packen und anpacken!";
 		$t->long_description = "Hier kann ein langer langer langer Text stehen. Mitunter eine ganze Anleitung!";
+		$t->time_start = "13:00:00";
+		$t->time_stop = "15:00:00";
 		$t->day_of_week = 4;
 		$t->member_group_id = 2;
 		$t->active = 1;
