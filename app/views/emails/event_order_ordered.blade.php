@@ -1,5 +1,6 @@
 @extends('emails.layouts.mail')
 @include("emails.layouts.usermail")
+@include("emails.includes.ordersList")
 
 @section("heading")
 Deine Bestellung bei {{$merchantName}} wurde aufgegeben.
@@ -14,7 +15,7 @@ Deine Bestellung bei {{$merchantName}} wurde aufgegeben.
 	@endif
 	bei
 	{{$merchantName}}</p>
-	@yield("includes.ordersList")
+	@yield("ordersList")
 	<p>wurde soeben bestellt.</p>
 	<p>Wenn alles gut geht sollte die Ware bei der nächsten Lieferung mit ankommen.</p>
 @stop
