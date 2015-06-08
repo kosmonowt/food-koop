@@ -79,7 +79,7 @@ class Product extends AppModel {
     }
 
     public function getSingleRetailPriceAttribute() {
-        return $this->price * (1 + $this->getTaxrateAttribute()) * (1 + Config::get("retailSurchargeRate"));
+        return $this->price * (1 + $this->getTaxrateAttribute() / 100) * (1 + Config::get("retailSurchargeRate") / 100);
     }
 
     public function scopeOrderCount($query) {
