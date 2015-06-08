@@ -27,7 +27,7 @@ $app = new Illuminate\Foundation\Application;
 $env = $app->detectEnvironment(array(
 
 	'local' => array('kosmomac'),
-	'staging' => array('web-und-app.com'),
+	'staging' => array('bethany.quantensuppe.eu'),
 
 ));
 
