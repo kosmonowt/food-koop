@@ -27,7 +27,10 @@ Event::listen('orders.setState',function($orders,$new_order_state){
 
 		// Sort Order By Member
 		$ordersByMember = array();
-		foreach ($orders as $order) $ordersByMember[$order->member_id][] = $order;
+		foreach ($orders as $order) {
+			$order['product'] = Product::find($order['id']);
+			$ordersByMember[$order->member_id][] = $order;
+		}
 		// For each member send only one mail
 		// The user that triggers this event is not informed
 		foreach ($ordersByMember as $memberOrders) {
