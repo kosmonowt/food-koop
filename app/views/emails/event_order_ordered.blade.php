@@ -6,13 +6,13 @@ Deine Bestellung bei {{$merchantName}} wurde aufgegeben.
 @stop
 
 @section("content")
-	<p>Deine&nbsp;
+	<p>Deine
 	@if (count($orders) === 1)
 	Bestellung
 	@else
 	Bestellungen
 	@endif
-	&nbsp;bei
+	bei
 	{{$merchantName}}</p>
 	@yield("includes.ordersList")
 	<p>wurde soeben bestellt.</p>

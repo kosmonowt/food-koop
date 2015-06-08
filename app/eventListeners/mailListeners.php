@@ -11,6 +11,7 @@
  **/
 Event::listen('orders.setState',function($orders,$new_order_state){
 	if ($new_order_state >= 5 || $new_order_state == 3 || $new_order_state == 100) {
+		
 		if ($new_order_state == 5) {
 			// Message => ORDERED
 			$mailTemplateName = "event_order_ordered";
