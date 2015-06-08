@@ -10,12 +10,12 @@
  * - don't inform the user (when he fired the event)
  **/
 Event::listen('orders.setState',function($orders,$new_order_state){
-	if ($new_order_state >= 4 || $new_order_state == 2) {
-		if ($new_order_state == 4) {
+	if ($new_order_state >= 5 || $new_order_state == 3 || $new_order_state == 100) {
+		if ($new_order_state == 5) {
 			// Message => ORDERED
 			$mailTemplateName = "event_order_ordered";
 			$mailSubject = "BIOKISTE: Deine Bestellung wurde aufgegeben.";
-		} elseif ($new_order_state == 2) {
+		} elseif ($new_order_state == 3) {
 			$mailTemplateName = "event_order_setback";
 			$mailSubject = "BIOKISTE: Deine Bestellung wurde zurückgestellt.";
 		} elseif ($new_order_state == 100) {
