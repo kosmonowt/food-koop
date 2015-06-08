@@ -14,7 +14,7 @@ Deine Bestellung bei {{$merchantName}} ist zurückgestellt worden.
 	@endif
 	bei
 	{{$merchantName}}</p>
-	@include("emails.includes.ordersList",array("orders"=>"orders"))
+	@include("emails.includes.ordersList",array("orders"=>$orders))
 	<p>wurde zurückgestellt.</p>
 	<p>Bei Fragen dazu stelle diese bitte an bestellgruppe@biokiste.org.</p>
 @stop

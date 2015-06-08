@@ -14,7 +14,7 @@ Deine Bestellung bei {{$merchantName}} wurde aufgegeben.
 	@endif
 	bei
 	{{$merchantName}}</p>
-	@include("emails.includes.ordersList",array("orders"=>"orders"))
+	@include("emails.includes.ordersList",array("orders"=>$orders))
 	<p>wurde soeben bestellt.</p>
 	<p>Wenn alles gut geht sollte die Ware bei der nächsten Lieferung mit ankommen.</p>
 @stop

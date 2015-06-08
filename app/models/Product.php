@@ -7,7 +7,7 @@ class Product extends AppModel {
 
 	protected $fillable = ["merchant_id","product_type_id","sku","name","comment","price","units","weight_per_unit","unit_unit","tare_unit"];
 
-	protected $appends = array('taxrate','standardProduct','blocked','merchantName',"productTypeName");
+	protected $appends = array('taxrate','standardProduct','blocked','merchantName',"productTypeName","singleRetailPrice");
 
     protected static $rules = [
 		'merchant_id'  => 'required|exists:merchants,id',
@@ -76,6 +76,10 @@ class Product extends AppModel {
 
     public function getBlockedAttribute() {
         return $this->product_state_id == 2;
+    }
+
+    public function getSingleRetailPriceAttribute() {
+        return $this->price * (1 + $this->getTaxrateAttribute()) * (1 + Config::get("retailSurchargeRate"));
     }
 
     public function scopeOrderCount($query) {

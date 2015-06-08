@@ -88,4 +88,5 @@ require app_path()."/eventListeners/eventListeners.php";
 CONST ledgerDeductionInterval = 3; 	// That's how often (every nth month) the member-fee will be reducted from ledger.
 CONST ledgerDeductionFee = 21;		// That's the amount that will be deducted from all members that have to pay the fee.
 
+Config::set("surcharge_rate",6);	// That's a percentage that is added to the gross price of a product. Applies to the user.
 Config::set("sUrl","/");
