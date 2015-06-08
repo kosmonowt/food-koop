@@ -1,6 +1,6 @@
 @extends('emails.layouts.mail')
 @include("emails.layouts.usermail")
-@include("emails.includes.ordersList")
+@include("emails.includes.ordersList",array("orders"=>"orders"))
 
 @section("heading")
 Deine Bestellung bei {{$merchantName}} ist eingetroffen!
