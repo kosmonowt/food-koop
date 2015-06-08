@@ -67,7 +67,7 @@
 						<tr>@if ($myself->isAdmin)
 							<th></th>
 							@endif
-							<th>Produkt</th>
+							<th>Produkt<br /><small>Brutto EK pro Gebinde / Netto EK pro Einheit</small></th>
 							<th>Menge</th>
 							<th>Bestellt zwischen / am</th>
 							@if ($myself->isAdmin)

@@ -460,21 +460,21 @@ can.mustache.registerHelper("dowName",function(data){
  * Returns the calculated price for an order from amount and taxes and product price (for product)
  **/
 can.mustache.registerHelper("orderPrice",function(data){
-  return parseFloat(parseInt(data.context.amount) * parseFloat(data.context.product.price) * (1+ (data.context.product.taxrate/100)),2).toFixed(2);
+  return parseFloat(parseInt(data.context.amount) * parseFloat(data.context.product.singleRetailPrice)).toFixed(2);
 });
 
 /**
  * Returns the calculated prace for an order from taxes and product price (for marketplace model)
  **/
 can.mustache.registerHelper("marketplacePrice",function(data){
-  return parseFloat(parseFloat(data.context.price) * (1+ (data.context.product_type.tax / 100)),2).toFixed(2);
+  return parseFloat(data.context.singleRetailPrice).toFixed(2);
 });
 
 /**
  * Returns the calculated price for an order from taxes and product price
  **/
 can.mustache.registerHelper("productPrice",function(data){
-  return parseFloat(parseFloat(data.context.product.price) * (1+ (data.context.product.taxrate/100)),2).toFixed(2);
+  return parseFloat(data.context.product.singleRetailPrice).toFixed(2);
 });
 
 can.mustache.registerHelper("toFixed",function(data){
