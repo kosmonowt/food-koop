@@ -1,6 +1,5 @@
 @extends('emails.layouts.mail')
 @include("emails.layouts.usermail")
-@include("emails.includes.ordersList",array("orders"=>"orders"))
 
 @section("heading")
 Deine Bestellung bei {{$merchantName}} ist eingetroffen!
@@ -15,7 +14,7 @@ Deine Bestellung bei {{$merchantName}} ist eingetroffen!
 	@endif
 	bei
 	{{$merchantName}}</p>
-	@yield("ordersList")
+	@include("emails.includes.ordersList",array("orders"=>"orders"))
 	<p>ist soeben eingetroffen.</p>
 	<p>Bitte hole diese bei nächster Gelegenheit in der Biokiste ab.</p>
 @stop

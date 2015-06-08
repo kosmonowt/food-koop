@@ -1,4 +1,3 @@
-@section("ordersList")
 {{-- A list of orders that is shown in an email --}}
 <ul>
 	@foreach($orders as $order)
@@ -7,4 +6,3 @@
 	</li>
 	@endforeach
 </ul>
-@stop
