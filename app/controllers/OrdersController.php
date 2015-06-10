@@ -60,6 +60,17 @@ class OrdersController extends \BaseController {
 			$productIds = Input::get("product_ids");
 			$order = Order::whereIn("product_id",$productIds);
 			$order_state_id = $product_id;
+		} elseif ($order_state_id == "delete") {
+
+			if (!Auth::user()->isAdmin) return App::abort(403, "Du kannst diese Aktion nicht ausführen (DELETE BULK).");
+			$orders = Order::with("product")->where('created_at', '<=', Input::get("latestOrder"))->where("created_at",">=",Input::get("earliestOrder"))->where("product_id",$product_id)->get();
+			
+			Event::fire("orders.massDeleted",array($orders));
+			
+			Order::where('created_at', '<=', Input::get("latestOrder"))->where("created_at",">=",Input::get("earliestOrder"))->where("product_id",$product_id)->delete();
+
+			return "true";
+
 		} else {
 			$order = Order::where("product_id","=",$product_id);
 		}

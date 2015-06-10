@@ -78,7 +78,7 @@
 						@{{#each ordersByProduct}}
 						<tr class="@{{colormark totalAmount}} orderState-@{{order_state_id}}">
 							@if ($myself->isAdmin)
-							<td onclick="$(this).children('input').click();"><input type="checkbox" value="@{{id}}"></td>
+							<td><input type="checkbox" value="@{{id}}"></td>
 							@endif
 							<td>
 								<strong>@{{sku}}</strong> - @{{name}}<br>
@@ -98,6 +98,7 @@
 								<button class="btn btn-success btn-sm setOrderState-4"   can-click="toggle" data-order_state_id="4"><span class="glyphicon glyphicon-send" title="Auf die Bestelliste"></span></button>
 								<button class="btn btn-warning btn-sm setOrderState-3"   can-click="toggle" data-order_state_id="3"><span class="glyphicon glyphicon-remove-sign" title="Zurück in Wartezustand"></span></button>
 								<button class="btn btn-success btn-sm setOrderState-100" can-click="toggle" data-order_state_id="100"><span class="glyphicon glyphicon-ok-sign" title="Vollständig angekommen"></span></button>
+								<button class="btn btn-danger btn-sm deleteOrder" can-click="deleteBulk"><span class="glyphicon glyphicon-trash" title="Bestellung löschen"></span></button>
 							</td>
 							@endif
 					    </tr>
@@ -400,7 +401,7 @@
 					</tr>
 					@{{#each products}}
 					<tr class="status-@{{order_state_id}}" id="productRow-@{{id}}" data-id="@{{id}}">
-						<td onclick="$(this).children('input').click();"><input type="checkbox" value="@{{id}}"></td>
+						<td><input type="checkbox" value="@{{id}}"></td>
 						<td>
 							<strong>@{{sku}}</strong> - @{{name}}<br>
 							<strong>@{{price}}€ +@{{taxrate}}%</strong> MwSt. <small>(@{{productTypeName}})</small><br>
@@ -448,9 +449,6 @@
 @stop
 
 @section("content")
-		<div class="container" id="flashContainer">
-		</div>		
-		<div class="container">
 			<orders-app>
 				@yield("appHeader")
 				<ul class="nav nav-tabs" id="tabNav">

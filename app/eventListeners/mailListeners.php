@@ -52,6 +52,24 @@ Event::listen('orders.setState',function($orders,$new_order_state){
 	}
 });
 
+Event::listen("orders.massDeleted",function($orders) {
+
+	foreach ($orders as $order) {
+		$user = User::find($order->user_id);
+		$name = $user->name;
+		$email = $user->email;
+
+		Mail::queue(
+			"emails.event_order_deleted",
+			array("merchantName" => $order->merchant->name,"order" => $order,"userName" => $user->name),
+			function($message) use ($name,$email) {
+				$message->from(Config::get("order_admin_email"))->to($email)->subject("BIOKISTE: Deine Bestellung wurde gelöscht, ".$name);
+			}
+		);
+
+	}
+});
+
 /**
  * This event is triggered when someone removes himself from a task
  * 
@@ -89,4 +107,26 @@ MemberLedger::saving(function($memberLedger) {
 		Log::info("ledger action mail sent: ".$member->email);
 
 	}
+});
+
+/**
+ * This catches when user WAS created.
+ * Sends Mail out to admin
+ **/
+User::created(function($user){
+
+	$member = Member::where("id",$user->member_id)->with("user")->first();
+	$name = $member->name;
+	$email = Config::get("member_admin_email");
+
+	Mail::queue(
+		"emails.event_member_new_member",
+		array("member"=>$member,"newMember"=>$user),
+		function($message) use ($name,$email) {
+			$message->to($email)->subject("BIOKISTE: Neues Mitglied für Gruppe ".$name);
+		}
+	);
+
+	return $user;
+
 });

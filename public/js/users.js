@@ -13,7 +13,7 @@ can.Component.extend({
       this.attr('selectedMember', members);
     },
     delete: function(member) {
-      if (confirm("Willst Du "+member.name+" wirklich löschen?")) member.destroy().then(function(){handleRestDestroy("Gelöscht:","Das Mitglied wurde gelöscht."),handleRestError});;
+      if (confirm("Willst Du "+member.name+" wirklich löschen?")) member.destroy().then(function(){handleRestDestroy("Gelöscht:","Das Mitglied wurde gelöscht."),handleRestError});
     },
     save: function(member) {
       member.save();
@@ -37,6 +37,9 @@ can.Component.extend({
         handleRestError // Error
         );
     },
+    /**************************/
+    /****** USER SECTION ******/
+    /**************************/
     filterUsersByMember: function(m,el,ev) { this.memberUsers.replace(m.user); this.currentMember.attr("id", m.id);  },
     /** Create User **/
     userCreate: function(scope,el,ev) {
@@ -46,14 +49,28 @@ can.Component.extend({
         eval("data."+$(this).attr("name")+" = '"+$(this).val()+"';"); // Save Data
       });
       var user = new User(data);
+      var memberUsers = this.memberUsers;
       user.save(
         function(user){ 
           // Assign User to member
           member = scope.members.filter(function(member,ix,list) {return member.id == user.member_id;});
-          member[0].user.push(user);
+          memberUsers.push(user);
+          handleRestCreate("Erfolg","Benutzer wurde erfolgreich angelegt.");
+          $("#userCreateForm .form-control").val("");
         }, handleRestError // Error
       );
     },
+    /** Delete User **/
+    userDelete: function(user) {
+      if (confirm("Willst Du "+user.name+" wirklich entfernen?")) 
+        var u = new User(user);
+        var id = u.attr("id");
+        var memberUsers = this.memberUsers;
+        u.destroy().then(function(){
+          memberUsers.replace(memberUsers.filter(function(i,x,l){return i.attr("id") != id;}));
+          handleRestDestroy("Gelöscht:","Der Benutzer wurde gelöscht.");
+        },handleRestError);
+    },    
     /** 
      * Edit functions.
      * Has to move to a global prototype soon.
@@ -65,7 +82,6 @@ can.Component.extend({
       var input = el.siblings('.editValue');
       var val = input.val();
       var attrName = input.attr("name");
-
       if (typeof(el.data("scope")) != "undefined") {
         // for <Select>, need to do like this unless I found way to ascend the sections
         var modelList = eval("this."+el.data("scope"));
@@ -89,7 +105,9 @@ can.Component.extend({
           //retrieve model
           var modelName = el.parents(".modelSection").data("model");
           eval("var u = new "+modelName+"(m)");
-          u.save(function(){},handleRestError);
+          u.save(function(){
+            handleRestCreate("Erfolg","Benutzer wurde erfolgreich bearbeitet.");
+          },handleRestError);
           // SAVE
         }
       }

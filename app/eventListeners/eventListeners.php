@@ -44,8 +44,10 @@ User::creating(function($user){
 	$lastname = $user->lastname;
 	$email = $user->email;
 
-	Mail::queue('emails.willkommen_migrated', array("user"=>$user,"password"=>$password,"userName"=>$user->username), function($message) use ($firstname,$lastname,$email) {
-    	$message->to($email, $firstname." ".$lastname)->subject('Dein Zugang zur Biokiste, '.$firstname);
+	$template = Config::get("emails_willkommen_template","emails.willkommen");
+
+	Mail::queue($template, array("user"=>$user,"password"=>$password,"userName"=>$user->username), function($message) use ($firstname,$lastname,$email) {
+    	$message->to($email, $firstname." ".$lastname)->subject('BIOKISTE: Dein neuer Zugang'.$firstname);
 	});
 
 	return $user;

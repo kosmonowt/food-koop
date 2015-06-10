@@ -6,7 +6,7 @@
 @stop
 
 @section("content")
-	<p>Lieber {{$user['firstname']}},<br>
+	<p>Hallo {{$user['firstname']}},<br>
 	Du bekommst diese E-Mail weil Du Mitglied in einer Bestellgruppe der Biokiste bist.</p>
 	<p>Dank viel ehrenamtlicher Arbeit ist nun die Website biokiste.org auf die aktuellen Bedürfnisse und den neusten Stand der Technik aktualisiert worden.</p>
 	<p><strong>Von nun an hat jedes Mitglied einer Bestellgruppe einen eigenen Benuterzugang mit speziellen Rechten.</strong> Falls Deine Mitbewohner / Partner oder andere Gemeinschaftsgefährten keine E-Mail bekommen haben müsstest Du sie noch registrieren.</p>

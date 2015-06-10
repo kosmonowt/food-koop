@@ -27,6 +27,8 @@ class MoveDataAndClearOldTables extends Migration {
 	public function up()
 	{
 
+		Config::set("emails_willkommen_template",'emails.willkommen_migrated');
+
 		$this->info("Import 'Dienstgruppen'");
 		// Copy Member Workgroups
 		if (Schema::hasTable('dienstgruppen')) {

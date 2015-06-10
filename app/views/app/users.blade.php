@@ -362,7 +362,7 @@
 						<td>
 							<div class="userUserGroup">@{{userGroup}}</div>
 						</td>
-					    <td><button class="btn btn-danger btn-sm" can-click="delete"><span class="glyphicon glyphicon-remove" title="Löschen"></span></button></td>
+					    <td><button class="btn btn-danger btn-sm" data-model="User" can-click="userDelete"><span class="glyphicon glyphicon-remove" title="Löschen"></span></button></td>
 						@endif
 				    </tr>
 				    @{{/each}}

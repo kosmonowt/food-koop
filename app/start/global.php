@@ -89,4 +89,7 @@ CONST ledgerDeductionInterval = 3; 	// That's how often (every nth month) the me
 CONST ledgerDeductionFee = 21;		// That's the amount that will be deducted from all members that have to pay the fee.
 
 Config::set("retailSurchargeRate",6);	// That's a percentage that is added to the gross price of a product. Applies to the user.
-Config::set("sUrl","/");
+Config::set("sUrl","/");				// That's the path prefix of the REST API
+Config::set("member_admin_email","mitglieder@biokiste.org");
+Config::set("order_admin_email","bestellung@biokiste.org");
+Config::set("web_admin_email","web@biokiste.org");

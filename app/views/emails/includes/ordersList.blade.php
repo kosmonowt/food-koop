@@ -2,7 +2,7 @@
 <ul>
 	@foreach($orders as $order)
 	<li>
-		<span class="orderAmount">{{$order['amount']}} {{$order['product']['unit_unit']}}</span> <strong>{{$order['product']['sku']}}, {{$order['product']['name']}}</strong> zu <span class="orderPdice">{{$order['product']['singleRetailPrice']}}€</span>
+		@include('emails.includes.order', array('order'=>$order))
 	</li>
 	@endforeach
 </ul>

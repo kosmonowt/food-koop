@@ -12,7 +12,7 @@ class Task extends AppModel {
 	}
 
 	public function scopeUpcoming($query) {
-		return $query->where("date",">=",date("Y-m-d"));
+		return $query->where("date",">=",date('Y-m-d'));
 	}
 
 	public function scopeDayAsc($query) {

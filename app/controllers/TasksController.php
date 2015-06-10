@@ -17,9 +17,9 @@ class TasksController extends \BaseController {
 	 * Display a listing of the resource of upcoming free tasks for dashboard view
 	 * 
 	 */
-	public function upcoming() { return Task::untilDay("sunday this week +21 days")->with("taskType")->dayAsc()->get()->toJson(); }
+	public function upcoming() { return Task::upcoming()->with("taskType")->dayAsc()->get()->toJson(); }
 	
-	public function upcomingUnassigned() { return Task::untilDay("sunday this week +21 days")->unassigned()->with("taskType")->dayAsc()->get()->toJson(); }
+	public function upcomingUnassigned() { return Task::upcoming()->unassigned()->with("taskType")->dayAsc()->get()->toJson(); }
 
 	/**
 	 * Assigns a task to the current user

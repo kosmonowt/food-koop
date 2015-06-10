@@ -12,18 +12,6 @@ class UsersController extends \BaseController {
 		return User::dynamicHide()->get()->toJson();
 	}
 
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -77,7 +65,7 @@ class UsersController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		$user = User::find($id);
+		$user = User::findOrFail($id);
 		$user->fill(Input::all());
 		$user->password = Hash::make($user->password);
 
@@ -97,7 +85,7 @@ class UsersController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$user = User::find($id);
+		$user = User::findOrFail($id);
 
 		if(!$user->delete()) {
 			App::abort(403,$user->getErrors());

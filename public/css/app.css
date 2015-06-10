@@ -22,8 +22,15 @@
 .panel-default>.panel-heading { background-color: #B69141;}
 .nav-tabs>li>a,
 .table-striped>tbody>tr:nth-of-type(odd) { background-color: #F1DFC9; }
+.table-striped>tbody>tr:nth-of-type(even) {  background-color: #F9F9F9;}
+.h1, .h2, .h3, h1, h2, h3 { margin-left: 30px;}
 
-
+.container {
+  background-color: #F1DFC9;
+  border-radius: 5px;
+  border: 1px solid #666;
+  box-sizing: border-box;
+}
 
 div.statusIcon		{ position: relative;}
 div.status-1:before { color: orange;}
@@ -121,3 +128,4 @@ tr.demand-low {}
 
     
 }
+

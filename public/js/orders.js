@@ -106,7 +106,7 @@ can.Component.extend({
           list.replace(list.filter(function(i,x,l){ return (b.id != i.id); }));
           unfiltered.replace(list);
         })
-        .fail(handleRestError);        
+        .fail(handleRestError);
       }
     },
     orderNow: function(scope,el,ev) {
@@ -138,6 +138,7 @@ can.Component.extend({
           unfiltered.replace(list);
       }).fail(handleRestError);
     },
+    /** Returns the order states that will be filled into the dropdown "Markierte" **/
     setSettableOrderStates: function(orderState) {
       var scopeToState = {"waiting":[4],"listed":[3],"pending":[3,100]};
       var activeStates = eval("scopeToState."+orderState);
@@ -269,7 +270,25 @@ can.Component.extend({
           orders.replace(orders.filter(function(i,x,l){return i.attr("id") != id;}));
         },handleRestError);
       }
-    },    
+    },
+    deleteBulk: function(scope, el, ev) {
+      var from = scope.attr("earliestOrder");
+      var until = scope.attr("latestOrder");
+      var id = scope.attr("id");
+
+      var list = this.ordersByProduct;
+      
+      can.$.ajax({
+          url: sUrl+'orders/bulk/'+id+"/delete",
+          type: 'POST',
+          dataType: 'json',
+          data: {"earliestOrder":from,"latestOrder":until}
+        })
+        .done(function() {
+          list.replace(list.filter(function(i,x,l){ return (id != i.id); }));
+        })
+        .fail(handleRestError);        
+    },
     submitOrder: function(scope, el, ev) {
       ev.preventDefault();
       var orderData = {};

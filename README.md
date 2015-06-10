@@ -32,6 +32,20 @@ It is thought to use
 
 ## Release History
 
+### 2015-06-10
+* Changed Email Start from "Lieber" to "Hallo"
+* Email template for welcome mail is now set by config (to distinguish migration message from NEW memeber message)
+* Email notification will be sent to admin when new member is created.
+* Bugfixes in adding, editing and deleting USER.
+* Orders can now be bulk deleted
+* New Mail Event when bulk deletion happens
+* some CSS changes
+
+### 2015-06-08
+* Fixed issue with email templates (order list)
+* Added staging environment with mailtrap
+* Added support for prices including surcharge
+
 ### 2015-05-31
 * Fixed Issue with updating validated Models (added way/model into trunk)
 * Fixed Issue with {!! $VAR !!} to show unescaped output
@@ -209,8 +223,6 @@ It is thought to use
 * Allow only Admin to edit product attribute! (ZURÜCKGESTELLT)
 
 ### Users
-* Edit User Group Settings needs update
-* CHECK findOr404 in controller
 
 ### User Groups
 * CRUD Views for User Groups
@@ -221,7 +233,7 @@ It is thought to use
 * CHECK findOr404 in controller
 
 ### Member Groups
-* CRUD Views for Member Groups
+* CRUD Views for MemberGroups
 * Assign Group Leader
 
 ### MemberLedger
