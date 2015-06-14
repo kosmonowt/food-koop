@@ -5,7 +5,7 @@ class Member extends AppModel {
 	
 	use SoftDeletingTrait, HasFilters;
 
-	protected $fillable = ["name","email","street","telephone","plz","ort","member_group_id","member_status_id","date_of_entry"];
+	protected $fillable = ["name","email","street","telephone","plz","ort","member_group_id","member_status_id","date_of_entry","groupUID"];
 	protected $table = "members";
 
 	protected static $rules = [

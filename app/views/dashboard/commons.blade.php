@@ -157,6 +157,7 @@
 					<p>
 						Bestellgruppe: <strong>{{{$member->name}}}</strong>, {{{$member->street}}} {{{$member->plz}}} {{{$member->ort}}}<br>
 						Gruppenmitglied: <strong>{{{$user->firstname}}} {{{$user->lastname}}}</strong>, {{{$user->username}}}, @if (strlen($user->email)) {{{$user->email}}}@else <em>Email Adresse einragen</em>@endif, @if (strlen($user->telephone)) {{{$user->telephone}}}@else <em>Telefonnummer einragen</em>@endif<br>
+						Mitgliedsnummer: <strong>{{{$member->groupUID}}}</strong> - <em>Bitte bei Überweisungen immer mit angeben!</em>
 					</p>
 				</div>
 			</div>

@@ -444,6 +444,10 @@ can.Component.extend({
         this.productsScopes.attr("term",$(el).val());
         this.performReloadList();
       }
+    },
+    getTable: function(scope, el, ev) {
+      var url = sUrl+"app/orders/export/";
+      jQuery('<form action="'+ url +'" method="'+ ('get') +'"></form>').appendTo('body').submit().remove();
     }
   }
 });

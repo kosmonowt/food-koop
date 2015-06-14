@@ -32,6 +32,13 @@ It is thought to use
 
 ## Release History
 
+### 2015-06-13
+* Fixed Problem with mass assignment on unique ids. (Problem with str_replace in way/model)
+* Member GroupUID attribute added in Views
+* Order - single order view reformed. Now using bootstrap icons and button classes.
+* Order - bulk order view reformated. Now calculating FINAL PRICE in view.
+* Order - XLS Download hooked to form.
+
 ### 2015-06-10
 * Changed Email Start from "Lieber" to "Hallo"
 * Email template for welcome mail is now set by config (to distinguish migration message from NEW memeber message)

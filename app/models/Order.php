@@ -78,7 +78,8 @@ class Order extends AppModel {
             '(orders.amount / products.units * 100) as demand, '.
             'SUM(orders.amount) as totalAmount, '.
             'product_types.tax as taxrate, '.
-            'products.id, products.name, products.units, products.price, products.weight_per_unit, products.unit_unit, products.tare_unit, products.sku, products.product_state_id, products.product_type_id, products.merchant_id, '.
+            'TRUNCATE(products.price * (1+product_types.tax) * ((1+'.Config::get("retailSurchargeRate").')/100),2) as singleRetailPrice, '.
+            'products.price, products.id, products.name, products.units, products.weight_per_unit, products.unit_unit, products.tare_unit, products.sku, products.product_state_id, products.product_type_id, products.merchant_id, '.
             "orders.order_state_id as order_state_id"));
         $query->with("merchant");
         return $query;

@@ -120,6 +120,17 @@ tr.demand-low {}
     margin-bottom: 0;
 }
 
+.container .statusIcon, [class^="icon-"]:before, [class*=" icon-"]:before {
+    font-family: Glyphicons Halflings;
+}
+td .status-1:before{content:"\e034"} /* Incoming */
+td .status-2:before{content:"\e030"} /* Waiting */
+td .status-3:before{content:"\e209"} /* set back */
+td .status-4:before{content:"\e116"} /* on list */
+td .status-5:before{content:"\e178"} /* ordered */
+td .status-6:before{content:"\e102"} /* arrived */
+td .status-100:before{content:"\e013"} /* done */
+
 @media screen and (min-width: 768px) {
 
     .panel.dashboard-sized {

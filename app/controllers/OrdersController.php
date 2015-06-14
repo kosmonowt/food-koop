@@ -9,7 +9,7 @@ class OrdersController extends \BaseController {
 	 * @return Response
 	 */
 	public function index()	{
-		return Order::with("member")->with("product")->with("merchant")->orderBy('updated_at', 'DESC')->take(50)->get()->toJson();
+		return Order::open()->with("member")->with("product")->with("merchant")->orderBy('updated_at', 'DESC')->take(50)->get()->toJson();
 	}
 
 	/**

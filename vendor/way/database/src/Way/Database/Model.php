@@ -58,16 +58,32 @@ class Model extends Eloquent {
      */
     public function validate()
     {
+
+        // Failover - we need to reset the rule when we mass assign unique rules.
+        // So we memorize the old rule and insert it again after validation.
+        $ruleReset = [];
+
         // if the key's value is greater than 0, then its an existing model
         // so we will replace the placeholder (:id) with the id value
         // otherwise we will just replace it with an empty string
         $replace = ($this->getKey() > 0) ? $this->getKey() : '';
+
         foreach (static::$rules as $key => $rule)
         {
-            static::$rules[$key] = str_replace(':id', $replace, $rule);
+            $oldRule = $rule;
+
+            $newRule = str_replace(':id', $replace, $rule);
+            static::$rules[$key] = $newRule;
+
+            if ($oldRule != $newRule) $ruleReset[$key] = $oldRule;
         }
-            
+
         $v = $this->validator->make($this->attributes, static::$rules, static::$messages);
+
+        foreach ($ruleReset as $key => $value) {
+            // Now reset the rule and insert :id into it, again.
+            static::$rules[$key] = $value;
+        }
 
         if ($v->passes())
         {

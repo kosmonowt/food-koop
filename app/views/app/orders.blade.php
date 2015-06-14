@@ -67,7 +67,7 @@
 						<tr>@if ($myself->isAdmin)
 							<th></th>
 							@endif
-							<th>Produkt<br /><small>Brutto EK pro Gebinde / Netto EK pro Einheit</small></th>
+							<th>Produkt<br /><small>Brutto EK pro Gebinde<br />Biokistenpreis pro Einheit</small></th>
 							<th>Menge</th>
 							<th>Bestellt zwischen / am</th>
 							@if ($myself->isAdmin)
@@ -82,8 +82,9 @@
 							@endif
 							<td>
 								<strong>@{{sku}}</strong> - @{{name}}<br>
-								<strong>@{{totalForBulk}}€</strong> inkl. @{{taxrate}}% MwSt. (Einzelpreis: @{{price}}€)<br>
 								<strong>@{{merchant.name}}</strong><br>
+								<strong>@{{totalForBulk}}€</strong> inkl. @{{taxrate}}% MwSt.<br>
+								<strong>@{{singleRetailPrice}}€</strong> inkl. MwSt. und Foodkoop Aufschlag
 							</td>
 							<td>
 								<strong>@{{totalAmount}}</strong> von (@{{units}} @{{unit_unit}})
@@ -116,10 +117,8 @@
 					<tbody>
 						<tr>
 							@if ($myself->isAdmin)<th></th>@endif
-							<th>Datum</th>
-							<th>Nummer</th>
-							<th>Bezeichnung</th>
-							<th>Anbieter</th>
+							<th>Status / Datum</th>
+							<th>SKU / Bezeichnung / Anbieter</th>
 							<th>Anzahl</th>
 							<th>Nettopreis</th>
 							<th>Mitglied</th>
@@ -128,27 +127,20 @@
 						@{{#each orders}}
 						<tr class="status-@{{order_state_id}}">
 							@if ($myself->isAdmin)<td><input type="checkbox" can-value="complete"></td>@endif
-							<td>@{{dmY data=created_at field="created_at"}}</td>
-							<td>@{{product.sku}}</td>
-							<td>@{{product.name}}</td>
-							<td>@{{merchant.name}}</td>
+							<td><span class="glyphicon status-@{{order_state_id}}"></span> @{{dmY data=created_at field="created_at"}}</td>
+							<td>@{{product.sku}}<br>@{{product.name}}<br><strong>@{{merchant.name}}</strong></td>
 							<td>@{{amount}} <small>(@{{product.units}})</small></td>
 							<td>@{{product.price}}</td>
 					        <td>@{{member.name}}</td>
 							<td>
-								<div class="statusIcon status-@{{order_state_id}}" onclick="$(this).children('.statusSetter').toggle();">
-									@if ($myself->isAdmin)
-									<div class='statusSetter' style="display:none;">
-										<div class='setStatus status-2' data-order_state_id='2' can-click="toggle">Wartend</div>
-										<div class='setStatus status-3' data-order_state_id='3' can-click="toggle">Zurückgestellt</div>
-										<div class='setStatus status-4' data-order_state_id='4' can-click="toggle">Auf Bestelliste</div>
-										<div class='setStatus status-5' data-order_state_id='5' can-click="toggle">Bestellt</div>
-									</div>
-									@endif
-								</div>
+								@if ($myself->isAdmin)
+								<button class="btn btn-xs btn-default" data-order_state_id='2' can-click="toggle" title="Bestellung in Wartezustand setzen."><span class="glyphicon status-2"></span></button>
+								<button class="btn btn-xs btn-warning" data-order_state_id='3' can-click="toggle" title="Bestellung zurückstellen"><span class="glyphicon status-3"></span></button>
+								<button class="btn btn-xs btn-success" data-order_state_id='4' can-click="toggle" title="Bestellung in Bestelliste"><span class="glyphicon status-4"></span></button>
+								@endif
 							</td>
 							@if ($myself->isAdmin)
-						    <td><button class="btn btn-danger" can-click="delete"><span class="glyphicon glyphicon-remove"></span></button></td>
+						    <td><button class="btn btn-xs btn-danger" can-click="delete"><span class="glyphicon glyphicon-remove"></span></button></td>
 							@endif
 					    </tr>
 					    @{{/each}}

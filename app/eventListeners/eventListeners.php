@@ -47,7 +47,7 @@ User::creating(function($user){
 	$template = Config::get("emails_willkommen_template","emails.willkommen");
 
 	Mail::queue($template, array("user"=>$user,"password"=>$password,"userName"=>$user->username), function($message) use ($firstname,$lastname,$email) {
-    	$message->to($email, $firstname." ".$lastname)->subject('BIOKISTE: Dein neuer Zugang'.$firstname);
+    	$message->to($email, $firstname." ".$lastname)->subject('BIOKISTE: Dein neuer Zugang, '.$firstname);
 	});
 
 	return $user;

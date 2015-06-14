@@ -11,6 +11,7 @@
 				<tbody>
 					<tr>
 						<th></th>
+						<th>Mitgliedsnummer</th>
 						<th>Mitglieds- / Gruppenname</th>
 						<th>Adresse &amp; Kontakt</th>
 						<th>Dienstgruppe</th>
@@ -23,6 +24,16 @@
 					@{{#each members}}
 					<tr class="">
 						<td><input type="checkbox" can-value="complete"></td>
+						<td>
+							<div class="memberUID">
+								<span can-click="editAttr"><strong>@{{groupUID}}</strong></span>
+							</div>
+							<div class="memberUIDForm" style="display:none;">
+								<input type="text" class="form-control editValue" name="groupUID" value="@{{groupUID}}">
+								<button class='btn btn-success btn-xs' can-click='editSubmit'><span class="glyphicon glyphicon-ok"></span></button>
+								<button class='btn btn-warning btn-xs' can-click='editAttr'><span class="glyphicon glyphicon-remove"></span></button>
+							</div>
+						</td>
 						<td>
 							<div class="memberName">
 								<span can-click="editAttr">@{{name}}</span>
