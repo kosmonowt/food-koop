@@ -22,12 +22,12 @@
 								<label for="newOrderFormOrderComment" class="col-sm-2 control-label">Passwort</label>
 								<div class="col-sm-3">
 									<input type="password" class="form-control" id="password" name="password">
-								</div>						
+								</div>
 								<div class="col-sm-2">
 									<button class="btn btn-success" type="submit" id="newOrderFormButtonSubmit">Anmelden</button>
 								</div>
-							</div>					
-						</div>							
+							</div>
+						</div>
 					</div>
 				</form>
 			</div>

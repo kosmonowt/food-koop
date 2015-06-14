@@ -5,7 +5,7 @@ class Order extends AppModel {
 
     use HasFilters;
 
-    protected $fillable = ["amount","member_id","merchant_id","state","product_id","comment"];
+    protected $fillable = ["amount","member_id","merchant_id","state","product_id","comment","submitted_at"];
     
     protected static $rules = [
         'amount'  => 'required|integer|min:1',

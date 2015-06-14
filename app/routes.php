@@ -52,7 +52,8 @@ Route::group(array('before' => 'auth'), function() {
 	Route::post("orders/bulk/{product_id}/{order_state_id}",'OrdersController@updateBulk');
 	Route::post("orders/bulk/{order_state_id}","OrdersController@updateBulk");
 	Route::get('users/byMember/{id}', function($id){ return User::where("member_id",$id)->get()->toJson(); });
-	Route::get("orders/export/","OrdersController@exportForCommissioner");
+	Route::get("orders/export/commissioner","OrdersController@exportForCommissioner");
+	Route::get("orders/export/merchant","OrdersController@exportForOrderGroup");
 
 	// Special Dashboard Routes
 	Route::get("memberLedger/starteinlage", function(){ return MemberLedger::starteinlage()->own()->first()->toJson(); });

@@ -481,6 +481,32 @@ can.mustache.registerHelper("toFixed",function(data){
   return parseFloat().toFixed(2);
 });
 
+can.mustache.registerHelper("labelClassByPercentage",function(data){
+
+  var r, quote;
+  quote = parseFloat(this.totalAmount) / parseFloat(this.units);
+  if (quote >= 0.8) {
+    r = "success";
+  } else if (quote >= (2/3)) {
+    r = "info";
+  } else if (quote >= (1/3)) {
+    r = "warning";
+  } else {
+    r = "danger";
+  }
+
+  return r;
+});
+
+can.mustache.registerHelper("ledgerBalanceNegative",function(data){
+  return (null !== this.ledger_balance && parseFloat(this.ledger_balance.ledgerBalance) < 0) ? "ledgerBalanceNegative" : "";
+});
+
+can.mustache.registerHelper("ledgerBalanceWidget",function(data){
+  var balance = (null === this.ledger_balance) ? 0 : parseFloat(this.ledger_balance.ledgerBalance).toFixed(2);
+  var balanceString = balance.toString().replace(".",",");
+  return balanceString;
+});
 
 can.mustache.registerHelper("optList",function(data){
   console.log(data);

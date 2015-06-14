@@ -2,7 +2,7 @@
 
 @section("latestNews")
 		<div class="col-sm-12">
-			<div class="panel panel-default">
+			<div class="panel panel-default" id="latestNews">
 				<div class="panel-heading">
 					<strong>Aktuelles</strong>
 				</div>
@@ -70,15 +70,15 @@
 					<strong>Marktplatz</strong>
 				</div>
 				<div class="scrollable">
-					<table class="table table-striped table-condensed">
+					<table class="table table-striped table-condensed" id="marketplaceTable">
 						<tbody>
-							<th>Verfügbar</th>
-							<th>Produkt</th>
-							<th colspan="2">Preis <small>(inkl. MwST)</small></th>
+							<th><small>Offen</small></th>
+							<th><small>Produkt</small></th>
+							<th colspan="2"><small>Preis (inkl. MwST)</small></th>
 						@{{#each marketplace}}
 						<tr>
 							<td>
-								@{{availableAmount}} / @{{units}}
+								<strong>@{{availableAmount}}</strong>/<small>@{{units}}</small>
 							</td>
 							<td>
 								@{{name}} (@{{weight_per_unit}}@{{tare_unit}})

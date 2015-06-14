@@ -75,12 +75,16 @@ class OrdersController extends \BaseController {
 			$order = Order::where("product_id","=",$product_id);
 		}
 		
+		$update = array("order_state_id" => $order_state_id);
+
 		if ($order_state_id == 4) {
 			// Apply only for orders waiting.
 			$order->where("order_state_id","<",4);
 		} elseif ($order_state_id == 5) {
 			// Apply only for orders pending
 			$order->where("order_state_id","=",4);
+			// Now the order will be submitted. we set a flag that all products of this order will be connected.
+			$update["submitted_at"] = date("Y-m-d H:i:s");
 		} elseif ($order_state_id == 3) {
 			// Apply only for orders pending or ordered (not for completed ones)
 			$order->where("order_state_id","<=",5);
@@ -93,7 +97,7 @@ class OrdersController extends \BaseController {
 		if (!is_null(Input::get("earliestOrder"))) $order->where("created_at",">=",Input::get("earliestOrder"));
 		Event::fire("orders.setState",array($order->get(),$order_state_id));
 
-		$order->update(array("order_state_id" => $order_state_id));
+		$order->update($update);
 
 		return $order->get()->toJson();
 	}
@@ -104,7 +108,10 @@ class OrdersController extends \BaseController {
 	public function orderBulk() {
 		$orderStateId = 5;
 		Event::fire("orders.setState",array(Order::where("order_state_id","=",4)->get(),$orderStateId));
-		$order = Order::where("order_state_id","=",4)->update(array("order_state_id" => $orderStateId));
+
+		$update = ["order_state_id"=>5,"submitted_at"=>date("Y-m-d H:i:s")];
+
+		$order = Order::where("order_state_id","=",4)->update($update);
 		return "{\"result\":\"$order\"}";
 	}
 
@@ -221,7 +228,11 @@ class OrdersController extends \BaseController {
 			
 			foreach ($merchants as $merchant) {
 			
-				$orders = $merchant->orders()->byProductVerbose()->where("orders.order_state_id","=",4)->get();
+				// Export the last order
+				$lastOrderSubmission = Order::orderBy("submitted_at","DESC")->pluck("submitted_at");
+
+				$orders = $merchant->orders()->byProductVerbose()->where("orders.order_state_id","=",5)->where("orders.submitted_at","=",$lastOrderSubmission)->get();
+				
 				if (count($orders)) {
  
  					$excel->sheet('Bestellung bei '.$merchant->name, function($sheet) use ($orders,$merchant) {
@@ -251,7 +262,7 @@ class OrdersController extends \BaseController {
 			
 			foreach ($merchants as $merchant) {
 			
-				$orders = $merchant->orders()->with("member")->with("product")->where("orders.order_state_id","=",4)->orderBy("product_id","ASC")->get();
+				$orders = $merchant->orders()->with("member")->with("product")->where("orders.order_state_id","=",5)->orderBy("product_id","ASC")->get();
 				if (count($orders)) {
  
  					$excel->sheet('Bestellung bei '.$merchant->name, function($sheet) use ($orders,$merchant) {

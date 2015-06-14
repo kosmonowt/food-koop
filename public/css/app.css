@@ -16,7 +16,7 @@
 /* Bootstrap Overrides */
 .panel-default {  border-color: #941A25;}
 .panel,
-.tab-content,
+/*.tab-content,*/
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover
 .list-group-item { background-color: #F3E8CF;}
 .panel-default>.panel-heading { background-color: #B69141;}
@@ -26,13 +26,27 @@
 .h1, .h2, .h3, h1, h2, h3 { margin-left: 30px;}
 
 .container {
-  background-color: #F1DFC9;
-  border-radius: 5px;
-  border: 1px solid #666;
-  box-sizing: border-box;
+  background-color: #FFFFFF;
+  padding-top: 15px;
+  box-shadow: 0 0 12px 2px #000;
 }
 
-div.statusIcon		{ position: relative;}
+.navbar {
+    margin-bottom: 0;
+}
+
+div#flashContainer {
+    padding-top: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+div#latestNews .panel-body {
+    max-height: 300px;
+    overflow: auto;
+}
+
+div.statusIcon      { position: relative;}
 div.status-1:before { color: orange;}
 div.status-2:before { color: blue;}
 div.status-3:before { color: red;}
@@ -51,7 +65,14 @@ div.status-5:before { color: #00A094;}
 .statusSetter .setStatus { line-height: 22px;}
 .statusSetter .setStatus:hover { background: #dadada;}
 
-span.userName:not(:last-child):after { content: "/";}
+.memberBalance button {
+    float: right;
+}
+
+.ledgerBalanceNegative {
+  color: #F00;
+  font-weight: bold;
+}
 
 div.autocompleteListWrapper {
     position: absolute;
@@ -61,8 +82,8 @@ div.autocompleteListWrapper {
     border-radius: 2px;
     z-index: 10;
     padding: 0px;
-	height: 360px;
-	overflow: auto;    
+    height: 360px;
+    overflow: auto;    
 }
 
 ul.autocompleteListWrapper {
@@ -81,6 +102,7 @@ line-height: 20px;
 padding: 10px;
 }
 
+#flashContainer .alert { box-shadow: 0 0 2px 2px #000;}
 
 /** Statusfarben **/
 tr.demand-max {}
@@ -130,6 +152,14 @@ td .status-4:before{content:"\e116"} /* on list */
 td .status-5:before{content:"\e178"} /* ordered */
 td .status-6:before{content:"\e102"} /* arrived */
 td .status-100:before{content:"\e013"} /* done */
+
+#marketplaceTable input[name="amount"] {
+  min-width: 70px;
+}
+
+.btn-toolbar {
+  margin-bottom: 15px;
+}
 
 @media screen and (min-width: 768px) {
 

@@ -53,8 +53,11 @@
 					  </ul>
 					</div>
 					@{{#if ordersByProductShowResume.show}}
-					<button type="button" class="btn btn-success btn-sm" can-click="getTable">Tabelle herunterladen&nbsp;<span class="glyphicon glyphicon-save"></span></button>
+					<button type="button" class="btn btn-success btn-sm" can-click="printLastOrder">Letztes Bestellformular&nbsp;<span class="glyphicon glyphicon-save"></span></button>
 					<button type="button" class="btn btn-success btn-sm" can-click="orderNow">Bestellung jetzt Auslösen&nbsp;<span class="glyphicon glyphicon-share-alt"></span></button>
+				    @{{/if}}
+				    @{{#if ordersByProductShowCommissionerButton.show}}
+				    <button type="button" class="btn btn-success btn-sm" can-click="printCommissionerTable">Liste für Auspackdienst&nbsp;<span class="glyphicon glyphicon-save"></span></button>
 				    @{{/if}}
 				</div>
 			</div>
@@ -68,7 +71,7 @@
 							<th></th>
 							@endif
 							<th>Produkt<br /><small>Brutto EK pro Gebinde<br />Biokistenpreis pro Einheit</small></th>
-							<th>Menge</th>
+							<th>Menge<br /><small>Gebinde</small><br /><small>Bestellungen</small></th>
 							<th>Bestellt zwischen / am</th>
 							@if ($myself->isAdmin)
 							<th>Einheiten Bestellen</th>
@@ -83,12 +86,12 @@
 							<td>
 								<strong>@{{sku}}</strong> - @{{name}}<br>
 								<strong>@{{merchant.name}}</strong><br>
-								<strong>@{{totalForBulk}}€</strong> inkl. @{{taxrate}}% MwSt.<br>
-								<strong>@{{singleRetailPrice}}€</strong> inkl. MwSt. und Foodkoop Aufschlag
+								<strong>@{{totalForBulk}}€</strong> <small>inkl. @{{taxrate}}% MwSt.</small><br>
+								<strong>@{{singleRetailPrice}}€</strong> <small>inkl. MwSt. und Foodkoop Aufschlag</small>
 							</td>
 							<td>
-								<strong>@{{totalAmount}}</strong> von (@{{units}} @{{unit_unit}})
-								<br>in @{{countOrders}} Bestellungen
+								<span class="label label-@{{labelClassByPercentage}}">@{{totalAmount}} von @{{units}} @{{unit_unit}}</span>
+								<br><span class="label label-default">@{{countOrders}} Bestellung(en)</span></small>
 							</td>
 							<td>@{{oneOrTwoDates data=earliestOrder field1="earliestOrder" field2="latestOrder"}}</td>
 							@if ($myself->isAdmin)
@@ -183,7 +186,7 @@
 		      <div class="autocompleteListWrapper" id="newOrderFormProductListWrapper" style="display:none;">
 		      	<ul class="autocompleteListWrapper">
 		      	@{{#each newOrderFormProductList}}
-		      		<li class="autocompleteListElement" data-sku="@{{sku}}">@{{name}}</li>
+		      		<li class="autocompleteListElement" data-sku="@{{sku}}" can-click="newOrderFormAutocompleteClick">@{{name}}</li>
 		      	@{{/each}}
 		      	</ul>
 		      </div>
@@ -228,8 +231,7 @@
 				<h3>@{{currentProductForm.caption}}</h3>
 			</div>
 			<div class="col-ms-6">
-
-			</div>							
+			</div>
 		</div>
 		<div class="form-group">
 			<input type="hidden" name="id" value="@{{newProduct.id}}">

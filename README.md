@@ -39,6 +39,18 @@ It is thought to use
 * Order - bulk order view reformated. Now calculating FINAL PRICE in view.
 * Order - XLS Download hooked to form.
 
+### 2015-06-11
+* Added Column TransactionTypeId to member ledger
+* Added Table TransactionTypes to app
+* Improved Search on New Order Form
+* Added Fields for BNN3 Format (preparation for import)
+* Table for Order will be downloaded on click.
+* Table for Order can be downloaded again on demand.
+* Table for Commissioners will be downloaded on demand.
+* Some Layout enhancements.
+* Negative Ledger Balance now shows up in red.
+* Cleaned up ORDER and MEMBER view
+
 ### 2015-06-10
 * Changed Email Start from "Lieber" to "Hallo"
 * Email template for welcome mail is now set by config (to distinguish migration message from NEW memeber message)

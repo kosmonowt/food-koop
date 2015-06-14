@@ -18,7 +18,7 @@
 		<th>Einzelpreis</th>
 		<th>wenn abweichend</th>
 		<th>MwSt.</th>
-		<th>Preis inkl. MwSt.</th>
+		<th>Preis inkl. MwSt. und Zuschlag</th>
 		<th>wenn abweichend</th>
 	</tr>
 	@foreach($orders as $order)
@@ -32,7 +32,7 @@
 		<td>{{str_replace(".",",",$order->product->price)}}</td>
 		<td></td>
 		<td>{{$order->product->taxrate}}%</td>
-		<td>{{(1 + $order->product->taxrate) * $order->product->price}}</td>
+		<td><strong>{{$order->product->singleRetailPrice}}</strong></td>
 		<td></td>
 	</tr>
 	@endforeach

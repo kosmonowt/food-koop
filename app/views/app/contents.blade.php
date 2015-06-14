@@ -177,20 +177,17 @@
 @stop
 
 @section("content")
-		<div class="container" id="flashContainer">
-		</div>		
-		<div class="container">
-			<contents-app>
-				@yield("appHeader")
-				<ul class="nav nav-tabs" id="tabNav">
-				  <li role="presentation" class="active">
-				  	<a href="#public" aria-controls="blogControl" id="tabPublicControl">Inhalte</a></li>
-				  <li role="presentation" id="controlProductCreate">
-				  	<a href="#new" aria-controls="contentCreate" id="tabNewControl">Neuer Inhalt</a></li>
-				</ul>
-				<div class="tab-content">
-					@yield("index")
-					@yield("new")
-				</div>
-			</contents-app>
+<contents-app>
+	@yield("appHeader")
+	<ul class="nav nav-tabs" id="tabNav">
+	  <li role="presentation" class="active">
+	  	<a href="#public" aria-controls="blogControl" id="tabPublicControl">Inhalte</a></li>
+	  <li role="presentation" id="controlProductCreate">
+	  	<a href="#new" aria-controls="contentCreate" id="tabNewControl">Neuer Inhalt</a></li>
+	</ul>
+	<div class="tab-content">
+		@yield("index")
+		@yield("new")
+	</div>
+</contents-app>
 @stop

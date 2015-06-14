@@ -1,58 +1,4 @@
 /*======================================================================*/
-/*==================== MUSTACHE TEMPLATE SECTION =======================*/
-/*======================================================================*/
-
-var productInformationTemplate = can.mustache('{{#product}}'+
-'<input type="hidden" class="productName" name="product_id" value="{{id}}" data-productid="{{id}}">'+
-'<div class="form-group form-group-sm">'+
-' <label class="col-sm-2">Name:</label>'+
-' <div class="col-sm-4">'+
-'   <div class="input-group">'+
-'     <input type="text" class="form-control" name="product.name" value="{{name}}" readonly>'+
-'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.name"></span></span>'+
-'   </div>'+
-' </div>'+
-' <label class="col-sm-2">Nettopreis:</label>'+
-' <div class="col-sm-4">'+
-'   <div class="input-group">'+
-'     <input type="number" class="form-control" id="newOrderFormProductPrice" name="product.price" value="{{price}}" min="0.01" range="0.01" readonly>'+
-'     <span class="input-group-addon productTaxrate" id="newOrderFormProductTaxrate" data-taxrate="{{taxrate}}">€ + {{taxrate}}% </span>'+
-'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit" title="Bearbeiten" can-click="enableInput" data-enable="product.price,product.product_type_id"></span></span>'+
-'   </div>'+
-' </div>'+
-'</div>'+
-'<div class="form-group form-group-sm">'+
-' <label class="col-sm-2">Gebinde:</label>'+
-' <div class="col-sm-2"><div class="input-group">'+
-'  <input type="text" class="form-control" name="product.units" value="{{units}}" readonly>'+
-'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.units,product.unit_unit"></span></span>'+
-' </div></div>'+
-'<div class="col-sm-2">'+
-'  <select class="form-control" name="product.unit_unit" readonly><option value="{{unit_unit}}">{{unit_unit}}</select>'+
-' </div>'+
-' <label class="col-sm-2">Gewicht:</label>'+
-' <div class="col-sm-2"><div class="input-group"><input type="text" class="form-control" name="product.weight_per_unit" value="{{weight_per_unit}}" readonly>'+
-'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.weight_per_unit,product.tare_unit"></span></span>'+
-'</div></div>'+
-'<div class="col-sm-2">'+
-'  <select class="form-control" name="product.tare_unit" readonly><option value="{{tare_unit}}">{{tare_unit}}</select>'+
-'</div>'+
-'</div>'+
-'<div class="form-group form-group-sm">'+
-' <label class="col-sm-2">Produktart:</label>'+
-'<div class="col-sm-4">'+
-'  <select class="form-control" name="product.product_type_id" readonly><option value="{{product_type_id}}">{{product_type.name}}</select>'+
-'</div>'+
-' <label class="col-sm-2">Anmerkungen:</label>'+
-' <div class="col-sm-4"><div class="input-group">'+
-'  <input type="text" class="form-control" name="product.comment" value="{{comment}}" readonly>'+
-'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.comment"></span></span>'+
-' </div></div>'+
-'{{#if blocked}}<div class="row"><div class="col-sm-12"><span class="text-danger text-center">Dieses Produkt ist derzeit blockiert. Bitte wende Dich an die Bestellgruppe um mehr zu erfahren.</span></div></div>{{/if}}'+
-'</div>'+
-  '{{/product}}');
-
-/*======================================================================*/
 /*================== COMPONENT CONTROLLER SECTION ======================*/
 /*======================================================================*/
 
@@ -67,14 +13,16 @@ can.Component.extend({
     ordersByProductUnfiltered: new can.List(), // Second list for caching values
     ordersByProductScope: null, // Scope for Orders By Product View
     ordersByProductShowResume: new can.Map({"show":false}), // Indicates if onList Orders are now shown and if to show "Order Now" Button
+    ordersByProductShowCommissionerButton: new can.Map({"show":false}), // Indicates if button for commissioner form should be shown.
     orderStateSettersActive: new can.List({}), // In Orders By Product View, list that indicates the actions that could be taken (states to set) with the orders
     newProduct: new can.Map({}), // Product to be edited/created
     newOrderFormProductList: new can.List(),
+    newOrderFormProductListCache: new can.List(),
     createProductForm: new can.Map({"titleCaption":"Neues Produkt Hinzufügen","showOrderAndSave":true,"buttonCaption":"Produkt Erstellen","buttonName":"create"}),
     updateProductForm: new can.Map({"titleCaption":"Produkt Bearbeiten","showOrderAndSave":false,"buttonCaption":"Änderungen Speichern","buttonName":"update"}),
     currentProductForm: new can.Map({}),
     orderResume: new can.Map({}),
-    productSearchTerm: "",
+    productSearchTerm: "", // That's on product search the current search term
     product: null,
     products: new Product.List({}), // All Products existing
     allProducts: new can.List(),  // Cached view for products
@@ -111,12 +59,15 @@ can.Component.extend({
     },
     orderNow: function(scope,el,ev) {
       var list = this.ordersByProduct;
+      var orderApp = this;
       can.$.ajax({
         url: sUrl+"orders/bulk/applyOrder",
         type: "GET",
         dataType: "json"
       }).done(function(){
-        handleRestCreate("Bestellung","Bestellung erfolgreich abgeschickt.");
+        // Download Table
+        handleRestCreate("Bestellung","Bestellung erfolgreich abgeschickt. Tabelle wird herungtergeladen.");
+        orderApp.printLastOrderTable();
         list.replace(new can.List({}));
       }).fail(handleRestError);
     },
@@ -159,11 +110,8 @@ can.Component.extend({
       this.setSettableOrderStates(queryScope);
       if (!this.ordersByProduct.length || (this.ordersByProductScope != queryScope) ) {
         this.ordersByProductScope = queryScope;
-        if (queryScope == "listed") {
-          this.ordersByProductShowResume.attr("show",true);
-        } else {
-          this.ordersByProductShowResume.attr("show",false);
-        }
+        this.ordersByProductShowResume.attr("show", ((queryScope == "listed") ? true : false) );
+        this.ordersByProductShowCommissionerButton.attr("show", ((queryScope == "pending") ? true : false) );
         var list = this.ordersByProduct;
         OrderSearch.findByProduct([queryScope]).then(function(newList,xhr){
           newList = JSON.parse(newList);
@@ -202,47 +150,68 @@ can.Component.extend({
         list.replace(unfiltered);
       }
     },
+    /** Action called when user clicks on a product that he wants to order **/
+    newOrderFormAutocompleteClick: function(scope,el,ev) {
+      $("#newOrderFormProductListWrapper").hide();
+      $("#newOrderFormProductNumber").val(scope.attr("sku"));
+      $(".2nd-step").removeClass('hidden');
+      $("#productFormFields").html(productInformationTemplate({product:scope}));
+      $("#newOrderFormDetails input").val("");      
+    },
     /** Action called on product search (in add Order Tab) is clicked **/
     findProduct: function(p,el,ev) {
       var acLength = appConfig.product.search.term.autocompleteLength;
       var merchantId = $('#newOrderFormMerchantId').val();
       var val = el.val();
-      var list = this.newOrderFormProductList;
+      var list = this.newOrderFormProductList; // product list
+      var listCached = this.newOrderFormProductListCache; // cached list
       var product = this.product;
+
+      // Don't show nothing when less than 3 chars are entered.
       if (val.length < acLength) {
+        
+        if (val == "") this.productSearchTerm = "";
+
         $("#newOrderFormProductListWrapper").hide();
+
         return;
       }
-
+      
+      // Otherwise:
+      // Search term not yet defined or first three chars of search term don't match
       if ( (this.productSearchTerm == "") || (this.productSearchTerm.substr(0,acLength) != val.substr(0,acLength) ) ) {
-        
-        /** @todo Filter für mehr als drei buchstaben. **/
 
         this.productSearchTerm = val;
         
         ProductSearch.findAll({merchantId:merchantId,term:val}).then(function(newList,xhr){ 
-          newList = JSON.parse(newList);
-          if (!newList.length ) {
+          listCached.replace(JSON.parse(newList));
+          if (!listCached.length ) {
+            
             $("#newOrderFormProductListWrapper").hide();
+          
           } else {
+
             $("#newOrderFormProductListWrapper").show();
-            list.replace(newList);
-            $(".autocompleteListElement").click(function(ev){
-              var sku = $(this).data("sku");
-              $("#newOrderFormProductListWrapper").hide();
-              $("#newOrderFormProductNumber").val(sku);
-              $(".2nd-step").removeClass('hidden');
-              e = list.filter(function(item,index,list){
-                return item.sku == sku;
-              });
-              $("#productFormFields").html(productInformationTemplate({product:e}));
-              $("#newOrderFormDetails input").val("");
-            });
+            list.replace(listCached);
+
           }
+
         },handleRestError);
+
       } else {
+        // ab mehr als [acList] Buchstaben filtere hier.
+        this.productSearchTerm = val;
+        var searchTermLength = val.length;
+
+        list.replace(
+          listCached.filter(function(item,index,list) {
+            return ((item.sku.substr(0,searchTermLength) == val) || (item.name.substr(0,searchTermLength) == val));
+          })
+        );
+
         $("#newOrderFormProductListWrapper").show();
       }
+      console.log(listCached);
     },
     /** Removes a Product from the database **/
     deleteProduct: function(product) {
@@ -445,12 +414,71 @@ can.Component.extend({
         this.performReloadList();
       }
     },
-    getTable: function(scope, el, ev) {
-      var url = sUrl+"app/orders/export/";
+    printCommissionerTable: function(scope, el, ev) {
+      var url = sUrl+"orders/export/commissioner";
+      jQuery('<form action="'+ url +'" method="'+ ('get') +'"></form>').appendTo('body').submit().remove();
+    },
+    printLastOrderTable: function(scope, el, ev) {
+      var url = sUrl+"orders/export/merchant";
       jQuery('<form action="'+ url +'" method="'+ ('get') +'"></form>').appendTo('body').submit().remove();
     }
+
   }
 });
 
 var template = can.view("appMustache");
 $("body").html(template);
+
+/*======================================================================*/
+/*==================== MUSTACHE TEMPLATE SECTION =======================*/
+/*======================================================================*/
+
+var productInformationTemplate = can.mustache('{{#product}}'+
+'<input type="hidden" class="productName" name="product_id" value="{{id}}" data-productid="{{id}}">'+
+'<div class="form-group form-group-sm">'+
+' <label class="col-sm-2">Name:</label>'+
+' <div class="col-sm-4">'+
+'   <div class="input-group">'+
+'     <input type="text" class="form-control" name="product.name" value="{{name}}" readonly>'+
+'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.name"></span></span>'+
+'   </div>'+
+' </div>'+
+' <label class="col-sm-2">Nettopreis:</label>'+
+' <div class="col-sm-4">'+
+'   <div class="input-group">'+
+'     <input type="number" class="form-control" id="newOrderFormProductPrice" name="product.price" value="{{price}}" min="0.01" range="0.01" readonly>'+
+'     <span class="input-group-addon productTaxrate" id="newOrderFormProductTaxrate" data-taxrate="{{taxrate}}">€ + {{taxrate}}% </span>'+
+'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit" title="Bearbeiten" can-click="enableInput" data-enable="product.price,product.product_type_id"></span></span>'+
+'   </div>'+
+' </div>'+
+'</div>'+
+'<div class="form-group form-group-sm">'+
+' <label class="col-sm-2">Gebinde:</label>'+
+' <div class="col-sm-2"><div class="input-group">'+
+'  <input type="text" class="form-control" name="product.units" value="{{units}}" readonly>'+
+'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.units,product.unit_unit"></span></span>'+
+' </div></div>'+
+'<div class="col-sm-2">'+
+'  <select class="form-control" name="product.unit_unit" readonly><option value="{{unit_unit}}">{{unit_unit}}</select>'+
+' </div>'+
+' <label class="col-sm-2">Gewicht:</label>'+
+' <div class="col-sm-2"><div class="input-group"><input type="text" class="form-control" name="product.weight_per_unit" value="{{weight_per_unit}}" readonly>'+
+'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.weight_per_unit,product.tare_unit"></span></span>'+
+'</div></div>'+
+'<div class="col-sm-2">'+
+'  <select class="form-control" name="product.tare_unit" readonly><option value="{{tare_unit}}">{{tare_unit}}</select>'+
+'</div>'+
+'</div>'+
+'<div class="form-group form-group-sm">'+
+' <label class="col-sm-2">Produktart:</label>'+
+'<div class="col-sm-4">'+
+'  <select class="form-control" name="product.product_type_id" readonly><option value="{{product_type_id}}">{{product_type.name}}</select>'+
+'</div>'+
+' <label class="col-sm-2">Anmerkungen:</label>'+
+' <div class="col-sm-4"><div class="input-group">'+
+'  <input type="text" class="form-control" name="product.comment" value="{{comment}}" readonly>'+
+'     <span class="input-group-addon"><span class="glyphicon glyphicon-edit makeEditableButton" title="Bearbeiten" can-click="enableInput" data-enable="product.comment"></span></span>'+
+' </div></div>'+
+'{{#if blocked}}<div class="row"><div class="col-sm-12"><span class="text-danger text-center">Dieses Produkt ist derzeit blockiert. Bitte wende Dich an die Bestellgruppe um mehr zu erfahren.</span></div></div>{{/if}}'+
+'</div>'+
+  '{{/product}}');

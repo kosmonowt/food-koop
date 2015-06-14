@@ -11,8 +11,8 @@
 				<tbody>
 					<tr>
 						<th></th>
-						<th>Mitgliedsnummer</th>
-						<th>Mitglieds- / Gruppenname</th>
+						<th>MtglNr.</th>
+						<th>Namen<br /><small>Mitglieder</small></th>
 						<th>Adresse &amp; Kontakt</th>
 						<th>Dienstgruppe</th>
 						<th>Mitglied Seit</th>
@@ -36,6 +36,7 @@
 						</td>
 						<td>
 							<div class="memberName">
+				        		<button class="btn btn-info btn-xs btn-userdetail" title="User anzeigen" can-click="filterUsersByMember" onclick="$('a[href=\'#group\']').tab('show');"><span class="glyphicon glyphicon-zoom-in"></span></button>							    
 								<span can-click="editAttr">@{{name}}</span>
 						    	<span class="badge">@{{user.length}}</span>
 					    	</div>
@@ -45,19 +46,14 @@
 								<button class='btn btn-warning btn-xs' can-click='editAttr'><span class="glyphicon glyphicon-remove"></span></button>
 							</div>
 						    <div class="memberUsers" can-click="filterUsersByMember">
-						    	<small>
 							    @{{#user}}
-							    	<span class="userName" data-id="@{{id}}">
-							    	@{{firstname}} @{{lastname}}
-							    	</span>
+							    	<span class="userName label label-primary" data-id="@{{id}}">@{{firstname}} @{{lastname}}</span>
 							    @{{/each}}
 							    @if($myself->isAdmin)
 							    @{{^user}}
-							    	<span class="userName">User Hinzufügen.</span>
+							    	<span class="userName btn btn-success btn-xs">User Hinzufügen.</span>
 							    @{{/user}}
-							    </small>
 				        		@endif
-				        		<button class="btn btn-info btn-xs" title="User anzeigen" can-click="filterUsersByMember" onclick="$('a[href=\'#group\']').tab('show');"><span class="glyphicon glyphicon-zoom-in"></span></button>							    
 						    </div>
 						</td>
 						<td>
@@ -142,12 +138,12 @@
 				        @if($myself->isAdmin)
 				        <td>
 				        	<div class="memberBalance">
-				        		<span>@{{ledger_balance.ledgerBalance}}&euro;</span><br>
+				        		<span class="ledgerBalance @{{ledgerBalanceNegative}}">@{{ledgerBalanceWidget}}&euro;</span>
 				        		<button class="btn btn-info btn-xs" title="Kontoübersicht" can-click="openLedger"><span class="glyphicon glyphicon-piggy-bank"></span></button>
 				        	</div>
 				        </td>
 					    <td>
-					    	<br><button class="btn btn-danger btn-xs" can-click="delete"><span class="glyphicon glyphicon-remove" title="Löschen"></span></button>
+					    	<button class="btn btn-danger btn-xs" can-click="delete"><span class="glyphicon glyphicon-remove" title="Löschen"></span></button>
 					    </td>
 				        @endif
 				    </tr>
