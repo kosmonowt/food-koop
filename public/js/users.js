@@ -29,6 +29,7 @@ can.Component.extend({
       var member = new Member(data);
       member.save(
         function(member){
+          member.attr("ledger_balance",null);
           scope.members.push(member);
           handleRestCreate("Erfolg","Mitglied wurde erfolgreich angelegt");
           el.find("input").each(function(i,x){$(this).val("");});

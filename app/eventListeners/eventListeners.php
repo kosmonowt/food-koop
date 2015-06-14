@@ -28,6 +28,7 @@ Member::created(function($member){
 	$ML->date = $member->date_of_entry;
 	$ML->member_id = $member->id;
 	$ML->balance = Input::get("initialLedger");
+	$ML->transaction_type_id = TransactionType::where("shortname","LIKE","D")->pluck("id");
 	$ML->vwz = "Starteinlage";
 	$ML->save();
 });

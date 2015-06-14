@@ -36,7 +36,7 @@
 						</td>
 						<td>
 							<div class="memberName">
-				        		<button class="btn btn-info btn-xs btn-userdetail" title="User anzeigen" can-click="filterUsersByMember" onclick="$('a[href=\'#group\']').tab('show');"><span class="glyphicon glyphicon-zoom-in"></span></button>							    
+				        		<button class="btn btn-info btn-xs btn-userdetail" title="User anzeigen" can-click="filterUsersByMember" onclick="$('a[href=\'#group\']').tab('show');"><span class="glyphicon glyphicon-zoom-in"></span></button>
 								<span can-click="editAttr">@{{name}}</span>
 						    	<span class="badge">@{{user.length}}</span>
 					    	</div>
@@ -51,7 +51,7 @@
 							    @{{/each}}
 							    @if($myself->isAdmin)
 							    @{{^user}}
-							    	<span class="userName btn btn-success btn-xs">User Hinzufügen.</span>
+							    	<span class="userName btn btn-success btn-xs" can-click="filteRUsersByMember" onclick="$('a[href=\'#group\']').tab('show');">User Hinzufügen.</span>
 							    @{{/user}}
 				        		@endif
 						    </div>
@@ -221,6 +221,12 @@
 		    <div class="col-sm-4">
 				<input type="date" name="date_of_entry" class="form-control" id="newMemberFormDateOfEntry" value="" required>
 		    </div>								    
+	    </div>
+	    <div class="form-group">
+	    	<label for="newMemberFormGroupUID" class="col-sm-2 control-label">Mitgliedsnummer</label>
+	    	<div class="col-sm-4">
+	    		<input type="text" name="groupUID" class="form-control" id="newMemberFormGroupUID" value="" required>
+	    	</div>
 	    </div>
 	    <div class="form-group">
 		    <label for="newMemberFormStreet" class="col-sm-2 control-label">Straße</label>

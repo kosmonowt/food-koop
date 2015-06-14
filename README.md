@@ -38,10 +38,6 @@ It is thought to use
 * Order - single order view reformed. Now using bootstrap icons and button classes.
 * Order - bulk order view reformated. Now calculating FINAL PRICE in view.
 * Order - XLS Download hooked to form.
-
-### 2015-06-11
-* Added Column TransactionTypeId to member ledger
-* Added Table TransactionTypes to app
 * Improved Search on New Order Form
 * Added Fields for BNN3 Format (preparation for import)
 * Table for Order will be downloaded on click.
@@ -50,6 +46,11 @@ It is thought to use
 * Some Layout enhancements.
 * Negative Ledger Balance now shows up in red.
 * Cleaned up ORDER and MEMBER view
+* Bugfixes in USER / MEMBER ADD Forms
+
+### 2015-06-11
+* Added Column TransactionTypeId to member ledger
+* Added Table TransactionTypes to app
 
 ### 2015-06-10
 * Changed Email Start from "Lieber" to "Hallo"
