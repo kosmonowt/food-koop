@@ -36,6 +36,7 @@
 		</div>
 
 		@yield("mustacheEnd")
+		@yield("dynamicScripts")
 		<script type="text/javascript" src="js/app.js"></script>
 		@yield("bottomJs")
 	</body>

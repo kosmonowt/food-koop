@@ -81,7 +81,7 @@
 								<strong>@{{availableAmount}}</strong>/<small>@{{units}}</small>
 							</td>
 							<td>
-								@{{name}} (@{{weight_per_unit}}@{{tare_unit}})
+								<small>@{{name}} (@{{weight_per_unit}}@{{tare_unit}})</small>
 							</td>
 							<td>
 								<span class="text-nowrap">@{{marketplacePrice data=price}} €</span>

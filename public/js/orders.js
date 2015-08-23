@@ -15,18 +15,9 @@ can.Component.extend({
     ordersByProductShowResume: new can.Map({"show":false}), // Indicates if onList Orders are now shown and if to show "Order Now" Button
     ordersByProductShowCommissionerButton: new can.Map({"show":false}), // Indicates if button for commissioner form should be shown.
     orderStateSettersActive: new can.List({}), // In Orders By Product View, list that indicates the actions that could be taken (states to set) with the orders
-    newProduct: new can.Map({}), // Product to be edited/created
     newOrderFormProductList: new can.List(),
     newOrderFormProductListCache: new can.List(),
-    createProductForm: new can.Map({"titleCaption":"Neues Produkt Hinzufügen","showOrderAndSave":true,"buttonCaption":"Produkt Erstellen","buttonName":"create"}),
-    updateProductForm: new can.Map({"titleCaption":"Produkt Bearbeiten","showOrderAndSave":false,"buttonCaption":"Änderungen Speichern","buttonName":"update"}),
-    currentProductForm: new can.Map({}),
     orderResume: new can.Map({}),
-    productSearchTerm: "", // That's on product search the current search term
-    product: null,
-    products: new Product.List({}), // All Products existing
-    allProducts: new can.List(),  // Cached view for products
-    productsScopes: new can.Map({"merchant_id":"all","product_state_id":"all","term":""}),
 
     /** Is called when New Product is being Clicked **/
     resetCreateProductForm: function(b,el,ev) {
@@ -213,18 +204,6 @@ can.Component.extend({
       }
       console.log(listCached);
     },
-    /** Removes a Product from the database **/
-    deleteProduct: function(product) {
-      var products = this.products;
-      if (confirm("Soll dieses Produkt wirklich aus der Datenbank entfernt werden?")) {
-        var p = new Product(product);
-        var id = p.attr("id");
-        p.destroy().then(function(){
-          products.replace(products.filter(function(i,x,l){return i.attr("id") != id;}));
-          handleRestDestroy("Gelöscht:","Das Produkt wurde aus der Datenbank entfernt.");
-        },handleRestError);
-      } 
-    },
     select: function(orders){ this.attr('selectedOrder', orders); },
     save: function(order) {
       order.save(function(order){},handleRestError);
@@ -279,55 +258,6 @@ can.Component.extend({
     resetOrder: function(scope, el, ev) {
       /** RESET ORDER FORM **/
       $(".2nd-step").addClass('hidden');
-    },
-    createProduct: function(scope, el, ev) {
-      ev.preventDefault();
-      var data = {};
-      el.find("input, select, button").each(function(i,x){
-        eval("data."+$(this).attr("name")+" = '"+$(this).val()+"';"); // Save Data
-      });
-      var product = new Product(data);
-      product.save(
-        function(product){
-          if (typeof(data.id) == "undefined") { 
-          scope.newOrderFormProductList.push(product); // create product
-          } else {
-            // Load Updated Product into view
-          }
-          handleRestCreate("Produkt:","Das Produkt wurde erfolgreich erstellt");
-          el.trigger("reset"); // Reset Form
-          $("#controlProductIndex > a").trigger("click"); // Switch Tabs
-        },  // Success
-        handleRestError // Error
-        );
-    },
-    /** Fills the Create Product form with the clicked product of product view **/
-    editProduct: function(scope, el, ev) {
-      var n = this.newProduct;
-      n.attr("id",scope.id);
-      n.attr("sku",scope.sku);
-      n.attr("units",scope.units);
-      n.attr("unit_unit",scope.unit_unit);
-      n.attr("name",scope.name);
-      n.attr("merchant_id",scope.merchant_id);
-      n.attr("comment",scope.comment);
-      n.attr("weight",scope.weight);
-      n.attr("price",scope.price);
-      n.attr("weight_per_unit",scope.weight_per_unit);
-      n.attr("product_state_id",scope.product_state_id);
-      n.attr("product_type_id",scope.product_type_id);
-      $('#createProductForm_unit_unit').val(scope.unit_unit);
-      $('#createProductForm_product_state_id').val(scope.product_state_id);
-      $('#createProductForm_product_type_id').val(scope.product_type_id);
-      $('#createProductForm_merchant_id').val(scope.merchant_id);
-      $('#priceInclTax').html('+'+$("#createProductForm_product_type_id").children(':selected').data('tax')+'% MwSt.');
-      $('#priceInclTax').data('factor',(1 + (parseInt($("#createProductForm_product_type_id").children(':selected').data('tax'))/100)));
-      this.currentProductForm.attr("titleCaption",this.updateProductForm.titleCaption);
-      this.currentProductForm.attr("showOrderAndSave",this.updateProductForm.showOrderAndSave);
-      this.currentProductForm.attr("buttonCaption",this.updateProductForm.buttonCaption);
-      this.currentProductForm.attr("buttonName",this.updateProductForm.buttonName);
-      $(".tab-pane.active").removeClass('active');
-      $("#productCreate").addClass('active');
     },
     calculateOrderPrice: function(scope, el, ev) {
       /** CALC THE PRICE **/

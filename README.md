@@ -32,6 +32,10 @@ It is thought to use
 
 ## Release History
 
+### 2015-08-23
+* Fixed Problem with table irregularities in Product page
+* Re-Activated Quick-Order Button in Product page
+
 ### 2015-06-13
 * Fixed Problem with mass assignment on unique ids. (Problem with str_replace in way/model)
 * Member GroupUID attribute added in Views
@@ -199,6 +203,9 @@ It is thought to use
 * Direct Ordering in Product View
 
 ## Todo
+
+### Current ToDos
+* Make Product list paginable
 
 ### Urgent Tasks
 * Debug XLS-Export on Order

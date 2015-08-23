@@ -212,6 +212,36 @@ function replaceAllAttr(canMap,oCanMap) {
   oCanMap.each(function(i,n){canMap.attr(n,oCanMap.attr(n));});
   return canMap;
 }
+/*======================================================================*/
+/*============================== PAGINATION ============================*/
+/*======================================================================*/
+
+var Paginate = can.Map.extend({
+  current_page: 1,
+  last_page: Infinity,
+  next: function () {
+    this.attr('current_page', this.current_page + 1);
+  },
+  prev: function () {
+    this.attr('current_page', this.current_page - 1);
+  },
+  canNext: function () {
+    return this.attr('current_page') < this.attr('last_page');
+  },
+  canPrev: function () {
+    return this.attr('current_page') > 1;
+  },
+  page: function (newVal) {
+    if (newVal === undefined) {
+      return this.attr("current_page");
+    } else {
+      this.attr('current_page', parseInt(newVal));
+    }
+  },
+  pageCount: function () {
+    return this.attr("last_page");
+  }
+});
 
 /*======================================================================*/
 /*============================ REST API SECTION ========================*/
@@ -350,7 +380,6 @@ var MyTask = can.Model.extend({
   findAll: "GET "+sUrl+"tasks/my",
   update: "PUT "+sUrl+"tasks/my/{id}"
 },{});
-
 
 var TaskType = can.Model.extend({
   findAll: 'GET '+sUrl+'taskTypes',
@@ -569,3 +598,17 @@ function tabToggler(show,affects) {
   $("#"+show).removeClass("hidden");
   $("."+affects).not("#"+show).addClass('hidden');
 }
+
+can.Component.extend({
+  tag: "next-prev",
+  template: 
+    '<a href="javascript://"' + 
+      'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" can-click="paginate.prev">Prev</a>' + 
+    '<a href="javascript://"' + 
+      'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" can-click="paginate.next">Next</a>'
+});
+
+can.Component.extend({
+  tag: "page-count",
+  template: 'Page <span>{{page}}</span> of <span>{{count}}</span>.'
+});

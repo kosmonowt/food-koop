@@ -16,7 +16,7 @@
 						<th>Adresse &amp; Kontakt</th>
 						<th>Dienstgruppe</th>
 						<th>Mitglied Seit</th>
-				        @if($myself->isAdmin)	
+						@if($myself->isAdmin)	
 						<th>Kontostand</th>
 						<th>Aktion</th>
 						@endif
